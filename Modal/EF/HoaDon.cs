@@ -18,10 +18,6 @@ namespace Modal.EF
         [Key]
         public int id_hoadon { get; set; }
 
-        public int? id_sanpham { get; set; }
-
-        public int? id_loaisp { get; set; }
-
         public int? id_nguoimua { get; set; }
 
         [StringLength(100)]
@@ -29,7 +25,8 @@ namespace Modal.EF
 
         public double? tonggia { get; set; }
 
-        public DateTime? thoigian { get; set; }
+        public int soluong { get; set; }
+        public DateTime thoigian { get; set; }
 
         [StringLength(100)]
         public string hinhthuctt { get; set; }
@@ -39,11 +36,7 @@ namespace Modal.EF
         [StringLength(50)]
         public string trangthai { get; set; }
 
-        public virtual LoaiSanPham LoaiSanPham { get; set; }
-
         public virtual NguoiMua NguoiMua { get; set; }
-
-        public virtual SanPham SanPham { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HoaDonCT> HoaDonCTs { get; set; }

@@ -2,9 +2,7 @@
 @{
     ViewBag.Title = "ProductPage";
 }
-<div class="meta">
 
-</div>
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
     <div class="container">
@@ -127,7 +125,7 @@
                     </div>
                     <!--/ End Single Widget -->
                     <!-- Single Widget -->
-                    @*<div class="single-widget category">
+                    <div class="single-widget category">
                         <h3 class="title">Manufacturers</h3>
                         <ul class="categor-list">
                             <li><a href="#">Forever</a></li>
@@ -136,7 +134,7 @@
                             <li><a href="#">ecko united</a></li>
                             <li><a href="#">zara</a></li>
                         </ul>
-                    </div>*@
+                    </div>
                     <!--/ End Single Widget -->
                 </div>
             </div>
@@ -153,7 +151,6 @@
                                         <option>15</option>
                                         <option>25</option>
                                         <option>30</option>
-                                        <option>ALL</option>
                                     </select>
                                 </div>
                                 <div class="single-shorter">
@@ -200,7 +197,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -344,7 +340,7 @@
             }
         });
     }
-        
+
     function LoadCategory_shortname(tenngan) {
         $.ajax({
             url: "/Home/Get_Category_Product?type=" + tenngan,
@@ -380,7 +376,7 @@
                     html += '<div class="product-content">';
                     html += '<h3><a href="product-details.html">' + value.tensp + '</a></h3>';
                     html += '<div class="product-price">';
-                   
+
                     if (Number(value.giasale) > 0 && Number(value.giasale) != Number(value.dongia)) {
                         html += '<span class="old">' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
                         html += '<span>' + (value.giasale).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
