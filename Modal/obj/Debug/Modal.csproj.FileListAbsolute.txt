@@ -10,3 +10,18 @@ T:\TieuLuan\pingping\Modal\obj\Debug\Modal.csproj.CoreCompileInputs.cache
 T:\TieuLuan\pingping\Modal\obj\Debug\Modal.csproj.CopyComplete
 T:\TieuLuan\pingping\Modal\obj\Debug\Modal.dll
 T:\TieuLuan\pingping\Modal\obj\Debug\Modal.pdb
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\Modal.dll.config
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\Modal.dll
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\Modal.pdb
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\EntityFramework.dll
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\EntityFramework.xml
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\obj\Debug\Modal.csprojAssemblyReference.cache
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\obj\Debug\Modal.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\obj\Debug\Modal.csproj.CopyComplete
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\obj\Debug\Modal.dll
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\obj\Debug\Modal.pdb
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\MailChimp.dll
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\ServiceStack.Text.dll
+C:\Users\Admin\Desktop\Tieu Luan\TieuLuanTN-1\Modal\bin\Debug\ServiceStack.Text.xml

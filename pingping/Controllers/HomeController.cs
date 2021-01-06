@@ -1,7 +1,10 @@
-﻿using Modal.DAO;
+﻿using MailChimp;
+using MailChimp.Helper;
+using Modal.DAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -52,5 +55,24 @@ namespace pingping.Controllers
         {
             return View();
         }
+        string MailChimpAPIKey = System.Configuration.ConfigurationManager.AppSettings["MailChimpAPIKey"];
+        string MailChimpAPIKeySubsribeListID = System.Configuration.ConfigurationManager.AppSettings["MailChimpAPIKeySubsribeListID"];
+        public ActionResult AddSubscribe(FormCollection frc)
+        {
+            string userEmail = frc["subscribe"];
+            MailChimpManager mc = new MailChimpManager(MailChimpAPIKey);
+            EmailParameter email = new EmailParameter()
+            {
+                Email = userEmail
+            };
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            EmailParameter results = mc.Subscribe(MailChimpAPIKeySubsribeListID, email);
+            return View("~/Views/Home/Index.cshtml");
+        }
+        public ActionResult Contact()
+        {
+            return View();
+        }
+
     }
 }
