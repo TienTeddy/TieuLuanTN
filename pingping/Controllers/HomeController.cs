@@ -47,5 +47,10 @@ namespace pingping.Controllers
             var result = dao2.get_product_idloaisp(id_loaisp);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult ProductPage()
+        {
+            return View();
+        }
     }
 }

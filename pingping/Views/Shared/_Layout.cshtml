@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="~/Content/main/jquery.fancybox.min.css">
     <!-- Themify Icons -->
     <link rel="stylesheet" href="~/Content/main/themify-icons.css">
+    <!-- Jquery Ui -->
+    <link rel="stylesheet" href="~/Content/main/jquery-ui.css">
     <!-- Nice Select CSS -->
     <link rel="stylesheet" href="~/Content/main/niceselect.css">
     <!-- Animate CSS -->
@@ -50,7 +52,6 @@
         </div>
     </div>
     <!-- End Preloader -->
-
     <!-- Header -->
     <header class="header shop sticky">
         <!-- Topbar -->
@@ -251,25 +252,20 @@
                                     <div class="navbar-collapse">
                                         <div class="nav-inner">
                                             <ul class="nav main-menu menu navbar-nav">
-                                                <li class="active"><a href="#">Home</a></li>
-                                                <li><a href="#">Product</a></li>
-                                                <li><a href="#">Service</a></li>
+                                                <li class="active"><a href="~/Home/Index">Trang Chủ</a></li>
                                                 <li>
-                                                    <a href="#">Shop<i class="ti-angle-down"></i><span class="new">New</span></a>
+                                                    <a href="#">Sản Phẩm<i class="ti-angle-down"></i></a><!--<span class="new">New</span>-->
                                                     <ul class="dropdown">
-                                                        <li><a href="shop-grid.html">Shop Grid</a></li>
-                                                        <li><a href="cart.html">Cart</a></li>
-                                                        <li><a href="checkout.html">Checkout</a></li>
+                                                        <li><a href="~/Home/ProductPage">Thịnh Hành</a></li>
+                                                        <li><a href="cart.html">Sale</a></li>
+                                                        <li><a href="cart.html">Hot</a></li>
+                                                        <li><a href="checkout.html">Mua Nhiều Nhất</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="#">Pages</a></li>
-                                                <li>
-                                                    <a href="#">Blog<i class="ti-angle-down"></i></a>
-                                                    <ul class="dropdown">
-                                                        <li><a href="blog-single-sidebar.html">Blog Single Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="contact.html">Contact Us</a></li>
+                                                <li><a href="#">Giới Thiệu</a></li>
+                                                <li><a href="#">Sale</a></li>
+                                                <li><a href="#">Liên Hệ</a></li>
+                                                <li><a href="contact.html">Khuyến Mãi</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -286,6 +282,10 @@
     <!--/ End Header -->
 
     @RenderBody()
+
+    <!--Footer-start-->
+    @Html.Partial("_Footer")
+    <!--Footer-end-->
 
     @Scripts.Render("~/bundles/jquery")
 
@@ -322,33 +322,33 @@
     <!-- Active JS -->
     <script src="~/Scripts/main/active.js"></script>
     <script>
-    $(document).ready(function () {
-        LoadCategory();
-    })
-    function LoadCategory() {  
-        $.ajax({
-            url: "/Home/Get_Category",
-            type: "GET",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                var html = ""; var tab = "";
-                result.forEach(function (value, key) {
-                    html += '<li><a href="#' + value.id_loaisp + '">' + value.tenloai + '</a></li>';
-                    //tab += '<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#' + value.id_loaisp + '" role="tab">' + value.tenloai + '</a></li>';
-                })
-                $('.main-category').html(html);
-                //$('#myTab').html(tab);
-            },
-            error: function (errormessage) {
-                    alert(errormessage.responseText);  
-            }  
-        });  
-     }
-        
+        $(document).ready(function () {
+            LoadCategory();
+        })
+        function LoadCategory() {
+            $.ajax({
+                url: "/Home/Get_Category",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = "";
+                    result.forEach(function (value, key) {
+                        html += '<li><a href="#' + value.id_loaisp + '">' + value.tenloai + '</a></li>';
+                        //tab += '<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#' + value.id_loaisp + '" role="tab">' + value.tenloai + '</a></li>';
+                    })
+                    $('.main-category').html(html);
+                    //$('#myTab').html(tab);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
     </script>
     @RenderSection("scripts", required: false)
 
-    
+
 </body>
 </html>
