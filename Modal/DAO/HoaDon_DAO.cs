@@ -38,13 +38,13 @@ namespace Modal.DAO
 
             var modal_To_EF = new HoaDon()
             {
-                id_nguoimua = id_nguoimua,
+                id_nguoimua=id_nguoimua,
                 //mahd
                 //tonggia
-                thoigian = now,
-                hinhthuctt = "Mới Đặt",
-                freeship = 0,
-                trangthai = "Chưa Thanh Toán";
+                thoigian=now,
+                hinhthuctt ="Mới Đặt",
+                freeship=0,
+                trangthai= "Chưa Thanh Toán"
             };
 
             result = db.HoaDons.Add(modal_To_EF);
