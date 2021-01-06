@@ -176,7 +176,7 @@
                     <div class="row">
                         <div class="col-lg-3">
                             <div class="all-category">
-                                <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>CATEGORIES</h3>
+                                <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>SẢN PHẨM</h3>
                                 <ul class="main-category">
                                     <li>
                                         <a href="#">New Arrivals <i class="fa fa-angle-right" aria-hidden="true"></i></a>
@@ -321,6 +321,34 @@
     <script src="~/Scripts/main/easing.js"></script>
     <!-- Active JS -->
     <script src="~/Scripts/main/active.js"></script>
+    <script>
+    $(document).ready(function () {
+        LoadCategory();
+    })
+    function LoadCategory() {  
+        $.ajax({
+            url: "/Home/Get_Category",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = ""; var tab = "";
+                result.forEach(function (value, key) {
+                    html += '<li><a href="#' + value.id_loaisp + '">' + value.tenloai + '</a></li>';
+                    //tab += '<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#' + value.id_loaisp + '" role="tab">' + value.tenloai + '</a></li>';
+                })
+                $('.main-category').html(html);
+                //$('#myTab').html(tab);
+            },
+            error: function (errormessage) {
+                    alert(errormessage.responseText);  
+            }  
+        });  
+     }
+        
+    </script>
     @RenderSection("scripts", required: false)
+
+    
 </body>
 </html>

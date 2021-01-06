@@ -84,3 +84,10 @@ T:\TieuLuan\pingping\pingping\obj\Debug\pingping.csproj.CoreCompileInputs.cache
 T:\TieuLuan\pingping\pingping\obj\Debug\pingping.csproj.CopyComplete
 T:\TieuLuan\pingping\pingping\obj\Debug\pingping.dll
 T:\TieuLuan\pingping\pingping\obj\Debug\pingping.pdb
+T:\TieuLuan\pingping\pingping\bin\Modal.dll
+T:\TieuLuan\pingping\pingping\bin\EntityFramework.dll
+T:\TieuLuan\pingping\pingping\bin\Modal.pdb
+T:\TieuLuan\pingping\pingping\bin\Modal.dll.config
+T:\TieuLuan\pingping\pingping\bin\EntityFramework.xml
+T:\TieuLuan\pingping\pingping\bin\EntityFramework.SqlServer.dll
+T:\TieuLuan\pingping\pingping\bin\EntityFramework.SqlServer.xml

@@ -1,0 +1,12 @@
+T:\TieuLuan\pingping\Modal\bin\Debug\Modal.dll.config
+T:\TieuLuan\pingping\Modal\bin\Debug\Modal.dll
+T:\TieuLuan\pingping\Modal\bin\Debug\Modal.pdb
+T:\TieuLuan\pingping\Modal\bin\Debug\EntityFramework.dll
+T:\TieuLuan\pingping\Modal\bin\Debug\EntityFramework.SqlServer.dll
+T:\TieuLuan\pingping\Modal\bin\Debug\EntityFramework.xml
+T:\TieuLuan\pingping\Modal\bin\Debug\EntityFramework.SqlServer.xml
+T:\TieuLuan\pingping\Modal\obj\Debug\Modal.csprojAssemblyReference.cache
+T:\TieuLuan\pingping\Modal\obj\Debug\Modal.csproj.CoreCompileInputs.cache
+T:\TieuLuan\pingping\Modal\obj\Debug\Modal.csproj.CopyComplete
+T:\TieuLuan\pingping\Modal\obj\Debug\Modal.dll
+T:\TieuLuan\pingping\Modal\obj\Debug\Modal.pdb

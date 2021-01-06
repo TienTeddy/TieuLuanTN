@@ -1214,7 +1214,7 @@ Version:1.0
 }
 .hero-slider .single-slider {
 	height: auto;
-	background-image: url('https://via.placeholder.com/1900x700');
+	background-image: url('../../Source/Images/slider-1900x700.jpg');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -1235,16 +1235,16 @@ Version:1.0
 	margin-bottom: 20px;
 }
 .hero-slider .hero-text h1 span {
-	font-size: 20px;
-	display: block;
-	margin-bottom: 12px;
-	color: #333;
-	font-weight: 700;
-	line-height: initial;
+    font-size: 20px;
+    display: block;
+    margin-bottom: 12px;
+    color: white;
+    font-weight: 700;
+    line-height: initial;
 }
 .hero-slider .hero-text p {
-	color: #333;
-	margin-bottom: 35px;
+    color: #e2e3e6;
+    margin-bottom: 35px;
 }
 .hero-slider .hero-text .button{
 	margin:0;
@@ -1554,7 +1554,7 @@ Version:1.0
 	font-size: 22px;
 	font-weight: 700;
 	text-transform: capitalize;
-	color: #333;
+	color: white;
 }
 .small-banner .single-banner h3 span{
 	color:#F7941D;
