@@ -12,8 +12,8 @@ namespace Modal.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
-            NguoiBans = new HashSet<NguoiBan>();
-            NguoiMuas = new HashSet<NguoiMua>();
+            NguoiBan = new HashSet<NguoiBan>();
+            NguoiMua = new HashSet<NguoiMua>();
         }
 
         [Key]
@@ -28,18 +28,18 @@ namespace Modal.EF
         [StringLength(250)]
         public string password_old { get; set; }
 
-        [StringLength(150)]
-        public string hoten { get; set; }
-
         [StringLength(250)]
         public string email { get; set; }
 
         public bool loaitk { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NguoiBan> NguoiBans { get; set; }
+        [StringLength(150)]
+        public string hoten { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NguoiMua> NguoiMuas { get; set; }
+        public virtual ICollection<NguoiBan> NguoiBan { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NguoiMua> NguoiMua { get; set; }
     }
 }

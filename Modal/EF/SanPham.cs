@@ -12,9 +12,9 @@ namespace Modal.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SanPham()
         {
-            HoaDonCTs = new HashSet<HoaDonCT>();
-            Sales = new HashSet<Sale>();
-            TheTiches = new HashSet<TheTich>();
+            HoaDonCT = new HashSet<HoaDonCT>();
+            Sale = new HashSet<Sale>();
+            TheTich = new HashSet<TheTich>();
         }
 
         [Key]
@@ -63,14 +63,14 @@ namespace Modal.EF
         public string xeploai { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HoaDonCT> HoaDonCTs { get; set; }
+        public virtual ICollection<HoaDonCT> HoaDonCT { get; set; }
 
         public virtual LoaiSanPham LoaiSanPham { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
+        public virtual ICollection<Sale> Sale { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TheTich> TheTiches { get; set; }
+        public virtual ICollection<TheTich> TheTich { get; set; }
     }
 }

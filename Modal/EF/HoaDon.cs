@@ -12,11 +12,15 @@ namespace Modal.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public HoaDon()
         {
-            HoaDonCTs = new HashSet<HoaDonCT>();
+            HoaDonCT = new HashSet<HoaDonCT>();
         }
 
         [Key]
         public int id_hoadon { get; set; }
+
+        public int? id_sanpham { get; set; }
+
+        public int? id_loaisp { get; set; }
 
         public int? id_nguoimua { get; set; }
 
@@ -25,7 +29,6 @@ namespace Modal.EF
 
         public double? tonggia { get; set; }
 
-        public int soluong { get; set; }
         public DateTime thoigian { get; set; }
 
         [StringLength(100)]
@@ -36,9 +39,11 @@ namespace Modal.EF
         [StringLength(50)]
         public string trangthai { get; set; }
 
+        public int? soluong { get; set; }
+
         public virtual NguoiMua NguoiMua { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HoaDonCT> HoaDonCTs { get; set; }
+        public virtual ICollection<HoaDonCT> HoaDonCT { get; set; }
     }
 }

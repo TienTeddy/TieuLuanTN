@@ -21,7 +21,7 @@ namespace Modal.EF
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SanPham> SanPhams { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
-        public virtual DbSet<TheTich> TheTiches { get; set; }
+        public virtual DbSet<TheTich> TheTichs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -29,17 +29,12 @@ namespace Modal.EF
                 .Property(e => e.mahd)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<HoaDon>()
-                .HasMany(e => e.HoaDonCTs)
-                .WithOptional(e => e.HoaDon)
-                .WillCascadeOnDelete();
-
             modelBuilder.Entity<LoaiSanPham>()
                 .Property(e => e.hinhanh)
                 .IsUnicode(false);
 
             modelBuilder.Entity<LoaiSanPham>()
-                .HasMany(e => e.SanPhams)
+                .HasMany(e => e.SanPham)
                 .WithOptional(e => e.LoaiSanPham)
                 .WillCascadeOnDelete();
 
@@ -48,7 +43,7 @@ namespace Modal.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<NguoiMua>()
-                .HasMany(e => e.HoaDons)
+                .HasMany(e => e.HoaDon)
                 .WithOptional(e => e.NguoiMua)
                 .WillCascadeOnDelete();
 
@@ -77,7 +72,7 @@ namespace Modal.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<SanPham>()
-                .HasMany(e => e.TheTiches)
+                .HasMany(e => e.TheTich)
                 .WithOptional(e => e.SanPham)
                 .WillCascadeOnDelete();
 
@@ -98,12 +93,12 @@ namespace Modal.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<TaiKhoan>()
-                .HasMany(e => e.NguoiBans)
+                .HasMany(e => e.NguoiBan)
                 .WithOptional(e => e.TaiKhoan)
                 .WillCascadeOnDelete();
 
             modelBuilder.Entity<TaiKhoan>()
-                .HasMany(e => e.NguoiMuas)
+                .HasMany(e => e.NguoiMua)
                 .WithOptional(e => e.TaiKhoan)
                 .WillCascadeOnDelete();
         }
