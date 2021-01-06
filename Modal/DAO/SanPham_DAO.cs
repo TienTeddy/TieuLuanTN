@@ -27,5 +27,12 @@ namespace Modal.DAO
 
             return db.SanPhams.Where(x => x.id_loaisp == id).ToList();
         }
+
+        public SanPham get_product_(int id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.SanPhams.FirstOrDefault(x => x.id_sanpham == id);
+        }
     }
 }

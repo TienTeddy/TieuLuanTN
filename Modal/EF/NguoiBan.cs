@@ -20,7 +20,7 @@ namespace Modal.EF
         [StringLength(100)]
         public string nganhang { get; set; }
 
-        public int? phone { get; set; }
+        public int phone { get; set; }
 
         [StringLength(100)]
         public string street { get; set; }

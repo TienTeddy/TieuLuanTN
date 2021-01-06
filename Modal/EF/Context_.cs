@@ -18,6 +18,7 @@ namespace Modal.EF
         public virtual DbSet<NguoiBan> NguoiBans { get; set; }
         public virtual DbSet<NguoiMua> NguoiMuas { get; set; }
         public virtual DbSet<PhieuThanhToan> PhieuThanhToans { get; set; }
+        public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SanPham> SanPhams { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<TheTich> TheTiches { get; set; }
@@ -36,11 +37,6 @@ namespace Modal.EF
             modelBuilder.Entity<LoaiSanPham>()
                 .Property(e => e.hinhanh)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<LoaiSanPham>()
-                .HasMany(e => e.HoaDons)
-                .WithOptional(e => e.LoaiSanPham)
-                .WillCascadeOnDelete();
 
             modelBuilder.Entity<LoaiSanPham>()
                 .HasMany(e => e.SanPhams)

@@ -66,3 +66,27 @@ function RemoveItem(removeItem,id) { // id sp
     }, 900);
     // alert(value_cart.splice(value_cart.findIndex(a => a.price === price), 1));
 }
+
+function checkout() {
+    //value_cart.push({
+    //    id: id, name: name, price: price, quantity: 1
+    //});
+    objectCart = JSON.stringify({ 'data': value_cart });
+    $.ajax({
+        url: "/Home/Set_CheckOut",
+        type: "POST",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        data: objectCart,
+        success: function (result) {
+            if (result == 1) {
+                alert("Success.");
+                window.location.replace('../Home/CheckOut');
+            }
+            else alert("Error.");
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        }
+    });
+}

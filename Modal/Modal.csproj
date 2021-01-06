@@ -50,8 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\HoaDonCT_DAO.cs" />
+    <Compile Include="DAO\HoaDon_DAO.cs" />
     <Compile Include="DAO\LoaiSanPham_DAO.cs" />
+    <Compile Include="DAO\NguoiBan_DAO.cs" />
+    <Compile Include="DAO\NguoiMua_DAO.cs" />
     <Compile Include="DAO\SanPham_DAO.cs" />
+    <Compile Include="DAO\TaiKhoan_DAO.cs" />
     <Compile Include="EF\Context_.cs" />
     <Compile Include="EF\HoaDon.cs" />
     <Compile Include="EF\HoaDonCT.cs" />
@@ -59,6 +64,7 @@
     <Compile Include="EF\NguoiBan.cs" />
     <Compile Include="EF\NguoiMua.cs" />
     <Compile Include="EF\PhieuThanhToan.cs" />
+    <Compile Include="EF\Sale.cs" />
     <Compile Include="EF\SanPham.cs" />
     <Compile Include="EF\TaiKhoan.cs" />
     <Compile Include="EF\TheTich.cs" />
