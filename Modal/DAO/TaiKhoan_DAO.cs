@@ -20,6 +20,25 @@ namespace Modal.DAO
             var res = db.TaiKhoans.FirstOrDefault(x => x.username == user && x.password == pass);
             return res;
         }
+        public TaiKhoan create_taikhoan(string username, string password, string hoten, string email)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            TaiKhoan tk_ =new TaiKhoan();
+            var tk = new TaiKhoan()
+            {
+                username=username,
+                password=password,
+                password_old=password,
+                hoten=hoten,
+                email=email,
+                loaitk=true,
+            };
+
+            tk_ = db.TaiKhoans.Add(tk);
+            db.SaveChanges();
+            if (tk_ != null) return tk_;
+            return null;
+        }
         public int CheckLogin(string user, string pass)
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -40,6 +59,32 @@ namespace Modal.DAO
             {
                 return 0;
             }
+        }
+        public TaiKhoan update_account(string email, string hoten, int id_taikhoan)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var res = db.TaiKhoans.FirstOrDefault(x => x.id_taikhoan == id_taikhoan);
+            if (res != null)
+            {
+                res.hoten = hoten;
+                res.email = email;
+                db.SaveChanges();
+                return res;
+            }
+            return null;
+        }
+        public TaiKhoan update_pass(int id_taikhoan, string pass)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var res = db.TaiKhoans.FirstOrDefault(x => x.id_taikhoan == id_taikhoan);
+            if (res != null)
+            {
+                res.password_old = res.password;
+                res.password = pass;
+                db.SaveChanges();
+                return res;
+            }
+            return null;
         }
     }
 }

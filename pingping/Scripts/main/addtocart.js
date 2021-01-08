@@ -43,7 +43,7 @@ function DetailCart() {
         html += '<a href="#" class="remove" title="Remove this item"><i class="fa fa-remove" onclick="RemoveItem(' + i + ',' + item.id + ')"></i></a>';
         html += '<a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>';
         html += '<h4><a href="#">' + item.name + '</a></h4>';
-        html += '<p class="quantity" style="color:red">' + item.quantity + 'x - <span class="amount">$' + item.price + '</span></p>';
+        html += '<p class="quantity" style="color:red">' + item.quantity + 'x - <span class="amount">' + item.price + '</span></p>';
         html += '</li>';
         total += Number(item.price) * item.quantity;
         i += 1;
@@ -72,21 +72,29 @@ function checkout() {
     //    id: id, name: name, price: price, quantity: 1
     //});
     objectCart = JSON.stringify({ 'data': value_cart });
-    $.ajax({
-        url: "/Home/Set_CheckOut",
-        type: "POST",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        data: objectCart,
-        success: function (result) {
-            if (result == 1) {
-                alert("Success.");
-                window.location.replace('../Home/CheckOut');
+    if (value_cart == 0) {
+        alert("Đơn Hàng Trống!");
+    }
+    else {
+        $.ajax({
+            url: "/Home/Set_CheckOut",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: objectCart,
+            success: function (result) {
+                if (result == 1) {
+                    alert("Success.");
+                    window.location.replace('../../Home/CheckOut');
+                }
+                else if (result == -1) { alert("Bạn Cần Đăng Nhập Để Mua Hàng!"); }
+                //setTimeout(function () {
+                //    $("#overlay").fadeOut(300);
+                //}, 500);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
             }
-            else alert("Error.");
-        },
-        error: function (errormessage) {
-            alert(errormessage.responseText);
-        }
-    });
+        });
+    }
 }

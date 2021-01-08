@@ -20,6 +20,7 @@ namespace Modal.EF
         public virtual DbSet<PhieuThanhToan> PhieuThanhToans { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SanPham> SanPhams { get; set; }
+        public virtual DbSet<Size_Color> Size_Color { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<TheTich> TheTiches { get; set; }
 
@@ -80,6 +81,10 @@ namespace Modal.EF
                 .HasMany(e => e.TheTiches)
                 .WithOptional(e => e.SanPham)
                 .WillCascadeOnDelete();
+
+            modelBuilder.Entity<Size_Color>()
+                .Property(e => e.size)
+                .IsUnicode(false);
 
             modelBuilder.Entity<TaiKhoan>()
                 .Property(e => e.username)

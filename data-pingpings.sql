@@ -125,6 +125,7 @@ create table HoaDon
 	tonggia float,
 	thoigian datetime,
 	hinhthuctt nvarchar(100),
+	soluong int,
 	freeship float,
 	trangthai nvarchar(50) check(trangthai in(N'Chưa Thanh Toán',N'Đã Thanh Toán')) default N'Chưa Thanh Toán',
 	CONSTRAINT FK_HoaDon_NguoiMua FOREIGN KEY (id_nguoimua) REFERENCES NguoiMua (id_nguoimua) ON DELETE CASCADE,
@@ -167,7 +168,34 @@ create table Sale
 	CONSTRAINT FK_Sale_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham)
 )
 go
+create table Size_Color
+(
+	id_size_color int identity primary key,
+	id_sanpham int,
+	size varchar(5),
+	color nvarchar(10),
+	soluong int
+	CONSTRAINT FK_SizeColor_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham)
+)
+-- xử lý sp trùng nhau trong hoadonct
+--CREATE TRIGGER trg_hdct_sp ON HoaDonCT AFTER INSERT AS 
+--BEGIN
+--	UPDATE HoaDonCT
+--	SET soluong = soluong + (
+--		SELECT soluong
+--		FROM inserted
+--		WHERE id_sanpham = HoaDonCT.id_sanpham
+--		), thoigian=(
+--		SELECT thoigian
+--		FROM inserted
+--		WHERE id_sanpham = HoaDonCT.id_sanpham
+--		)
+--	FROM HoaDonCT
+--	JOIN inserted ON HoaDonCT.id_sanpham = inserted.id_sanpham
+--END
+--GO
+select *from Size_Color
+select *from HoaDonCT
 
-SHOW DATABASES
-Select * from sys.databases 
-SET GLOBAL event_scheduler = ON;
+delete from HoaDon
+delete from HoaDonCT 

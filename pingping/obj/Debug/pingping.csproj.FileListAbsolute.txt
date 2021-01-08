@@ -91,3 +91,6 @@ T:\TieuLuan\pingping\pingping\bin\Modal.dll.config
 T:\TieuLuan\pingping\pingping\bin\EntityFramework.xml
 T:\TieuLuan\pingping\pingping\bin\EntityFramework.SqlServer.dll
 T:\TieuLuan\pingping\pingping\bin\EntityFramework.SqlServer.xml
+T:\TieuLuan\pingping\pingping\bin\MailChimp.dll
+T:\TieuLuan\pingping\pingping\bin\ServiceStack.Text.dll
+T:\TieuLuan\pingping\pingping\bin\ServiceStack.Text.xml

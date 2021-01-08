@@ -14,6 +14,7 @@ namespace Modal.EF
         {
             HoaDonCTs = new HashSet<HoaDonCT>();
             Sales = new HashSet<Sale>();
+            Size_Color = new HashSet<Size_Color>();
             TheTiches = new HashSet<TheTich>();
         }
 
@@ -30,9 +31,9 @@ namespace Modal.EF
 
         public int? soluong { get; set; }
 
-        public double? dongia { get; set; }
+        public double dongia { get; set; }
 
-        public double? giasale { get; set; }
+        public double giasale { get; set; }
 
         [StringLength(5)]
         public string trangthai { get; set; }
@@ -69,6 +70,9 @@ namespace Modal.EF
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sale> Sales { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Size_Color> Size_Color { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TheTich> TheTiches { get; set; }

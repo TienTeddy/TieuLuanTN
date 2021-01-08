@@ -28,13 +28,13 @@ namespace Modal.EF
         [StringLength(250)]
         public string password_old { get; set; }
 
-        [StringLength(150)]
-        public string hoten { get; set; }
-
         [StringLength(250)]
         public string email { get; set; }
 
         public bool loaitk { get; set; }
+
+        [StringLength(150)]
+        public string hoten { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NguoiBan> NguoiBans { get; set; }

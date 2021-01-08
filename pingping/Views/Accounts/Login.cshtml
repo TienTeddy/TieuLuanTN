@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#register" class="nav-link" id="Register">
+                        <a href="~/Accounts/Register" class="nav-link" id="Register">
                             <span class="nav-link-inner--text">Đăng Ký</span>
                         </a>
                     </li>
@@ -173,11 +173,9 @@
                                         </div>
                                     </div>
                                     <div class="custom-control custom-control-alternative custom-checkbox">
-                                        <input class="custom-control-input" id="customCheckLogin" type="checkbox">
-
-                                        <label class="custom-control-label" for="customCheckLogin">
-                                            <span class="text-muted">Remember me</span>
-                                        </label>
+                                        @*<input class="custom-control-input" id="customCheckLogin" type="checkbox">*@
+                                        @Html.CheckBoxFor(m => m.checkbox, new { @type = "checkbox", @class = "checkbox-custom" })
+                                        <span class="text-muted">Remember me</span>
                                     </div>
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary my-4">Sign in</button>
@@ -186,76 +184,13 @@
                             </div>  
                             </div>
                         <!--Login-end-->
-                        <!--Register-start-->
-                        <div id="registerForm">
-                            <div class="card-header bg-transparent pb-5">
-                                <div class="text-muted text-center mt-2 mb-4"><small>Sign up with</small></div>
-                                <div class="text-center">
-                                    <a href="#" class="btn btn-neutral btn-icon mr-4">
-                                        <span class="btn-inner--icon"><i class="fab fa-facebook-square"></i></span>
-                                        <span class="btn-inner--text">Facebook</span>
-                                    </a>
-                                    <a href="#" class="btn btn-neutral btn-icon">
-                                        <span class="btn-inner--icon"><img src="~/Areas/Manage/assets/img/icons/common/google.svg"></span>
-                                        <span class="btn-inner--text">Google</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card-body px-lg-5 py-lg-5">
-                                <div class="text-center text-muted mb-4">
-                                    <small>Or sign up with credentials</small>
-                                </div>
-                                <form role="form">
-                                    <div class="form-group">
-                                        <div class="input-group input-group-merge input-group-alternative mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
-                                            </div>
-                                            <input class="form-control" placeholder="Name" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="input-group input-group-merge input-group-alternative mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="ni ni-email-83"></i></span>
-                                            </div>
-                                            <input class="form-control" placeholder="Email" type="email">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="input-group input-group-merge input-group-alternative">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                                            </div>
-                                            <input class="form-control" placeholder="Password" type="password" name="password" id="password" onkeyup="return passwordChanged();">
-                                        </div>
-                                    </div>
-                                    <div class="text-muted font-italic"><small>password strength: <span class="text-success font-weight-700" id="strength">strong</span></small></div>
-                                    <div class="row my-4">
-                                        <div class="col-12">
-                                            <div class="custom-control custom-control-alternative custom-checkbox">
-                                                @Html.CheckBoxFor(m => m.checkbox, new { @type = "checkbox", @class = "checkbox-custom" })
-                                               
-                                                <label class="custom-control-label" for="customCheckRegister">
-                                                    <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="button" class="btn btn-primary mt-4">Create account</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <!--Register-end-->
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
                             <a href="#" class="text-light"><small>Forgot password?</small></a>
                         </div>
                         <div class="col-6 text-right">
-                            <a href="#Register" class="text-light" id="Registers"><small>Create new account</small></a>
+                            <a href="~/Accounts/Register" class="text-light" id="Registers"><small>Create new account</small></a>
                         </div>
                     </div>
                 </div>
@@ -303,34 +238,17 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#registerForm").hide();
-            $("#Register").click(function () {
-                $("#loginForm").hide({ direction: "right" }, 1000);
-                $("#registerForm").show({ direction: "right" }, 2000);
-                                });
-            $("#Registers").click(function () {
-                $("#loginForm").hide({ direction: "right" }, 1000);
-                $("#registerForm").show({ direction: "right" }, 3500);
-                                });
-                            })
-        function passwordChanged() {
-                                var strength = document.getElementById('strength');
-                                var strongRegex = new RegExp("^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
-                                var mediumRegex = new RegExp("^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
-                                var enoughRegex = new RegExp("(?=.{8,}).*", "g");
-                                var pwd = document.getElementById("password");
-                                if (pwd.value.length == 0) {
-                                    strength.innerHTML = 'Type Password';
-                                } else if (false == enoughRegex.test(pwd.value)) {
-                                    strength.innerHTML = 'More Characters';
-                                } else if (strongRegex.test(pwd.value)) {
-                                    strength.innerHTML = '<span style="color:green">Strong!</span>';
-                                } else if (mediumRegex.test(pwd.value)) {
-                                    strength.innerHTML = '<span style="color:orange">Medium!</span>';
-                                } else {
-                                    strength.innerHTML = '<span style="color:red">Weak!</span>';
-                                }
-                            }
+            //$("#registerForm").hide();
+            //$("#Register").click(function () {
+            //    $("#loginForm").hide({ direction: "right" }, 1000);
+            //    $("#registerForm").show({ direction: "right" }, 2000);
+            //                    });
+            //$("#Registers").click(function () {
+            //    $("#loginForm").hide({ direction: "right" }, 1000);
+            //    $("#registerForm").show({ direction: "right" }, 3500);
+            //                    });
+         })
+    }
     </script>
 </body>
 </html>

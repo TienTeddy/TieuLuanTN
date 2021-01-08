@@ -74,7 +74,7 @@
                             <ul class="list-main">
                                 <li><i class="ti-location-pin"></i> Store location</li>
                                 <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
-                                <li><i class="ti-user"></i> <a href="#">@ViewBag.Name</a></li>
+                                <li><i class="ti-user"></i> <a href="~/Accounts/MyAccount">@ViewBag.Name</a></li>
                                 <li><i class="ti-power-off"></i><a href="@ViewBag.Login">@ViewBag.Messager</a></li>
                             </ul>
                         </div>
@@ -257,15 +257,16 @@
                                                     <a href="#">Sản Phẩm<i class="ti-angle-down"></i></a><!--<span class="new">New</span>-->
                                                     <ul class="dropdown">
                                                         <li><a href="~/Home/ProductPage">Thịnh Hành</a></li>
-                                                        <li><a href="cart.html">Sale</a></li>
-                                                        <li><a href="cart.html">Hot</a></li>
-                                                        <li><a href="checkout.html">Mua Nhiều Nhất</a></li>
+                                                        <li><a href="~/Home/ProductPage">Sale</a></li>
+                                                        <li><a href="~/Home/ProductPage">Hot</a></li>
+                                                        <li><a href="~/Home/ProductPage">Mua Nhiều Nhất</a></li>
                                                     </ul>
                                                 </li>
                                                 <li><a href="#">Giới Thiệu</a></li>
                                                 <li><a href="#">Sale</a></li>
-                                                <li><a href="#">Liên Hệ</a></li>
+                                                <li><a href="~/Home/Contact">Liên Hệ</a></li>
                                                 <li><a href="contact.html">Khuyến Mãi</a></li>
+                                                <li><a href="~/Home/CheckOut">Giỏ Hàng</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -350,7 +351,5 @@
 
     </script>
     @RenderSection("scripts", required: false)
-
-
 </body>
 </html>

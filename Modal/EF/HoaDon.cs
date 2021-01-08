@@ -18,6 +18,10 @@ namespace Modal.EF
         [Key]
         public int id_hoadon { get; set; }
 
+        public int? id_sanpham { get; set; }
+
+        public int? id_loaisp { get; set; }
+
         public int? id_nguoimua { get; set; }
 
         [StringLength(100)]
@@ -25,7 +29,6 @@ namespace Modal.EF
 
         public double? tonggia { get; set; }
 
-        public int soluong { get; set; }
         public DateTime thoigian { get; set; }
 
         [StringLength(100)]
@@ -35,6 +38,8 @@ namespace Modal.EF
 
         [StringLength(50)]
         public string trangthai { get; set; }
+
+        public int? soluong { get; set; }
 
         public virtual NguoiMua NguoiMua { get; set; }
 
