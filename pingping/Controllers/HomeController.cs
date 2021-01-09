@@ -195,7 +195,7 @@ namespace pingping.Controllers
                     {
                         var res_sp = dao_sp.get_product_(item.id); //sp
 
-                        var res_hdct = dao_hdct.createHoaDonCT(res_hd_tt, item.id, item.price, now, item.quantity);
+                        var res_hdct = dao_hdct.createHoaDonCT(res_hd_tt, item.id, item.price, now, item.quantity,0,"");
                         soluong += 1;
                         gia += item.price * item.quantity;
                     }
@@ -210,7 +210,7 @@ namespace pingping.Controllers
                     {
                         var res_sp = dao_sp.get_product_(item.id); //sp
 
-                        var res_hdct = dao_hdct.createHoaDonCT(res_hd.id_hoadon, item.id, item.price, res_hd.thoigian, item.quantity);
+                        var res_hdct = dao_hdct.createHoaDonCT(res_hd.id_hoadon, item.id, item.price, res_hd.thoigian, item.quantity, 0, "");
                         soluong += 1;
                         gia += item.price * item.quantity;
                     }
@@ -235,6 +235,7 @@ namespace pingping.Controllers
             EmailParameter results = mc.Subscribe(MailChimpAPIKeySubsribeListID, email);
             return View("~/Views/Home/Index.cshtml");
         }
+
         public ActionResult Contact()
         {
             var session_acc = SessionHelper.GetSession();
@@ -252,6 +253,7 @@ namespace pingping.Controllers
             }
             return View();
         }
+
         public ActionResult SingleProcduct(int id)
         {
             var session_acc = SessionHelper.GetSession();
@@ -274,13 +276,102 @@ namespace pingping.Controllers
             }
             var dao = new SanPham_DAO();
             SanPham sp = dao.get_product_(id);
+
+            //get size
+            var dao_s = new Size_DAO();
+            var res_size = dao_s.get_size_idsanpham(id); //list
+
             //Neu khong thi truy xuat csdl lay ra san pham tuong ung
             if (sp == null)
             {
                 // Thong bao neu san pham khong co san pham do
                 return HttpNotFound();
             }
-            return View(sp);
+
+            var sanpham_size_model = new SanPham_Size_Model();
+            sanpham_size_model.SanPham_ = sp;
+            sanpham_size_model.Size_ = res_size;
+            return View(sanpham_size_model);
+        }
+
+        [HttpGet]
+        public JsonResult Get_Color_Size_id(int id_size)
+        {
+            //get color
+            var dao = new Color_DAO();
+            var res_size = dao.get_color_size_id(id_size); //list
+            return Json(res_size, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Set_CheckOut_Quickly(List<CheckOut_Model> data)
+        {
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc != null)
+            {
+                int soluong = 0;
+                double? gia = 0;
+                var dao_hd = new HoaDon_DAO();
+                var dao_sp = new SanPham_DAO();
+                var dao_hdct = new HoaDonCT_DAO();
+
+                var res_hd_tt = dao_hd.get_hoadon_trangthai(session_acc.id_nguoi); //id_hoadon ChưaThanhToan
+                //gia = res_hd_tt.tonggia;
+                if (res_hd_tt > 0)
+                {
+                    var r_ = dao_hd.get_hoadon_id(res_hd_tt);
+                    gia = r_.tonggia;
+                    //update hoadon
+                    DateTime now = DateTime.Now;
+                    foreach (CheckOut_Model item in data)
+                    {
+                        var res_sp = dao_sp.get_product_(item.id); //sp
+
+                        var res_hdct = dao_hdct.createHoaDonCT(res_hd_tt, item.id, item.price, now, item.quantity,item.id_size,item.color);
+                        soluong += 1;
+                        gia += item.price * item.quantity;
+                    }
+                    int res_ = dao_hd.updateHoaDon_quantity(res_hd_tt, soluong, gia); //return 1 or 0
+                    return Json(1, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    //create hoadon
+                    var res_hd = dao_hd.createHoaDon(session_acc.id_nguoi); //return hoadon
+                    foreach (CheckOut_Model item in data)
+                    {
+                        var res_sp = dao_sp.get_product_(item.id); //sp
+
+                        var res_hdct = dao_hdct.createHoaDonCT(res_hd.id_hoadon, item.id, item.price, res_hd.thoigian, item.quantity, item.id_size, item.color);
+                        soluong += 1;
+                        gia += item.price * item.quantity;
+                    }
+                    int res_ = dao_hd.updateHoaDon_quantity(res_hd.id_hoadon, soluong, gia); //return 1 or 0
+                    return Json(1, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(-1, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult MyOrder()
+        {
+            //var session_acc = SessionHelper.GetSession();
+            //var dao_1 = new HoaDon_DAO();
+            //var hoadon = dao_1.get_hoadon_idtaikhoan(session_acc.id_taikhoan);
+            //if (hoadon != null)
+            //{
+            //    MyOrder_Model res = new MyOrder_Model();
+            //    foreach (var hd in hoadon)
+            //    {
+            //        var dao_2 = new HoaDonCT_DAO();
+            //        var hoadonchitiet = dao_2.get_hoadonct(hd.id_hoadon);
+            //        res.hoadon = hoadon;
+            //        foreach (var hdct in hoadonchitiet)
+            //        {
+            //            res.hoadonct_ = hoadonchitiet;
+            //        }
+            //    }
+            //}
+            return View();
         }
     }
 }

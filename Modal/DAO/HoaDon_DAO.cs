@@ -80,5 +80,12 @@ namespace Modal.DAO
             if (result != null) return result;
             return null;
         }
+
+        public List<HoaDon> get_hoadon_taikhoan_id(int id_taikhoan)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.HoaDons.Where(x => x.id_nguoimua == id_taikhoan).ToList();
+        }
     }
 }

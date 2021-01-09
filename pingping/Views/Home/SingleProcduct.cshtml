@@ -1,4 +1,4 @@
-﻿@model Modal.EF.SanPham
+﻿@model pingping.Models.SanPham_Size_Model
 @{
     ViewBag.Title = "Xem Chi Tiết";
 }
@@ -18,7 +18,6 @@
 </div>
 
 <div class="modal-content">
-
     <div class="modal-body">
         <div class="row no-gutters">
             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -43,7 +42,7 @@
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                 <div class="quickview-content">
-                    <h2>@Model.tensp</h2>
+                    <h2>@Model.SanPham_.tensp</h2>
                     <div class="quickview-ratting-review">
                         <div class="quickview-ratting-wrap">
                             <div class="quickview-ratting">
@@ -60,38 +59,36 @@
                         </div>
                     </div>
                     <h3>
-                        @if (Model.giasale < Model.dongia)
+                        @if (@Model.SanPham_.giasale < @Model.SanPham_.dongia)
                         {
-                            <b> @Model.giasale.ToString("#,##") VND</b>
-                            <span>@Model.dongia.ToString("#,##") VND</span>
+                            <b>@Model.SanPham_.giasale.ToString("#,##") VND</b>
+                            <span>@Model.SanPham_.dongia.ToString("#,##") VND</span>
                         }
                         else
                         {
-                            <b>@Model.?dongia.ToString("#,##") VND</b>
+                            <b>@Model.SanPham_.dongia.ToString("#,##") VND</b>
                         }
                     </h3>
                     <div class="quickview-peragraph">
-                        <p>@Model.thongtin</p>
+                        <p>@Model.SanPham_.thongtin</p>
                     </div>
                     <div class="size">
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 <h5 class="title">Size</h5>
-                                <select>
-                                    <option selected="selected">s</option>
-                                    <option>m</option>
-                                    <option>l</option>
-                                    <option>xl</option>
+                                <input id="id_size" hidden />
+                                <select onchange="LoadColor_(value)">
+                                    @foreach (var item in Model.Size_)
+                                    {
+                                        <option value="@item.id_size">@item.size</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col-lg-6 col-12">
                                 <h5 class="title">Color</h5>
-                                <select>
-                                    <option selected="selected">orange</option>
-                                    <option>purple</option>
-                                    <option>black</option>
-                                    <option>pink</option>
-                                </select>
+                                <input id="id_color" hidden />
+                                <div id="select"><select></select></div>
+                                <div id="loadColor"></div>
                             </div>
                         </div>
                     </div>
@@ -103,7 +100,7 @@
                                     <i class="ti-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" name="quant[1]" class="input-number" data-min="1" data-max="1000" value="1">
+                            <input type="text" name="quant[1]" id="quantity" class="input-number" data-min="1" data-max="1000" value="1">
                             <div class="button plus">
                                 <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
                                     <i class="ti-plus"></i>
@@ -113,19 +110,13 @@
                         <!--/ End Input Order -->
                     </div>
                     <div class="add-to-cart">
-                        @*if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
-                            }
-                            else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
-                            }*@
-                        @if (Model.dongia <= Model.giasale)
+                        @if (Model.SanPham_.dongia <= Model.SanPham_.giasale)
                         {
-                            <a href="#" class="btn" onclick="addtocart('@Model.id_sanpham','@Model.tensp','@Model.dongia')">Thêm vào Giỏ Hàng</a>
+                            <a href="#" class="btn" onclick="addtocart_quyckly('@Model.SanPham_.id_sanpham','@Model.SanPham_.tensp','@Model.SanPham_.dongia')">Thêm vào Giỏ Hàng</a>
                         }
                         else
                         {
-                            <a href="#" class="btn" onclick="addtocart('@Model.id_sanpham','@Model.tensp','@Model.giasale')">Thêm vào Giỏ Hàng</a>
+                            <a href="#" class="btn" onclick="addtocart_quyckly('@Model.SanPham_.id_sanpham','@Model.SanPham_.tensp','@Model.SanPham_.giasale')">Thêm vào Giỏ Hàng</a>
                         }
                         <a href="#" class="btn min"><i class="ti-heart"></i></a>
                     </div>
@@ -144,9 +135,78 @@
     </div>
 </div>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script>
-    $(document).ready(function () {
-        //hiden nav Product
-        $('.all-category').hide();
-    })
-</script>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //hiden nav Product
+            $('.all-category').hide();
+            $('.btn-number').click(function () {
+                var quantity = $('#quantity').val();
+                console.log("quantity " + quantity);
+            })
+        })
+        function LoadColor_(id_size) {
+            $('#id_size').val(id_size);
+            console.log("id_size " + id_size);
+            $.ajax({
+            url: '@Url.Action("Get_Color_Size_id", "Home")',
+            type: 'GET',
+            dataType: 'json',
+            data: { id_size: id_size },
+            success: function (data) {
+                var html = '<select onchange="GetColor_(value)" class="nice-select">';
+                html += '<option value="0"></option>';
+                data.forEach(function (value, key) {
+                    html += '<option value="' + value.color1 + '">' + value.color1 + '</option>';
+                });
+                $('#select').hide();
+                $('#loadColor').html(html+'</select>');
+            },
+            error: function (ex) {
+                var r = jQuery.parseJSON(response.responseText);
+                alert("Message: " + r.Message);
+                alert("StackTrace: " + r.StackTrace);
+                alert("ExceptionType: " + r.ExceptionType);
+            }
+        });
+        }
+        function GetColor_(color) {
+            $('#id_color').val(color);
+            console.log("Color" + color);
+        }
+        function addtocart_quyckly(id,name,price) {
+            var value_cart = [];
+            value_cart.push({
+                id: id, name: name, price: price, quantity: $('#quantity').val(), id_size: $('#id_size').val(), color: $('#id_color').val()
+            });
+
+            objectCart = JSON.stringify({ 'data': value_cart });
+            if (value_cart == 0) {
+                alert("Đơn Hàng Trống!");
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("Set_CheckOut_Quickly", "Home")',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    data: objectCart,
+                    success: function (result) {
+                        if (result == 1) {
+                            alert("Success.");
+                            window.location.replace('@Url.Action("CheckOut", "Home")');
+                        }
+                        else if (result == -1) { alert("Bạn Cần Đăng Nhập Để Mua Hàng!"); }
+                        //setTimeout(function () {
+                        //    $("#overlay").fadeOut(300);
+                        //}, 500);
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}

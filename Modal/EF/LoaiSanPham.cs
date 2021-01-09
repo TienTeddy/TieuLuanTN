@@ -31,6 +31,9 @@ namespace Modal.EF
         [StringLength(100)]
         public string xeploai { get; set; }
 
+        [StringLength(20)]
+        public string theloai { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SanPham> SanPhams { get; set; }
     }

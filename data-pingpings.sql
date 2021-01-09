@@ -21,7 +21,8 @@ create table LoaiSanPham
 	tenngan nvarchar(50),
 	thongtin nvarchar(max),
 	hinhanh varchar(max),
-	xeploai nvarchar(100) check(xeploai in('Trending Item','Hot Item','Onsale','Best Saller','Top Viewed')) default 'Hot Item'
+	xeploai nvarchar(100) check(xeploai in('Trending Item','Hot Item','Onsale','Best Saller','Top Viewed')) default 'Hot Item',
+	theloai nvarchar(20)
 )
 alter table SanPham
 add  xeploai nvarchar(100) check(xeploai in('Trending Item','Hot Item','Onsale','Best Saller','Top Viewed')) default 'Hot Item'
@@ -139,12 +140,14 @@ create table HoaDonCT
 	dongia float,
 	thoigian datetime, --hdct add đồng thời sau hd
 	soluong int,
-	trangthai nvarchar(50) check(trangthai in(N'Chưa Thanh Toán',N'Đã Thanh Toán')) default N'Chưa Thanh Toán'
+	trangthai nvarchar(50) check(trangthai in(N'Chưa Thanh Toán',N'Đã Thanh Toán')) default N'Chưa Thanh Toán',
+	size varchar(5), --chỉ lấy size
+	color nvarchar(10), --chỉ lấy màu
 	CONSTRAINT FK_HoaDonCT_HoaDon FOREIGN KEY (id_hoadon) REFERENCES HoaDon (id_hoadon) ON DELETE CASCADE,
 	CONSTRAINT FK_HoaDonCT_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham) ON DELETE CASCADE,
 )
-alter table TaiKhoan
-add hoten nvarchar(150)
+alter table HoaDonCT
+add id_size int check(trangthai in(N'Chưa Thanh Toán',N'Đã Thanh Toán')) default N'Chưa Thanh Toán',
 create table PhieuThanhToan
 (
 	id_phieutt int identity primary key,
@@ -168,15 +171,23 @@ create table Sale
 	CONSTRAINT FK_Sale_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham)
 )
 go
-create table Size_Color
+create table Size
 (
-	id_size_color int identity primary key,
+	id_size int identity primary key,
 	id_sanpham int,
 	size varchar(5),
+	soluong int
+	CONSTRAINT FK_Size_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham)
+)
+create table Color
+(
+	id_color int identity primary key,
+	id_size int,
 	color nvarchar(10),
 	soluong int
-	CONSTRAINT FK_SizeColor_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham)
+	CONSTRAINT FK_Color_Size FOREIGN KEY (id_size) REFERENCES Size (id_size)
 )
+
 -- xử lý sp trùng nhau trong hoadonct
 --CREATE TRIGGER trg_hdct_sp ON HoaDonCT AFTER INSERT AS 
 --BEGIN
@@ -194,8 +205,8 @@ create table Size_Color
 --	JOIN inserted ON HoaDonCT.id_sanpham = inserted.id_sanpham
 --END
 --GO
-select *from Size_Color
 select *from HoaDonCT
+select *from HoaDon
 
 delete from HoaDon
 delete from HoaDonCT 

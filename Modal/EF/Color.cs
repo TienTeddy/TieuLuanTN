@@ -6,21 +6,20 @@ namespace Modal.EF
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Size_Color
+    [Table("Color")]
+    public partial class Color
     {
         [Key]
-        public int id_size_color { get; set; }
+        public int id_color { get; set; }
 
-        public int? id_sanpham { get; set; }
+        public int? id_size { get; set; }
 
-        [StringLength(5)]
-        public string size { get; set; }
-
+        [Column("color")]
         [StringLength(10)]
-        public string color { get; set; }
+        public string color1 { get; set; }
 
         public int? soluong { get; set; }
 
-        public virtual SanPham SanPham { get; set; }
+        public virtual Size Size { get; set; }
     }
 }

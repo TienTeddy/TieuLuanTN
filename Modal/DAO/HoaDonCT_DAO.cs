@@ -15,7 +15,7 @@ namespace Modal.DAO
             db = new Context_();
         }
 
-        public HoaDonCT createHoaDonCT(int id_hoadon,int id_sanpham,float dongia,DateTime thoigian,int soluong)
+        public HoaDonCT createHoaDonCT(int id_hoadon,int id_sanpham,float dongia,DateTime thoigian,int soluong,int id_size,string color)
         {
             db.Configuration.ProxyCreationEnabled = false;
             HoaDonCT result = new HoaDonCT();
@@ -24,9 +24,32 @@ namespace Modal.DAO
             var res_ = db.HoaDonCTs.FirstOrDefault(x => x.id_hoadon == id_hoadon && x.id_sanpham == id_sanpham);
             if (res_ != null)
             {
-                res_.thoigian = thoigian;
-                res_.soluong += soluong;
-                db.SaveChanges();
+                var dao_size = new Size_DAO();
+                int res_size = dao_size.get_size(id_size);
+                if (res_size != 0) //tồn tại sp có size đó
+                {
+                    res_.thoigian = thoigian;
+                    res_.soluong += soluong;
+                    db.SaveChanges();
+                }
+                else //tạo mới hdct
+                {
+                    var modal_To_EF = new HoaDonCT()
+                    {
+                        id_hoadon = id_hoadon,
+                        id_sanpham = id_sanpham,
+                        dongia = dongia,
+                        thoigian = thoigian,
+                        soluong = soluong,
+                        trangthai = "Chưa Thanh Toán",
+                        id_size = id_size,
+                        color = color
+                    };
+
+                    result = db.HoaDonCTs.Add(modal_To_EF);
+                    db.SaveChanges();
+                    if (result != null) return result;
+                }
             }
             else
             {
@@ -37,7 +60,9 @@ namespace Modal.DAO
                     dongia = dongia,
                     thoigian = thoigian,
                     soluong = soluong,
-                    trangthai = "Chưa Thanh Toán"
+                    trangthai = "Chưa Thanh Toán",
+                    id_size = id_size,
+                    color = color
                 };
 
                 result = db.HoaDonCTs.Add(modal_To_EF);
