@@ -41,14 +41,109 @@ namespace pingping.Controllers
                 ViewBag.Name = "My Account";
                 ViewBag.Messager = "Đăng Nhập";
                 ViewBag.Login = "../Accounts/Login";
+                return View();
             }
             else
             {
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
+
+                var dao_sp = new SanPham_DAO();
+
+                var dao = new HoaDon_DAO();
+                var result = dao.get_hoadon_trangthai(session_acc.id_nguoi, "Chưa Thanh Toán");
+
+                if (result != null)
+                {
+                    var dao_hdct = new HoaDonCT_DAO();
+                    var result_hdct = dao_hdct.get_hoadonct(result.id_hoadon);
+
+                    List<SanPham> sp = new List<SanPham>();
+                    var order = new MyOrder_Model();
+                    foreach (HoaDonCT i in result_hdct)
+                    {
+                        //var res = dao_sp.get_product_idsanpham(i.id_sanpham);
+                        var res_ = dao_sp.get_product_idsanpham_(i.id_sanpham);
+
+                        foreach (var item in res_)
+                        {
+                            if (item.dongia > item.giasale)
+                            {
+                                item.dongia = item.giasale;
+                                //order.sanpham_ = res_;
+                            }
+                            if (sp == null)
+                            {
+                                sp.Add(new SanPham()
+                                {
+                                    id_sanpham = item.id_sanpham,
+                                    id_loaisp = item.id_loaisp,
+                                    tensp = item.tensp,
+                                    tenngan = item.tenngan,
+                                    soluong = item.soluong,
+                                    dongia = item.dongia,
+                                    giasale = item.giasale,
+                                    trangthai = item.trangthai,
+                                    hienthi = item.hienthi,
+                                    barcode = item.barcode,
+                                    tinhtrang = item.tinhtrang,
+                                    thongtin = item.thongtin,
+                                    hinhanh1 = item.hinhanh1,
+                                    hinhanh2 = item.hinhanh2,
+                                    hinhanh3 = item.hinhanh3,
+                                    hinhanh4 = item.hinhanh4,
+                                    size = item.size,
+                                    xeploai = item.xeploai
+                                });
+                            }
+                            else //add sp
+                            {
+                                int flat = 0;
+                                foreach(var s in sp)
+                                {
+                                    if (item.id_sanpham == s.id_sanpham)
+                                    {
+                                        flat += 1;
+                                    }
+                                }
+                                if (flat == 0)
+                                {
+                                    sp.Add(new SanPham()
+                                    {
+                                        id_sanpham = item.id_sanpham,
+                                        id_loaisp = item.id_loaisp,
+                                        tensp = item.tensp,
+                                        tenngan = item.tenngan,
+                                        soluong = item.soluong,
+                                        dongia = item.dongia,
+                                        giasale = item.giasale,
+                                        trangthai = item.trangthai,
+                                        hienthi = item.hienthi,
+                                        barcode = item.barcode,
+                                        tinhtrang = item.tinhtrang,
+                                        thongtin = item.thongtin,
+                                        hinhanh1 = item.hinhanh1,
+                                        hinhanh2 = item.hinhanh2,
+                                        hinhanh3 = item.hinhanh3,
+                                        hinhanh4 = item.hinhanh4,
+                                        size = item.size,
+                                        xeploai = item.xeploai
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    order.sanpham_=sp;
+                    order.hoadonct_ = result_hdct;
+                    return View(order);
+                }
+                else
+                {
+                    return View();
+                }
             }
-            return View();
+            
         }
 
         [HttpGet]

@@ -205,8 +205,9 @@ create table Color
 --	JOIN inserted ON HoaDonCT.id_sanpham = inserted.id_sanpham
 --END
 --GO
-select *from HoaDonCT
+select *from SanPham
 select *from HoaDon
+select *from HoaDonCT
 
 delete from HoaDon
 delete from HoaDonCT 

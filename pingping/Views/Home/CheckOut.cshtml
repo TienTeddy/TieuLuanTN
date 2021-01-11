@@ -1,4 +1,5 @@
-﻿@{
+﻿@model pingping.Models.MyOrder_Model
+@{
     ViewBag.Title = "Giỏ Hàng";
 }
 
@@ -24,25 +25,45 @@
         <div class="row">
             <div class="col-12">
                 <!-- Shopping Summery -->
+
+                @if (Model != null)
+                {
                 <table class="table shopping-summery bill">
                     <thead>
                         <tr class="main-hading">
                             <th>Sản Phẩm</th>
                             <th>Tên</th>
                             <th class="text-center">Đơn Giá</th>
+                            <th class="text-center">Size</th>
+                            <th class="text-center">Màu</th>
                             <th class="text-center">Số Lượng</th>
                             <th class="text-center">Tổng</th>
                             <th class="text-center"><i class="ti-trash remove-icon"></i></th>
                         </tr>
                     </thead>
                     <tbody class="loadHoaDon">
-                        @*<tr>
+                        @foreach (var hdct in Model.hoadonct_)
+                        {
+                            foreach (var sp in Model.sanpham_)
+                            {
+                                if (hdct.id_sanpham == sp.id_sanpham)
+                                {
+                        <tr>
                             <td class="image" data-title="No"><img src="https://via.placeholder.com/100x100" alt="#"></td>
                             <td class="product-des" data-title="Description">
-                                <p class="product-name"><a href="#">Women Dress</a></p>
-                                <p class="product-des">Maboriosam in a tonto nesciung eget  distingy magndapibus.</p>
+                                <p class="product-name"><a href="#">@sp.tensp</a></p>
+                                <p class="product-des">@sp.thongtin</p>
                             </td>
-                            <td class="price" data-title="Price"><span>$110.00 </span></td>
+                            <td class="price" data-title="Price"><span>@sp.dongia </span></td>
+                            <td class="price" >
+                                <select onchange="LoadColor_(value)">
+                                    @foreach (var item in Model.Size_)
+                                    {
+                                        <option value="@hdct.id_size">@hdct.size</option>
+                                    }
+                                </select>
+                            </td>
+                            <td class="price" ><span>@hdct.color</span></td>
                             <td class="qty" data-title="Qty">
                                 <!-- Input Order -->
                                 <div class="input-group">
@@ -51,7 +72,7 @@
                                             <i class="ti-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" name="quant[1]" class="input-number" data-min="1" data-max="100" value="1">
+                                    <input type="text" name="quant[1]" class="input-number" data-min="1" data-max="100" value="@hdct.soluong">
                                     <div class="button plus">
                                         <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
                                             <i class="ti-plus"></i>
@@ -60,12 +81,25 @@
                                 </div>
                                 <!--/ End Input Order -->
                             </td>
-                            <td class="total-amount" data-title="Total"><span>$220.88</span></td>
+                            <td class="total-amount" data-title="Total"><span>@(hdct.soluong * hdct.dongia)</span></td>
                             <td class="action" data-title="Remove"><a href="#"><i class="ti-trash remove-icon"></i></a></td>
-                        </tr>*@
+                        </tr>
+                                    break;
+                                }
+                            }
+                        }
                     </tbody>
+                    <!--/ End Shopping Summery -->
                 </table>
-                <!--/ End Shopping Summery -->
+                }
+                else
+                {
+                <div class="alert-info shopping-summery bill">
+                    <h4 class="alert-heading center">Chưa có đơn hàng nào.</h4>
+                </div>
+                
+                }
+                    
             </div>
         </div>
         <div class="row">
@@ -114,60 +148,54 @@
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('.all-category').hide();
-        LoadBill("Chưa Thanh Toán");
-
-        $('.ti-plus').click(function () {
-            var num = Number($('#quantitynumber').val());
-            num += 1;
-            $('#quantitynumber').val(num);
-        })
-    });
-    function LoadBill(trangthai) {
-        $.ajax({
-            url: "/Home/Get_Bill?status=" + trangthai,
-            type: "GET",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                if (result == 0) { $('.bill').html('<h4 class="alert - heading center">Chưa có đơn hàng nào.</h4>'); }
-                else {
-                    var html = "";
-                    result.forEach(function (value, key) {
-                        html += '<tr>';
-                        html += '<td class="image" data-title="No"><img src="https://via.placeholder.com/100x100" alt="#"></td>';
-                        html += '<td class="product-des" data - title="Description" >';
-                        html += '<p class="product-name"><a href="#">' + value.tensp + '</a></p>';
-                        html += '<p class="product-des">' + value.thongtin + '.</p>';
-                        html += '</td >';
-                        html += '<td class="price" data-title="Price"><span>' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span></td>';
-                        html += '<td class="qty" data-title="Qty">';
-                        html += '<div class="input-group">';
-                        html += '<div class="button minus">';
-                        html += '<button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">';
-                        html += '<i class="ti-minus"></i>';
-                        html += '</button>';
-                        html += '</div>';
-                        html += '<input type="text" id="quantitynumber" name="quant[1]" class="input-number" data-min="1" data-max="100" value="' + value.soluong + '">';
-                        html += '<div class="button plus">';
-                        html += '<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">';
-                        html += '<i class="ti-plus"></i>';
-                        html += '</button>';
-                        html += '</div>';
-                        html += '</div>';
-                        html += '</td>';
-                        html += '<td class="total-amount" data-title="Total"><span>' + (value.tonggiact).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span></td>';
-                        html += '<td class="action" data-title="Remove"><a href="#"><i class="ti-trash remove-icon"></i></a></td>';
-                        html += '</tr>';
-                    })
-                    $('.loadHoaDon').html(html);
-                //$('#myTab').html(tab);
-                }
-            },
-            error: function (errormessage) {
-                alert(errormessage.responseText);
-            }
+        $(document).ready(function () {
+            $('.all-category').hide();
+            //LoadBill("Chưa Thanh Toán");
         });
-    }
+        function LoadBill(trangthai) {
+            $.ajax({
+                url: "/Home/Get_Bill?status=" + trangthai,
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == 0) { $('.bill').html('<h4 class="alert - heading center">Chưa có đơn hàng nào.</h4>'); }
+                    else {
+                        var html = "";
+                        result.forEach(function (value, key) {
+                            html += '<tr>';
+                            html += '<td class="image" data-title="No"><img src="https://via.placeholder.com/100x100" alt="#"></td>';
+                            html += '<td class="product-des" data - title="Description" >';
+                            html += '<p class="product-name"><a href="#">' + value.tensp + '</a></p>';
+                            html += '<p class="product-des">' + value.thongtin + '.</p>';
+                            html += '</td >';
+                            html += '<td class="price" data-title="Price"><span>' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span></td>';
+                            html += '<td class="qty" data-title="Qty">';
+                            html += '<div class="input-group">';
+                            html += '<div class="button minus">';
+                            html += '<button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">';
+                            html += '<i class="ti-minus"></i>';
+                            html += '</button>';
+                            html += '</div>';
+                            html += '<input type="text" name="quant[1]" class="input-number" data-min="1" data-max="100" value="' + value.soluong + '">';
+                            html += '<div class="button plus">';
+                            html += '<button type="button" class="btn btn-primary btn-number increase" data-type="plus" data-field="quant[1]">';
+                            html += '<i class="ti-plus"></i>';
+                            html += '</button>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</td>';
+                            html += '<td class="total-amount" data-title="Total"><span>' + (value.tonggiact).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span></td>';
+                            html += '<td class="action" data-title="Remove"><a href="#"><i class="ti-trash remove-icon"></i></a></td>';
+                            html += '</tr>';
+                        })
+                        $('.loadHoaDon').append(html);
+                    //$('#myTab').html(tab);
+                    }
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
 </script>

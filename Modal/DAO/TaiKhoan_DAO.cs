@@ -45,9 +45,9 @@ namespace Modal.DAO
 
             if (db.TaiKhoans.Count(x => x.username == user) > 0)
             {
-                if (db.TaiKhoans.Count(x => x.password == pass) > 0)
+                if (db.TaiKhoans.Count(x => x.username == user && x.password == pass)> 0)
                 {
-                    if (db.TaiKhoans.Count(x =>x.username==user && x.loaitk == false) > 0) 
+                    if (db.TaiKhoans.Count(x => x.username == user && x.loaitk == false) > 0) 
                     {
                         return 2; //saller
                     }

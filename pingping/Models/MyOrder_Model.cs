@@ -10,5 +10,6 @@ namespace pingping.Models
     {
         public List<HoaDon> hoadon_ { get; set; }
         public List<HoaDonCT> hoadonct_ { get; set; }
+        public List<SanPham> sanpham_ { get; set; }
     }
 }

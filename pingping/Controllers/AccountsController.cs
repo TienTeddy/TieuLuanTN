@@ -162,9 +162,14 @@ namespace pingping.Controllers
             var acc = SessionHelper.GetSession();
             if (acc == null)
             {
+                ViewBag.Name = "My Account";
+                ViewBag.Messager = "Đăng Nhập";
+                ViewBag.Login = "../Accounts/Login";
                 return RedirectToAction("Index", "Home");
             }
-
+            ViewBag.Name = acc.hoten;
+            ViewBag.Messager = "Đăng Xuất";
+            ViewBag.Login = "../Accounts/Logout";
             return View(acc);
         }
         [HttpPost]
@@ -174,6 +179,10 @@ namespace pingping.Controllers
             var acc = SessionHelper.GetSession();
             if (acc != null)
             {
+                ViewBag.Name = acc.hoten;
+                ViewBag.Messager = "Đăng Xuất";
+                ViewBag.Login = "../Accounts/Logout";
+
                 if (f == null)
                 {
                     return RedirectToAction("Index", "Home");
@@ -223,6 +232,9 @@ namespace pingping.Controllers
                 }
 
             }
+            ViewBag.Name = "My Account";
+            ViewBag.Messager = "Đăng Nhập";
+            ViewBag.Login = "../Accounts/Login";
             return View("MyAccount", acc);
         }
         public ActionResult ChangePassword(FormCollection f)
@@ -231,6 +243,10 @@ namespace pingping.Controllers
             var acc = SessionHelper.GetSession();
             if (acc != null)
             {
+                ViewBag.Name = acc.hoten;
+                ViewBag.Messager = "Đăng Xuất";
+                ViewBag.Login = "../Accounts/Logout";
+
                 if (f["password_old"] != acc.password)
                 {
                     ViewBag.notify = "Mật khẩu không đúng!";
@@ -279,6 +295,9 @@ namespace pingping.Controllers
                 }
 
             }
+            ViewBag.Name = acc.hoten;
+            ViewBag.Messager = "Đăng Xuất";
+            ViewBag.Login = "../Accounts/Logout";
             return View("MyAccount", acc);
         }
     }

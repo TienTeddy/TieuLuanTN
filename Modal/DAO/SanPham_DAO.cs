@@ -34,6 +34,12 @@ namespace Modal.DAO
 
             return db.SanPhams.FirstOrDefault(x => x.id_sanpham == id_sanpham);
         }
+        public List<SanPham> get_product_idsanpham_(int? id_sanpham)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.SanPhams.Where(x => x.id_sanpham == id_sanpham).ToList();
+        }
 
         public List<SanPham> get_product_all()
         {
