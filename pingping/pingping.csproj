@@ -161,6 +161,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account_buyer_Model.cs" />
     <Compile Include="Models\CheckOut_Model.cs" />
     <Compile Include="Models\HoaDon_HoaDonCT_Model.cs" />
     <Compile Include="Models\Login_Models.cs" />
@@ -3246,6 +3247,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Areas\Manage\Views\Manage\QuanLyLoaiSanPham.cshtml" />
+    <Content Include="Areas\Manage\Views\Manage\QuanLyKhachHang.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -3386,6 +3389,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Manage\Models\" />
+    <Folder Include="Source\img-private\" />
+    <Folder Include="Source\img-public\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

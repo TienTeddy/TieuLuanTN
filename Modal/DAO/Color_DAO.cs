@@ -21,5 +21,11 @@ namespace Modal.DAO
 
             return db.Colors.Where(x => x.id_size == id_size).ToList();
         }
+        public List<Color> get_color_size_id_color(int id_size,string color)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.Colors.Where(x => x.id_size == id_size&&x.color1==color).ToList();
+        }
     }
 }

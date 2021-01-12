@@ -206,6 +206,7 @@ create table Color
 --END
 --GO
 select *from SanPham
+select *from Size
 select *from HoaDon
 select *from HoaDonCT
 

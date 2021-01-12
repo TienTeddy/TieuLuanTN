@@ -59,12 +59,151 @@ namespace pingping.Controllers
                     var dao_hdct = new HoaDonCT_DAO();
                     var result_hdct = dao_hdct.get_hoadonct(result.id_hoadon);
 
+                    var dao_size = new Size_DAO();
+                    var dao_color = new Color_DAO();
+
                     List<SanPham> sp = new List<SanPham>();
+                    List<Size> size = new List<Size>();
+                    List<Color> color = new List<Color>();
                     var order = new MyOrder_Model();
                     foreach (HoaDonCT i in result_hdct)
                     {
                         //var res = dao_sp.get_product_idsanpham(i.id_sanpham);
                         var res_ = dao_sp.get_product_idsanpham_(i.id_sanpham);
+
+                        //get size
+                        var res_size = dao_size.get_size_idsanpham(i.id_sanpham);
+
+                        if (res_size != null)
+                        {
+                            foreach (var s in res_size)
+                            {
+                                if (size == null)
+                                {
+                                    size.Add(new Size()
+                                    {
+                                        id_size = s.id_size,
+                                        id_sanpham = s.id_sanpham,
+                                        size = s.size,
+                                        soluong = s.soluong
+                                    });
+
+                                    if (color == null)
+                                    {
+                                        //get color
+                                        foreach(var sflat in size)
+                                        {
+                                            var res_color_flat = dao_color.get_color_size_id(sflat.id_size);
+                                            foreach (var c in res_color_flat)
+                                            {
+                                                color.Add(new Color()
+                                                {
+                                                    id_color = c.id_color,
+                                                    id_size = c.id_size,
+                                                    color1 = c.color1,
+                                                    soluong = s.soluong
+                                                });
+                                            }
+                                        }
+                                    }
+                                    //else
+                                    //{
+                                    //    int flat = 0;
+                                    //    foreach (var c in color)
+                                    //    {
+                                    //        if (s.id_size == c.id_size)
+                                    //        {
+                                    //            flat += 1;
+                                    //        }
+                                    //    }
+                                    //    if (flat == 0)
+                                    //    {
+                                    //        //get color
+                                    //        var res_color = dao_color.get_color_size_id(s.id_size);
+                                    //        foreach (var c in res_color)
+                                    //        {
+                                    //            color.Add(new Color()
+                                    //            {
+                                    //                id_color = c.id_color,
+                                    //                id_size = c.id_size,
+                                    //                color1 = c.color1,
+                                    //                soluong = s.soluong
+                                    //            });
+                                    //        }
+                                    //    }
+                                    //}
+                                }
+                                else
+                                {
+                                    int flat = 0;
+                                    foreach (var ss in size)
+                                    {
+                                        if (ss.id_size == s.id_size)
+                                        {
+                                            flat += 1; //set size trùng
+                                        }
+                                    }
+                                    if (flat == 0) //ko có size trùng
+                                    {
+                                        size.Add(new Size()
+                                        {
+                                            id_size = s.id_size,
+                                            id_sanpham = s.id_sanpham,
+                                            size = s.size,
+                                            soluong = s.soluong
+                                        });
+                                        if (color == null)
+                                        {
+                                            //get color
+                                            foreach (var sflat in size)
+                                            {
+                                                var res_color_flat = dao_color.get_color_size_id(sflat.id_size);
+                                                foreach (var c in res_color_flat)
+                                                {
+                                                    color.Add(new Color()
+                                                    {
+                                                        id_color = c.id_color,
+                                                        id_size = c.id_size,
+                                                        color1 = c.color1,
+                                                        soluong = c.soluong
+                                                    });
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            int flat_ = 0;
+                                            foreach (var sss in size)
+                                            {
+                                                foreach (var cc in color)
+                                                {
+                                                    if (sss.id_size == cc.id_size)
+                                                    {
+                                                        flat_ += 1; //set color trùng
+                                                    }
+                                                }
+                                            }
+                                            if (flat_ == 0)
+                                            {
+                                                //get color
+                                                var res_color_ = dao_color.get_color_size_id(s.id_size);
+                                                foreach (var c_ in res_color_)
+                                                {
+                                                    color.Add(new Color()
+                                                    {
+                                                        id_color = c_.id_color,
+                                                        id_size = c_.id_size,
+                                                        color1 = c_.color1,
+                                                        soluong = c_.soluong
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
 
                         foreach (var item in res_)
                         {
@@ -133,9 +272,13 @@ namespace pingping.Controllers
                                 }
                             }
                         }
+
                     }
+
                     order.sanpham_=sp;
                     order.hoadonct_ = result_hdct;
+                    order.size_ = size;
+                    order.color_ = color;
                     return View(order);
                 }
                 else
@@ -168,6 +311,14 @@ namespace pingping.Controllers
         {
             var dao = new SanPham_DAO();
             var result = dao.get_product(type);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        
+        [HttpGet]
+        public JsonResult GetHoaDonCT_id(int id)
+        {
+            var dao = new HoaDonCT_DAO();
+            var result = dao.get_hoadonct_id(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -467,6 +618,64 @@ namespace pingping.Controllers
             //    }
             //}
             return View();
+        }
+        
+        
+        [HttpPost]
+        public JsonResult Update_HDCT(int id_hdct,int id_size,string color)
+        {
+            //get color
+            var dao = new HoaDonCT_DAO();
+            int res_ = dao.update_hdct(id_hdct, id_size, color);
+
+            if (res_ != 0) { return Json(res_, JsonRequestBehavior.AllowGet);  }
+            return Json(0, JsonRequestBehavior.AllowGet);
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[HttpGet]
+        public JsonResult Bill_Deleted(int? id,int hd)
+        {
+            if (id == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var dao_hdct = new HoaDonCT_DAO();
+                var res_hdct = dao_hdct.deleted_hdct(id,hd);
+                if (res_hdct !=0 && res_hdct!=-1 )
+                {
+                    return Json(res_hdct, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(0, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        public JsonResult Bill_Update(int? id,int hd,int l)
+        {
+            if (id == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var dao_hdct = new HoaDonCT_DAO();
+                var res_hdct = dao_hdct.update_hdct(id,l);
+                if (res_hdct == 1)
+                {
+                    var dao = new HoaDonCT_DAO();
+                    var res_hd = dao.update_hdct_tonggia(id,hd,l);
+                    return Json(res_hd, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(0, JsonRequestBehavior.AllowGet);
+                }
+            }
         }
     }
 }

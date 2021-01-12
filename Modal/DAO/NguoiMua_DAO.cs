@@ -53,5 +53,32 @@ namespace Modal.DAO
             }
             return null;
         }
+
+        public List<NguoiMua> get_nguoimua_all()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.NguoiMuas.ToList();
+        }
+
+        public NguoiMua create_nguoimua_Admin(int id_taikhoan, int phone, string street, string ward, string district, string province)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            NguoiMua tk_ = new NguoiMua();
+
+            var tk = new NguoiMua()
+            {
+                id_taikhoan = id_taikhoan,
+                phone = phone,
+                street = street,
+                ward = ward,
+                district = district,
+                province = province
+            };
+
+            tk_ = db.NguoiMuas.Add(tk);
+            db.SaveChanges();
+            if (tk_ != null) return tk_;
+            return null;
+        }
     }
 }

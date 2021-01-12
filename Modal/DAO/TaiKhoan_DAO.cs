@@ -86,5 +86,27 @@ namespace Modal.DAO
             }
             return null;
         }
+
+        public int remove_account_idtknm(int? id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var res = db.TaiKhoans.FirstOrDefault(x => x.id_taikhoan == id);
+            var res1 = db.NguoiMuas.FirstOrDefault(x => x.id_taikhoan == id);
+            if (res != null && res1 != null)
+            {
+                db.TaiKhoans.Remove(res);
+                db.NguoiMuas.Remove(res1);
+                db.SaveChanges();
+                return 1;
+            }
+            return 0;
+        }
+
+        public TaiKhoan Get_id_taikhoanAdmin(int? id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var res = db.TaiKhoans.FirstOrDefault(x => x.id_taikhoan == id);
+            return res;
+        }
     }
 }
