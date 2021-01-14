@@ -1,0 +1,258 @@
+﻿@using Modal.EF
+@model IEnumerable<Color>
+@{
+    ViewBag.Title = "QuanLySize_Mau";
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 5);
+}
+@{
+    IEnumerable<SanPham> lstsp = ViewBag.sp as IEnumerable<SanPham>;
+}
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tables</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-5 text-right">
+                    <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#myModal1">Thêm Mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Light table</h3>
+                </div>
+                <div class="@ViewBag.Alert" style="margin:20px">@ViewBag.notify</div>
+                <!-- Light table -->
+                <div class="table-responsive">
+
+                    @grid.GetHtml(
+                        tableStyle: "table align-items-center table-flush",
+                        headerStyle: "thead-light",
+                        footerStyle: "btn-group",
+                        rowStyle: "",
+                        alternatingRowStyle: "gridAltRow",
+                        columns: grid.Columns(
+                        grid.Column("id_size", header: "Tên Sản Phẩm", format: p => p.id_size != null ? p.Size.SanPham.tensp : ""),
+                        grid.Column("soluong", header: "Số lượng sản phẩm", format: p => p.id_size != null ? p.Size.SanPham.soluong : ""),
+                        grid.Column("id_size", header: "Size", format: p => p.id_size != null ? p.Size.size : ""),
+                        grid.Column("id_size", header: "Số lượng size", format: p => p.id_size != null ? p.Size.soluong : ""),
+                        grid.Column("color1", header: "Màu"),
+                        grid.Column("soluong", header: "Số lượng màu"),
+                        grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_color }, new { @class = "btn btn-info", onclick = "EditColor(" + p.id_color + ")", data_toggle = "modal", data_target = "#editColor" })),
+                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteSize_Color", new { id = p.id_color }, new { @class = "btn btn-danger" }))
+                    ))
+
+                </div>
+
+                <!-- Card footer -->
+                @*<div class="card-footer py-4">
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-end mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">
+                                        <i class="fas fa-angle-left"></i>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        <i class="fas fa-angle-right"></i>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    @Html.Partial("_Footer")
+</div>
+<!-- Modal content-->
+<div id="editColor" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        @using (Html.BeginForm("UpdateSize_Color", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <!-- Modal content-->
+        <div class="modal-content" id="loadLoaiSP">
+            <div class="modal-header">
+                <h4 class="modal-title">THÊM MỚI KHÁCH HÀNG</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-5">
+                        <label>Tên Sản Phẩm:</label>
+                    </div>
+                    <div class="col-6">
+                        @*<label type="text" id="id_sanpham"></label>*@
+                        <select class="id_loaisp form-control" type="text" name="id_sanpham">
+                            @foreach (var item in lstsp)
+                            {
+                                <option value="@item.id_sanpham">@item.tensp</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-5">
+                        <label>Size:</label>
+                    </div>
+
+                    <div class="col-6">
+                        <input type="text" name="id_sanpham" id="id_sanpham" class="form-control " hidden />
+                        <input type="text" name="id_color" id="id_color" class="form-control " hidden />
+                        <input type="text" name="size" id="size" class="form-control " />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-5">
+                        <label>Màu:</label>
+                    </div>
+
+                    <div class="col-6">
+                        <input type="text" name="color" id="color" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-5">
+                        <label>Số Lượng Màu:</label>
+                    </div>
+
+                    <div class="col-6">
+                        <input type="number" name="soluong"  id="soluong_color" class="form-control soluong" />
+                        <p id="TB_SoLuong" class="text-danger"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" id="btnCapNhat" value="Cập Nhật">
+                    <small><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></small>
+                </div>
+            </div>
+
+        </div>
+        }
+    </div>
+
+</div>
+<div id="myModal1" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        @using (Html.BeginForm("AddSize_Mau", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <!-- Modal content-->
+            <div class="modal-content" id="loadLoaiSP">
+                <div class="modal-header">
+                    <h4 class="modal-title">THÊM MỚI KHÁCH HÀNG</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Tên Sản Phẩm:</label>
+                        </div>
+                        <div class="col-6">
+                            <select class="id_loaisp form-control" type="text" name="id_sanpham">
+                                @foreach (var item in lstsp)
+                                 {
+                                    <option value="@item.id_sanpham">@item.tensp</option>
+                                 }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Size:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="size" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Màu:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="color" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Số Lượng Màu:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="number" name="soluong" class="form-control soluong" />
+                            <p id="TB_SoLuong" style="color:#ff0000"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success" id="btnCapNhat" value="Cập Nhật">
+                        <small><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></small>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+    $("#btnCapNhat").click(function () {
+        //Kiem tra so luong khong phai la so hoac nho hon 0
+        var SoLuong = $(".soluong").val();
+        if (isNaN(SoLuong) == true || SoLuong <= 0) {
+            $("#TB_SoLuong").text("Số lượng không hợp lệ!")
+            return false;
+        }
+        else {
+            $("#TB_SoLuong").text("")
+            return true;
+        }
+    });
+    function EditColor(idsp) {
+        $.ajax({
+            url: "/Manage/Manage/Get_Color_id/?id_color=" + idsp,
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $('#soluong_color').val(result.soluong);
+                console.log(result);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+

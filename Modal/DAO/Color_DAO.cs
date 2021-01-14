@@ -27,5 +27,45 @@ namespace Modal.DAO
 
             return db.Colors.Where(x => x.id_size == id_size&&x.color1==color).ToList();
         }
+
+        #region 13-01
+        public List<Color> get_color_all()
+        {
+            return db.Colors.ToList();
+        }
+        public Color get_color_idColor(int? id)
+        {
+            // db.Configuration.ProxyCreationEnabled = false;
+            return db.Colors.FirstOrDefault(x => x.id_color == id);
+        }
+        public int set_color(Color color)
+        {
+            db.Colors.Add(color);
+            db.SaveChanges();
+            return 0;
+        }
+        public int checkupdate_color(Color color)
+        {
+            var res = db.Colors.FirstOrDefault(x => x.color1 == color.color1 && x.id_size == color.id_size);
+            if (res != null)
+            {
+                res.soluong += color.soluong;
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Colors.Add(color);
+                db.SaveChanges();
+            }
+            return 0;
+        }
+        public int remove_color(Color s)
+        {
+            db.Colors.Remove(s);
+            db.SaveChanges();
+            return 0;
+        }
+        #endregion
+
     }
 }

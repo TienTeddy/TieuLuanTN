@@ -2,7 +2,7 @@
 @model IEnumerable<Account_buyer_Model>
 @{
     ViewBag.Title = "QuanLyKhachHang";
-    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 20);
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 5);
 }
 
 <!-- Header -->
@@ -11,12 +11,12 @@
         <div class="header-body">
             <div class="row align-items-center py-4">
                 <div class="col-lg-6 col-7">
-                    <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+                    <h6 class="h2 text-white d-inline-block mb-0">Khách hàng</h6>
                     <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                         <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                             <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Tables</li>
+                            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"></li>
                         </ol>
                     </nav>
                 </div>
@@ -34,7 +34,7 @@
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header border-0">
-                    <h3 class="mb-0">Light table</h3>
+                    <h3 class="mb-0">Khách hàng</h3>
                 </div>
                 <div class="@ViewBag.Alert" style="margin:20px">@ViewBag.notify</div>
                 <!-- Light table -->
@@ -49,22 +49,22 @@
                         columns: grid.Columns(
                         //grid.Column("id_taikhoan", header: "Mã Tài Khoản"),
                         grid.Column("hoten", header: "Họ Tên"),
-                        grid.Column("phone", header: "Số Điện Thoại"),
-                        grid.Column("loaitk", header: "Loại TK"),
+                        grid.Column("phone", header: "Số Điện Thoại"), 
+                        grid.Column("loaitk", header: "Loại TK",format: p=>p.loaitk == true ?"Khách Hàng":"Admin"),
                         grid.Column("email", header: "Email"),
                         grid.Column("street", header: "Đường"),
                         grid.Column("ward", header: "Phường/Xã"),
                         grid.Column("district", header: "Quận/Huyện"),
                         grid.Column("province", header: "Tỉnh/TP"),
-                        grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_taikhoan }, new { @class = "btn btn-info", onclick = "EditLoaiSP(" + p.id_taikhoan + ")", data_toggle = "modal", data_target = "#editloaisp" })),
+                        grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_taikhoan }, new { @class = "btn btn-info", onclick = "EditTaiKhoan(" + p.id_taikhoan + ")", data_toggle = "modal", data_target = "#editloaisp" })),
                         grid.Column(format: p => Html.ActionLink("Xoá", "DeleteAccount", new { id = p.id_taikhoan }, new { @class = "btn btn-danger" }))
-                        
+
                     ))
 
                 </div>
 
                 <!-- Card footer -->
-                <div class="card-footer py-4">
+                @*<div class="card-footer py-4">
                     <nav aria-label="...">
                         <ul class="pagination justify-content-end mb-0">
                             <li class="page-item disabled">
@@ -88,7 +88,7 @@
                             </li>
                         </ul>
                     </nav>
-                </div>
+                </div>*@
             </div>
         </div>
     </div>
@@ -110,18 +110,19 @@
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-5">
-                            <label>Mã Loại Sản Phẩm:</label>
+                            <label>Mã Tài Khoản:</label>
                         </div>
                         <div class="col-6">
-                            <input type="text" id="idloaisp" name="idloaisp" class="form-control" readonly />
+                            <input type="text" id="id_taikhoan" name="idloaisp" class="form-control" readonly />
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-5">
                             <label>Mật Khẩu:</label>
                         </div>
-                        <div class="col-6">
-                            @Html.ActionLink("Reset Password", "ResetPassword", new { @class = "btn btn-dark" })
+                        <div class="col-6" id="ressetPass">
+                            @*@Html.ActionLink("Reset Password", "ResetPassword", new { @class = "btn btn-dark" })*@
+                            <a class="btn btn-dark" href="../Manage/Manage/ResetPassword/id">Reset Password</a>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -129,8 +130,9 @@
                             <label>Loại Tài Khoản:</label>
                         </div>
 
-                        <div class="col-6">
-                            @Html.ActionLink("Nâng cấp", "ResetPassword", new { @class = "btn btn-dark" })
+                        <div class="col-6" id="updatePassVip">
+                            @*@Html.ActionLink("Nâng cấp", "ResetPassword", new { @class = "btn btn-dark" })*@
+                            <a class="btn btn-dark" href="../Manage/Manage/ResetPassword/id">Reset Password</a>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -244,28 +246,18 @@
 </div>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script src="~/Areas/Manage/assets/vendor/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
-    function EditLoaiSP(idloaisp) {
+    function EditTaiKhoan(id_taikhoan) {
         $.ajax({
-            url: "/Manage/Manage/Get_LoaiSanPham_id/?id_loaisp=" + idloaisp,
+            url: "/Manage/Manage/Get_TaiKhoan_id/?tk=" + id_taikhoan,
             type: "GET",
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             success: function (result) {
-                var html = "";
-                result.forEach(function (value, key) {
-                    $('#idloaisp').val(value.id_loaisp);
-                    $('#tenloai').val(value.tenloai);
-                    $('#tenngan').val(value.tenngan);
-                    $('#thongtin').val(value.thongtin);
-                    //$('#hinhanh').val(value.hinhanh);
-                    $('#xeploai').val(value.xeploai);
-                    $('#theloai').val(value.theloai);
-                    $('#a').val(value.id_loaisp);
-                    //document.getElementById('img-hinhanh').src = "~/Source/img-public/images.jpg";
-                })
-                //$('#loadLoaiSP').html(html);
+                $('#id_taikhoan').val(result.id_taikhoan);
+                $('#ressetPass').html('<a class="btn btn-danger" href="../Manage/ResetPassword/' + result.id_taikhoan + '">Reset Password</a>');
+                $('#updatePassVip').html('<a class="btn btn-info" href="../Manage/UpdateAdmin/' + result.id_taikhoan + '">Nâng Cấp</a>');
+                //alert('<a class="btn btn-dark" href="../ Manage / Manage / ResetPassword / ' + result.id_taikhoan + '">Reset Password</a>');
             },
             error: function (errormessage) {
                 alert(errormessage.responseText);

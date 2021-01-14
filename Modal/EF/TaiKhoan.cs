@@ -12,6 +12,7 @@ namespace Modal.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
+            LichSuDGs = new HashSet<LichSuDG>();
             NguoiBans = new HashSet<NguoiBan>();
             NguoiMuas = new HashSet<NguoiMua>();
         }
@@ -35,6 +36,9 @@ namespace Modal.EF
 
         [StringLength(150)]
         public string hoten { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LichSuDG> LichSuDGs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NguoiBan> NguoiBans { get; set; }

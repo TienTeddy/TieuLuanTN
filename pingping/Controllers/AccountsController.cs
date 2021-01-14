@@ -33,8 +33,9 @@ namespace pingping.Controllers
                 var res_tk = dao_tk.create_taikhoan(model.username,model.password,model.hoten,model.email);
                 if (res_tk != null)
                 {
+                    
                     var dao_nm = new NguoiMua_DAO();
-                    var res_nm = dao_nm.create_nguoimua(res_tk.id_taikhoan,Int32.Parse(model.phone));
+                    var res_nm = dao_nm.create_nguoimua(res_tk.id_taikhoan, model.phone);
                     if (res_nm != null)
                     {
                         //add cookie
@@ -92,14 +93,16 @@ namespace pingping.Controllers
                 }
                 //ViewBag.Message = "true";
 
-                if (result == 0) //saller
+                if (result == 2) //saller
                 {
                     var dao1 = new NguoiBan_DAO();
                     var res = dao.Get_id_taikhoan(Login.username, Login.password);
                     var res_infoSaller = dao1.get_infor(res.id_taikhoan);
+
+                    //int? s = res_infoSaller.phone;
                     SessionHelper.SetSession(new AccLogin() {
                         id_taikhoan = res.id_taikhoan,
-                        id_nguoi =res_infoSaller.id_nguoiban,
+                        id_nguoi =res_infoSaller.id_nguoiban,                        
                         phone = res_infoSaller.phone,
                         street =res_infoSaller.street,
                         ward = res_infoSaller.ward,
@@ -154,6 +157,7 @@ namespace pingping.Controllers
             Session.Clear();
             Session.RemoveAll();
             Session.Abandon();
+            SessionHelper.ClearSession();
             return RedirectToAction("Index", "Home");
         }
         [HttpGet]

@@ -51,18 +51,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\Color_DAO.cs" />
+    <Compile Include="DAO\DauGia_DAO.cs" />
     <Compile Include="DAO\HoaDonCT_DAO.cs" />
     <Compile Include="DAO\HoaDon_DAO.cs" />
+    <Compile Include="DAO\LichSuDG_DAO.cs" />
     <Compile Include="DAO\LoaiSanPham_DAO.cs" />
     <Compile Include="DAO\NguoiBan_DAO.cs" />
     <Compile Include="DAO\NguoiMua_DAO.cs" />
     <Compile Include="DAO\SanPham_DAO.cs" />
     <Compile Include="DAO\Size_DAO.cs" />
     <Compile Include="DAO\TaiKhoan_DAO.cs" />
+    <Compile Include="DAO\TheTich_DAO.cs" />
     <Compile Include="EF\Color.cs" />
     <Compile Include="EF\Context_.cs" />
+    <Compile Include="EF\DauGia.cs" />
     <Compile Include="EF\HoaDon.cs" />
     <Compile Include="EF\HoaDonCT.cs" />
+    <Compile Include="EF\LichSuDG.cs" />
     <Compile Include="EF\LoaiSanPham.cs" />
     <Compile Include="EF\NguoiBan.cs" />
     <Compile Include="EF\NguoiMua.cs" />

@@ -5,10 +5,10 @@
 var BarsChart = (function() {
 
 	//
-	// Variables
+	// Variabless
 	//
 
-	var $chart = $('#chart-bars');
+	var $chart = $('#chart-bars1');
 
 
 	//
@@ -22,10 +22,10 @@ var BarsChart = (function() {
 		var ordersChart = new Chart($chart, {
 			type: 'bar',
 			data: {
-				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				labels: ['Jul', 'Aug1', 'Sep', 'Oct', 'Nov', 'Dec1'],
 				datasets: [{
 					label: 'Sales',
-					data: [25, 20, 30, 22, 17, 29]
+					data: [25, 20, 30, 22, 17, 2]
 				}]
 			}
 		});

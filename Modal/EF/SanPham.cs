@@ -12,6 +12,7 @@ namespace Modal.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SanPham()
         {
+            DauGias = new HashSet<DauGia>();
             HoaDonCTs = new HashSet<HoaDonCT>();
             Sales = new HashSet<Sale>();
             Sizes = new HashSet<Size>();
@@ -62,6 +63,9 @@ namespace Modal.EF
 
         [StringLength(100)]
         public string xeploai { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DauGia> DauGias { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HoaDonCT> HoaDonCTs { get; set; }

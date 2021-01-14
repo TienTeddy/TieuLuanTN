@@ -31,18 +31,18 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
-                                    <span class="h2 font-weight-bold mb-0">350,897</span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Sản Phẩm</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="number_products">0</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                                        <i class="ni ni-active-40"></i>
+                                        <i class="ni ni-archive-2"></i>
                                     </div>
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
+                                <span class="text-danger mr-2 text-muted" id="number_products_an">Ẩn: 0</span>
+                                <span class="text-nowrap"></span>
                             </p>
                         </div>
                     </div>
@@ -53,18 +53,18 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                                    <span class="h2 font-weight-bold mb-0">2,356</span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Người dùng</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="number_member">0</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                                        <i class="ni ni-chart-pie-35"></i>
+                                        <i class="ni ni-circle-08"></i>
                                     </div>
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
+                                <span class="text-success mr-2" id="number_member_ad">Quản Lý: 0</span>
+                                <span class="text-primary" id="number_member_kh">Khách Hàng: 0</span>
                             </p>
                         </div>
                     </div>
@@ -75,40 +75,40 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
-                                    <span class="h2 font-weight-bold mb-0">924</span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Hóa Đơn</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="number_bills">0</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                        <i class="ni ni-cart"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-sm">
+                                <span class="text-success mr-2" id="number_bills_ok"></span>
+                                <span class="text-danger" id="number_bills_no"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Đấu Giá</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="number_auctions">0</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
                                         <i class="ni ni-money-coins"></i>
                                     </div>
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card card-stats">
-                        <!-- Card body -->
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>
-                                    <span class="h2 font-weight-bold mb-0">49,65%</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
-                                        <i class="ni ni-chart-bar-32"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
+                                <span class="text-success mr-2" id="number_auctions_run">Run: </span>
+                                <span class="text-danger" id="number_auctions_stop">Stop: </span>
                             </p>
                         </div>
                     </div>
@@ -121,8 +121,8 @@
 <div class="container-fluid mt--6">
     <div class="row">
         <div class="col-xl-8">
-            <div class="card bg-default">
-                <div class="card-header bg-transparent">
+            <div class="card bg-gradient-white" >
+                @*<div class="card-header bg-transparent">
                     <div class="row align-items-center">
                         <div class="col">
                             <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>
@@ -145,13 +145,10 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div>*@
                 <div class="card-body">
                     <!-- Chart -->
-                    <div class="chart">
-                        <!-- Chart wrapper -->
-                        <canvas id="chart-sales-dark" class="chart-canvas"></canvas>
-                    </div>
+                    @Html.Partial("Chart-Line")
                 </div>
             </div>
         </div>
@@ -395,3 +392,42 @@
     </div>
     @Html.Partial("_Footer")
 </div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            Count_statistis();
+        })
+
+        function Count_statistis() {
+            $.ajax({
+                url: "/Manage/Manage/Count_statistis",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result != 0) {
+                        $('#number_products').html();
+                        $('#number_products_an').html("Ẩn: " + result.sphide);
+
+                        $('#number_member').html(result.mb);
+                        $('#number_member_ad').html("Quản Lý: "+result.mbad);
+                        $('#number_member_kh').html("Khách Hàng: "+result.mbkh);
+
+                        $('#number_bills').html(result.hd);
+
+                        $('#number_auctions').html(result.dg);
+                        $('#number_auctions_run').html("Run: "+result.dgrun);
+                        $('#number_auctions_stop').html("Stop: " + result.dgstop);
+                        //console.log(result.sp);
+                    }
+                    else {
+                        alert("Thống Kê Lỗi.");
+                    }
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+    </script>    
+}

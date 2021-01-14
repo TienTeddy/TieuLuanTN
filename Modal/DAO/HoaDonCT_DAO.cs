@@ -152,6 +152,30 @@ namespace Modal.DAO
             }
             return -1;
         }
+
+        #region 13-01
+        public List<HoaDonCT> get_hdct_all()
+        {
+            return db.HoaDonCTs.ToList();
+        }
+        public int remove_hdct_idsanpham(int? type)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var res = db.HoaDonCTs.FirstOrDefault(x => x.id_sanpham == type && x.trangthai == "Chưa Thanh Toán");
+            if (res != null)
+            {
+                db.HoaDonCTs.Remove(res);
+                db.SaveChanges();
+                return 1;
+            }
+            return 0;
+        }
+        public List<HoaDonCT> get_hdct_hoadon(int id)
+        {
+            return db.HoaDonCTs.Where(x => x.id_hoadon == id).ToList();
+        }
+        #endregion
+
         #region CRUD
         public double? deleted_hdct(int? id_hdct,int id_hoadon)
         {
@@ -202,5 +226,7 @@ namespace Modal.DAO
             return -1;
         }
         #endregion
+
+
     }
 }

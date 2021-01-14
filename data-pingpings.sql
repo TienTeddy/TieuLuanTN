@@ -188,6 +188,30 @@ create table Color
 	CONSTRAINT FK_Color_Size FOREIGN KEY (id_size) REFERENCES Size (id_size)
 )
 
+--đấu gia theo giá thứ nhất(max)
+create table DauGia
+(
+	id_daugia int identity(1,1) primary key,
+	id_sanpham int,
+	status_ nvarchar(20) check(status_ in(N'Đang áp dụng', N'Kết thúc')) default N'Đang áp dụng', --bắt đầu or kết thúc
+	time_start datetime,
+	time_end datetime,
+	time_left datetime,
+	result nvarchar(20),
+	CONSTRAINT FK_DauGia_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham(id_sanpham),
+)
+drop table DauGia
+drop table LichSuDG
+create table LichSuDG
+(
+	id_lichsudg int identity primary key,
+	id_taikhoan int,
+	id_daugia int,
+	value float,
+	time_update datetime
+	CONSTRAINT FK_LichSuDG_DauGia FOREIGN KEY (id_daugia) REFERENCES DauGia(id_daugia),
+	CONSTRAINT FK_LichSuDG_TaiKhoan FOREIGN KEY (id_taikhoan) REFERENCES TaiKhoan(id_taikhoan)
+)
 -- xử lý sp trùng nhau trong hoadonct
 --CREATE TRIGGER trg_hdct_sp ON HoaDonCT AFTER INSERT AS 
 --BEGIN
@@ -205,9 +229,10 @@ create table Color
 --	JOIN inserted ON HoaDonCT.id_sanpham = inserted.id_sanpham
 --END
 --GO
-select *from SanPham
-select *from Size
-select *from HoaDon
+
+select *from DauGia
+select *from NguoiMua
+select *from LichSuDG
 select *from HoaDonCT
 
 delete from HoaDon

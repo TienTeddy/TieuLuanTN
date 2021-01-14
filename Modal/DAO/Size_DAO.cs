@@ -48,5 +48,36 @@ namespace Modal.DAO
             }
             return null;
         }
+
+        #region 13-01
+        public Size get_size_name(string name, int? id_sanpham)
+        {
+            //db.Configuration.ProxyCreationEnabled = false;
+            return db.Sizes.FirstOrDefault(x => x.size == name && x.id_sanpham == id_sanpham);
+        }
+        public Size set_size_(string name, int? id_sanpham, int soluong)
+        {
+            Size s = new Size();
+            s.size = name;
+            s.id_sanpham = id_sanpham;
+            s.soluong = soluong;
+            var res = db.Sizes.Add(s);
+            db.SaveChanges();
+            return res;
+        }
+        public int update_size(Size size)
+        {
+            Size s = new Size();
+            s = size;
+            db.SaveChanges();
+            return 0;
+        }
+        public int remove_size(Size s)
+        {
+            db.Sizes.Remove(s);
+            db.SaveChanges();
+            return 0;
+        }
+        #endregion
     }
 }

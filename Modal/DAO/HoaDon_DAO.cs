@@ -14,6 +14,12 @@ namespace Modal.DAO
         {
             db = new Context_();
         }
+        public int get_count()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.HoaDons.Count(x=>x.trangthai=="Đã Thanh Toán");
+        }
 
         public HoaDon get_hoadon_id(int id_hoadon)
         {
@@ -87,5 +93,12 @@ namespace Modal.DAO
 
             return db.HoaDons.Where(x => x.id_nguoimua == id_taikhoan).ToList();
         }
+
+        #region 13-01
+        public List<HoaDon> get_hoadon_damua_all()
+        {
+            return db.HoaDons.Where(n => n.trangthai == "Đã Thanh Toán").OrderBy(n => n.thoigian).ToList();
+        }
+        #endregion
     }
 }

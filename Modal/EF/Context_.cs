@@ -13,8 +13,10 @@ namespace Modal.EF
         }
 
         public virtual DbSet<Color> Colors { get; set; }
+        public virtual DbSet<DauGia> DauGias { get; set; }
         public virtual DbSet<HoaDon> HoaDons { get; set; }
         public virtual DbSet<HoaDonCT> HoaDonCTs { get; set; }
+        public virtual DbSet<LichSuDG> LichSuDGs { get; set; }
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; }
         public virtual DbSet<NguoiBan> NguoiBans { get; set; }
         public virtual DbSet<NguoiMua> NguoiMuas { get; set; }

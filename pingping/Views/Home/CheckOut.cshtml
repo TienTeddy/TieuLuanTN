@@ -63,7 +63,14 @@
                                                 {
                                                     if (sp.id_sanpham == s.id_sanpham)
                                                     {
-                                                        <option value="@s.id_size @hdct.id_hoadonct" name="@hdct.id_hoadonct">@s.size</option>
+                                                        if (hdct.id_size == s.id_size)
+                                                        {
+                                                            <option value="@s.id_size @hdct.id_hoadonct" name="@hdct.id_hoadonct" selected>@s.size</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@s.id_size @hdct.id_hoadonct" name="@hdct.id_hoadonct">@s.size</option>
+                                                        }
                                                     }
                                                 }
                                             </select>

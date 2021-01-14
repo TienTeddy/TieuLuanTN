@@ -25,9 +25,10 @@ namespace Modal.EF
         [StringLength(50)]
         public string trangthai { get; set; }
 
-        public int? id_size { get; set; }
-
+        [StringLength(10)]
         public string color { get; set; }
+
+        public int? id_size { get; set; }
 
         public virtual HoaDon HoaDon { get; set; }
 

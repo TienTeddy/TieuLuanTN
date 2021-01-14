@@ -14,6 +14,18 @@ namespace Modal.DAO
         {
             db = new Context_();
         }
+
+        public int get_count()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.TaiKhoans.Count();
+        }
+        public int get_count_loai(bool loaitk)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.TaiKhoans.Count(x=>x.loaitk==loaitk);
+        }
+
         public TaiKhoan Get_id_taikhoan(string user, string pass)
         {
             db.Configuration.ProxyCreationEnabled = false;

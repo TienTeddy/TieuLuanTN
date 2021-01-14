@@ -28,7 +28,7 @@ var SalesChart = (function() {
             ticks: {
               callback: function(value) {
                 if (!(value % 10)) {
-                  return '$' + value + 'k';
+                  return '$' + value + 'kk';
                 }
               }
             }
@@ -46,7 +46,7 @@ var SalesChart = (function() {
                   //content += label;
               }
 
-              content += '<span class="popover-body-value">$' + yLabel + 'k</span>';
+              content += '<span class="popover-body-value">$s' + yLabel + 'k</span>';
               return content;
             }
           }
@@ -56,7 +56,7 @@ var SalesChart = (function() {
         labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
           label: 'Performance',
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60]
+          data: [0, 20, 10, 30, 15, 40, 20, 70, 60]
         }]
       }
     });

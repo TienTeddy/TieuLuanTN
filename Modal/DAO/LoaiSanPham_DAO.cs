@@ -86,5 +86,13 @@ namespace Modal.DAO
             return db.LoaiSanPhams.Where(x => x.id_loaisp == idloaisp).ToList();
 
         }
+
+        public List<LoaiSanPham> get_category_all_()
+        {
+            //db.Configuration.ProxyCreationEnabled = false;
+
+            return db.LoaiSanPhams.ToList();
+        }
+
     }
 }

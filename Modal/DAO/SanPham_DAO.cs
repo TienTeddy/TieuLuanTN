@@ -53,5 +53,84 @@ namespace Modal.DAO
 
             return db.SanPhams.FirstOrDefault(x => x.id_sanpham == id);
         }
+
+        public int get_count()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.SanPhams.Count(x=>x.hienthi=="HIỆN");
+        }
+        public int get_count_hide()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.SanPhams.Count(x => x.hienthi == "ẨN");
+        }
+
+        //13-01
+        public List<SanPham> get_product_all_()
+        {
+            //db.Configuration.ProxyCreationEnabled = false;
+
+            return db.SanPhams.ToList();
+        }
+        public SanPham get_product__(int? id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.SanPhams.FirstOrDefault(x => x.id_sanpham == id);
+        }
+        public SanPham set_product(SanPham type)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            if (type != null)
+            {
+                db.SanPhams.Add(type);
+                db.SaveChanges();
+                return type;
+            }
+            return null;
+        }
+        public SanPham remove_product(int? id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var type = db.SanPhams.SingleOrDefault(x => x.id_sanpham == id);
+            if (type != null)
+            {
+                type.hienthi = "Ẩn";
+                db.SaveChanges();
+                return type;
+            }
+            return null;
+        }
+        public SanPham update_product(int? id_sanpham, string tensp, int id_loaisp, string tenngan, int soluong, double dongia, double giasale, string trangthai, string hienthi, string tinhtrang, string thongtin, string XepLoai)
+        {
+            var type = db.SanPhams.SingleOrDefault(x => x.id_sanpham == id_sanpham);
+            if (type != null)
+            {
+                type.tensp = tensp;
+                type.tensp = tensp;
+                type.id_loaisp = id_loaisp;
+                type.soluong = soluong;
+                type.dongia = dongia;
+                type.giasale = giasale;
+                type.trangthai = trangthai;
+                type.hienthi = hienthi;
+                type.tinhtrang = tinhtrang;
+                type.thongtin = thongtin;
+                type.xeploai = XepLoai;
+                db.SaveChanges();
+                return type;
+            }
+            return null;
+        }
+        public SanPham update_product_model(SanPham sp)
+        {
+            SanPham sanpham = new SanPham();
+            sanpham = sp;
+            db.SaveChanges();
+            return null;
+        }
+
     }
 }

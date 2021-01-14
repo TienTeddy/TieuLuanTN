@@ -30,7 +30,100 @@ namespace pingping.Controllers
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
             }
-            return View();
+
+
+            #region Auction
+            var dao = new DauGia_DAO();
+            var result_dg = dao.get_daugia("Đang áp dụng"); //get daugia có status="đang áp dụng"
+            if (result_dg == null)
+            {
+                return View();
+            }
+            else
+            {
+                double? sum = 0;
+
+                var dao_sp = new SanPham_DAO();
+                var dao_lsdg = new LichSuDG_DAO();
+
+                List<SanPham> sp = new List<SanPham>();
+                List<LichSuDG> lsdg = new List<LichSuDG>();
+                DauGia_SanPham_LichSu_Model model = new DauGia_SanPham_LichSu_Model();
+                foreach (var dg in result_dg) //list daugia
+                {
+                    //update time_end dg
+                    System.TimeSpan time =new TimeSpan();
+                    DateTime now = DateTime.Now;
+                    DateTime flat = dg.time_end;
+                    
+                    time = (now).Subtract(flat);
+                    if (time.TotalDays >= 0)
+                    {
+                        if (time.TotalHours >= 0)
+                        {
+                            if (time.TotalMinutes >= 0)
+                            {
+                                if (time.TotalSeconds >= 0)
+                                {
+                                    var res_up = dao.update_daugia_status(dg.id_daugia,0);
+                                    if (res_up == null) return HttpNotFound();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //load lại daugia
+                result_dg = dao.get_daugia("Đang áp dụng");
+                foreach (var dg in result_dg) //list daugia
+                {
+                    //get sp có trong đấu gia
+                    var listsp = dao_sp.get_product_idsanpham_(dg.id_sanpham);
+                    foreach (var list in listsp)
+                    {
+                        sp.Add(new SanPham()
+                        {
+                            id_sanpham = list.id_sanpham,
+                            id_loaisp = list.id_loaisp,
+                            tensp = list.tensp,
+                            tenngan = list.tenngan,
+                            soluong = list.soluong,
+                            dongia = list.dongia,
+                            giasale = list.giasale,
+                            trangthai = list.trangthai,
+                            hienthi = list.hienthi,
+                            barcode = list.barcode,
+                            tinhtrang = list.tinhtrang,
+                            thongtin = list.thongtin,
+                            hinhanh1 = list.hinhanh1,
+                            hinhanh2 = list.hinhanh2,
+                            hinhanh3 = list.hinhanh3,
+                            hinhanh4 = list.hinhanh4,
+                            xeploai = list.xeploai,
+                        });
+                    }
+
+                    //get lichsudaugia có trong daugia
+                    var listls = dao_lsdg.get_lichsudg_daugia_id(dg.id_daugia);
+                    foreach (var l in listls)
+                    {
+                        lsdg.Add(new LichSuDG()
+                        {
+                            id_lichsudg = l.id_lichsudg,
+                            id_daugia = l.id_daugia,
+                            id_taikhoan = l.id_taikhoan,
+                            value = l.value,
+                            time_update = l.time_update
+                        });
+                    }
+                }
+                model.daugia_ = result_dg;
+                model.sanpham_ = sp;
+                model.lichsudg_ = lsdg;
+                ViewBag.values = sum;
+                return View(model);
+            }
+            #endregion
         }
         public ActionResult CheckOut()
         {
@@ -309,6 +402,10 @@ namespace pingping.Controllers
         [HttpGet]
         public JsonResult Get_Category_TrendingItem(string type)
         {
+            if (type == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
             var dao = new SanPham_DAO();
             var result = dao.get_product(type);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -325,6 +422,10 @@ namespace pingping.Controllers
         [HttpGet]
         public JsonResult Get_Category_Product(string type)
         {
+            if (type == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
             var dao = new LoaiSanPham_DAO();
             int id_loaisp = dao.get_category_shortname(type);
 
@@ -677,5 +778,37 @@ namespace pingping.Controllers
                 }
             }
         }
+
+        #region Auction
+        [HttpGet]
+        public JsonResult Auction(int dg,float value)
+        {
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var dao_ls = new LichSuDG_DAO();
+                var res_ls = dao_ls.create_lichsudg_id_taikhoan_daugia(dg, session_acc.id_taikhoan, value); //create auction
+                if (res_ls == 0)
+                {
+                    return Json(-1, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    //update Result winner
+                    var dao_dg = new DauGia_DAO();
+                    var res_dg = dao_dg.update_daugia_result(dg,session_acc.hoten);
+                    if (res_dg == null)
+                    {
+                        return Json(-1, JsonRequestBehavior.AllowGet);
+                    }
+                    return Json(1, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        #endregion
     }
 }

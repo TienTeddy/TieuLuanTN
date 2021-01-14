@@ -1,0 +1,95 @@
+﻿@using Modal.EF
+@model IEnumerable<HoaDon>
+@{
+    ViewBag.Title = "QuanLyHoaDon";
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 5);
+}
+
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tables</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Light table</h3>
+                </div>
+                <div class="@ViewBag.Alert" style="margin:20px">@ViewBag.notify</div>
+                <!-- Light table -->
+                <div class="table-responsive">
+
+                    @grid.GetHtml(
+                        tableStyle: "table align-items-center table-flush",
+                        headerStyle: "thead-light",
+                        footerStyle: "btn-group",
+                        rowStyle: "",
+                        alternatingRowStyle: "gridAltRow",
+                        columns: grid.Columns(
+                        //grid.Column("id_sanpham", header: "Mã Sản Phẩm"),
+                        //grid.Column("id_sanpham", header: "Tên Sản Phẩm"),
+                        //grid.Column("id_loaisp"),
+                        grid.Column("id_nguoimua", header: "Họ Tên Người Mua", format: p => p.id_nguoimua != null ? p.NguoiMua.TaiKhoan.hoten : ""),
+                        grid.Column("id_nguoimua", header: "Số điện thoại người mua", format: p => p.id_nguoimua != null ? p.NguoiMua.phone : ""),
+                        //grid.Column("mahd", header: "Số lượng"),
+                        grid.Column("tonggia", header: "Tổng Hoá Đơn"),
+                        grid.Column("thoigian", header: "Thời Gian Đặt"),
+                        grid.Column("hinhthuctt", header: "Hình Thức Thanh Toán"),
+                        //grid.Column("soluong", header: "Hiển Thị"),
+                        grid.Column("freeship", header: "Phí Giao Hàng"),
+                        //grid.Column("trangthai", header: "Xếp Loại"), 
+                        grid.Column(format: p => Html.ActionLink("Xem hoá đơn chi tiết", "HoaDonChiTiet", new { id = p.id_hoadon }, new { @class = "btn btn-block" }))
+                    ))
+
+                </div>
+                <!-- Card footer -->
+                @*<div class="card-footer py-4">
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-end mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">
+                                        <i class="fas fa-angle-left"></i>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        <i class="fas fa-angle-right"></i>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    @Html.Partial("_Footer")
+</div>

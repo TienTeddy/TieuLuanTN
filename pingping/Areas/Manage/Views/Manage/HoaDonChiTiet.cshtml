@@ -1,0 +1,102 @@
+﻿@using Modal.EF
+@model Modal.EF.HoaDon
+@{
+    ViewBag.Title = "HoaDonChiTiet";
+}
+
+
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tables</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Light table</h3>
+                </div>
+                <div class="@ViewBag.Alert" style="margin:20px">@ViewBag.notify</div>
+                <!-- Light table -->
+                <h2 style="margin-right:5%">Thông tin đơn hàng <font color="#f65e84">@Model.NguoiMua.TaiKhoan.hoten</font></h2>
+                <div class="ChiTietDonHang table">
+                    @{IEnumerable<HoaDonCT> lstHoaDonChiTiet = (IEnumerable<HoaDonCT>)ViewBag.ListHoaDonChiTiet;}
+                    <table class="table" id="table">
+                        <tr>
+                            <td colspan="4">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td>Mã đơn hàng: <b style="color:red;">@Model.id_hoadon @Html.Hidden("MaDDh", Model.id_hoadon)</b></td>
+                                        <td>Mã khách hàng: <b style="color:red">@Model.NguoiMua.TaiKhoan.id_taikhoan</b></td>
+                                        <td>Tên khách hàng: <b style="color:red">@Model.NguoiMua.TaiKhoan.hoten</b></td>
+                                        <td>Ngày đặt: <b style="color:red">@Model.thoigian.ToString("dd/MM/yyyy")</b></td>
+                                        <td>Tình Trạng Thanh Toán: <b class="text-success">@Model.hinhthuctt</b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Sản Phẩm</b></td>
+                            <td><b>Hình Ảnh</b></td>
+                            <td><b>Số Lượng Đặt</b></td>
+                            <td><b>Đơn Giá Đặt</b></td>
+                        </tr>
+                        @foreach (var item in lstHoaDonChiTiet)
+                        {
+                            <tr>
+                                <td>@item.SanPham.tensp</td>
+                                <td><img width="150" height="120" src="@Url.Content("~/Content/img-sp/SanPham/"+item.SanPham.hinhanh1)"</td>
+                                <td>@item.soluong</td>
+                                <td>@item.dongia</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td align="right" colspan="4">Tổng số lượng: @Model.HoaDonCTs.Sum(n => n.soluong) sản phẩm</td>
+                        </tr>
+                        <tr>
+                            <td align="right" colspan="4">Tổng Tiền: @Model.HoaDonCTs.Sum(n => n.SanPham.dongia).ToString("#,##") đồng</td>
+                        </tr>
+                    </table>
+                    @Html.ActionLink("Trở Về", "QuanLyHoaDon", "Manage",new {@class= "btn btn-danger"})
+                    <input type="button" style="margin:20px" class="btn btn-dark" value="In hoá đơn" id="btnInHoaDon" />     
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    @Html.Partial("_Footer")
+</div>
+<script>
+    $("#btnInHoaDon").click(function () {
+        var content ="<table>"+ $("#table").html()+"</table>";
+        InDonHang(content);
+    });
+    function InDonHang(content)
+    {
+        var printWindown = window.open('', '', 'height=400,width=800');
+        printWindown.document.write('<html><head><title>Hoá Đơn</title>');
+        printWindown.document.write('</head><body >');
+        printWindown.document.write(content);
+        printWindown.document.write('</body></html>');
+        printWindown.document.close();
+        printWindown.print();
+    }
+</script>
