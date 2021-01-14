@@ -151,6 +151,7 @@
     <Compile Include="Areas\Manage\Controllers\AccountController.cs" />
     <Compile Include="Areas\Manage\Controllers\ManageController.cs" />
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
+    <Compile Include="Areas\Manage\Models\Statistis_Model.cs" />
     <Compile Include="Common\AccLogin.cs" />
     <Compile Include="Common\CommonStants.cs" />
     <Compile Include="Common\Encryptor.cs" />
@@ -3630,7 +3631,7 @@
     <Content Include="Areas\Manage\assets\Chart\dist\locales\tr.json" />
     <Content Include="Areas\Manage\assets\Chart\dist\locales\ua.json" />
     <Content Include="Areas\Manage\assets\Chart\dist\locales\zh-cn.json" />
-    <Content Include="Areas\Manage\Views\Shared\Chart-Line.cshtml" />
+    <Content Include="Areas\Manage\Views\Shared\Chart_Line.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -3770,7 +3771,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Manage\Models\" />
     <Folder Include="Source\img-private\" />
     <Folder Include="Source\img-public\" />
   </ItemGroup>

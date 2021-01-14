@@ -1,7 +1,7 @@
 ﻿@using Modal.EF
 @model IEnumerable<SanPham>
 @{
-    ViewBag.Title = "Products";
+    ViewBag.Title = "Sản Phẩm";
     WebGrid grid = new WebGrid(source: Model, rowsPerPage: 4);
 }
 @{
@@ -13,17 +13,17 @@
         <div class="header-body">
             <div class="row align-items-center py-4">
                 <div class="col-lg-6 col-7">
-                    <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+                    <h6 class="h2 text-white d-inline-block mb-0">@ViewBag.Title</h6>
                     <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                         <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                             <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Tables</li>
+                            <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="col-lg-6 col-5 text-right">
-                    <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#myModal1">Thêm Mới</button>
+                    <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#CreateSanPham">Thêm Mới</button>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header border-0">
-                    <h3 class="mb-0">Light table</h3>
+                    <h3 class="mb-0">@ViewBag.Title</h3>
                 </div>
                 <div class="@ViewBag.Alert" style="margin:20px">@ViewBag.notify</div>
                 <!-- Light table -->
@@ -65,7 +65,7 @@
                         grid.Column("hinhanh2", header: "Hình Ảnh 2", format: p => Html.Raw("<img width=\"150\" height=\"100\" src=\"../../Source/img-public/" + p.hinhanh2 + "\">")),
                         grid.Column("hinhanh3", header: "Hình Ảnh 3", format: p => Html.Raw("<img width=\"150\" height=\"100\" src=\"../../Source/img-public/" + p.hinhanh3 + "\">")),
                         grid.Column("hinhanh4", header: "Hình Ảnh 4", format: p => Html.Raw("<img width=\"150\" height=\"100\" src=\"../../Source/img-public/" + p.hinhanh4 + "\">")),
-                        grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_sanpham }, new { @class = "btn btn-info", onclick = "EditLoaiSP(" + p.id_sanpham + ")", data_toggle = "modal", data_target = "#editloaisp" })),
+                        grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_sanpham }, new { @class = "btn btn-info", onclick = "EditSanPham(" + p.id_sanpham + ")", data_toggle = "modal", data_target = "#EditSanPham" })),
                         grid.Column(format: p => Html.ActionLink("Xoá", "DeleteSanPham", new { id = p.id_sanpham }, new { @class = "btn btn-danger" }))
                     ))
 
@@ -104,189 +104,192 @@
     <!-- Footer -->
     @Html.Partial("_Footer")
 </div>
-<!-- Modal content-->
-<div id="editloaisp" class="modal fade" role="dialog">
+
+<!-- Modal EditSanPham content-->
+<div id="EditSanPham" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl">
-            @using (Html.BeginForm("UpdateSanPham", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
-            {
-                <!-- Modal content-->
-                <div class="modal-content" id="loadLoaiSP">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Thêm Loại Sản Phẩm</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Tên Sản Phẩm:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="tensp" id="tensp" class="form-control" />
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Tên Loại:</label>
-                            </div>
-                            <div class="col-3">
-                                <select class="id_loaisp form-control" type="text" name="id_loaisp" id="id_loaisp">
-                                    @foreach (var item in lstlsp)
-                                    {
-                                        <option value="@item.id_loaisp">@item.tenloai</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Tên Ngắn:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="tenngan" id="tenngan" class="form-control" />
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Số Lượng:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="soluong" id="soluong" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Đơn Giá:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="dongia" id="dongia" class="form-control" />
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Giá Sale:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="giasale" id="giasale" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Trạng Thái:</label>
-                            </div>
-                            <div class="col-3">
-                                <select class="form-control" type="text" name="trangthai" id="trangthai" >
-                                    <option value="MỚI">MỚI</option>
-                                    <option value="CŨ">CŨ</option>
-                                </select>
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Hiển Thị:</label>
-                            </div>
-                            <div class="col-3">
-                                <select class="form-control" type="text" name="hienthi" id="hienthi">
-                                    <option value="HIỆN">HIỆN</option>
-                                    <option value="ẨN">ẨN</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Tình Trạng:</label>
-                            </div>
-                            <div class="col-3">
-                                <select class="form-control" type="text" name="tinhtrang" id="tinhtrang">
-                                    <option value="MỚI">MỚI</option>
-                                    <option value="CÒN HÀNG">CÒN HÀNG</option>
-                                    <option value="SẮP HẾT">SẮP HẾT</option>
-                                    <option value="HẾT HÀNG">HẾT HÀNG</option>
-                                    <option value="TỒN KHO ĐÃ LÂU">TỒN KHO ĐÃ LÂU</option>
-                                    <option value="HÀNG LỖI">HÀNG LỖI</option>
-                                </select>
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Xếp Loại:</label>
-                            </div>
-                            <div class="col-3">
-                                <select class="form-control" type="text" name="XepLoai" id="XepLoai">
-                                    <option value="Trending Item">Trending Item</option>
-                                    <option value="Hot Item">Hot Item</option>
-                                    <option value="Onsale">Onsale</option>
-                                    <option value="Best Saller">Best Saller</option>
-                                    <option value="Top Viewed">Top Viewed</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Thông Tin:</label>
-                            </div>
-                            <div class="col-10">
-                                <textarea class="form-control" name="thongtin" id="thongtin"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Hình Ảnh 1:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="file" name="hinhanh" accept="image/*" />
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Hình Ảnh 2:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="file" name="hinhanh" accept="image/*" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Hình Ảnh 3:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="file" name="hinhanh" accept="image/*" />
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Hình Ảnh 4:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="file" name="hinhanh" accept="image/*" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Chiều Cao:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="chieucao" id="chieucao" class="form-control" />
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Chiều rộng:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="chieurong" id="chieurong" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label>Chiều dài:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="chieudai" id="chieudai" class="form-control" />
-                            </div>
-                            <div class="col-2" style="margin-left:10%">
-                                <label>Cân nặng:</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="cannang" id="cannang" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" class="btn btn-success" value="Cập Nhật">
-                            <small><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></small>
-                        </div>
-
-                    </div>
+        @using (Html.BeginForm("UpdateSanPham", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <!-- Modal content-->
+            <div class="modal-content" id="loadLoaiSP">
+                <div class="modal-header">
+                    <h4 class="modal-title">Sửa Sản Phẩm</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-             }
-    </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Tên Sản Phẩm:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="id_sanpham" id="id_sanpham_e" hidden/>
+                            <input type="text" name="tensp" id="tensp_e" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Tên Loại:</label>
+                        </div>
+                        <div class="col-3">
+                            <select class="id_loaisp form-control" type="text" name="id_loaisp" id="id_loaisp">
+                                @foreach (var item in lstlsp)
+                                {
+                                    <option value="@item.id_loaisp">@item.tenloai</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Tên Ngắn:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="tenngan" id="tenngan_e" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Số Lượng:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="soluong" id="soluong_e" placeholder="Cập nhật từ màu" class="form-control" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Đơn Giá:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="dongia" id="dongia_e" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Giá Sale:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="giasale" id="giasale_e" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Trạng Thái:</label>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-control" type="text" name="trangthai" id="trangthai_e">
+                                <option value="MỚI">MỚI</option>
+                                <option value="CŨ">CŨ</option>
+                            </select>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Hiển Thị:</label>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-control" type="text" name="hienthi" id="hienthi_e">
+                                <option value="HIỆN">HIỆN</option>
+                                <option value="ẨN">ẨN</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Tình Trạng:</label>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-control" type="text" name="tinhtrang" id="tinhtrang_e">
+                                <option value="MỚI">MỚI</option>
+                                <option value="CÒN HÀNG">CÒN HÀNG</option>
+                                <option value="SẮP HẾT">SẮP HẾT</option>
+                                <option value="HẾT HÀNG">HẾT HÀNG</option>
+                                <option value="TỒN KHO ĐÃ LÂU">TỒN KHO ĐÃ LÂU</option>
+                                <option value="HÀNG LỖI">HÀNG LỖI</option>
+                            </select>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Xếp Loại:</label>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-control" type="text" name="XepLoai" id="xeploai_e">
+                                <option value="Trending Item">Trending Item</option>
+                                <option value="Hot Item">Hot Item</option>
+                                <option value="Onsale">Onsale</option>
+                                <option value="Best Saller">Best Saller</option>
+                                <option value="Top Viewed">Top Viewed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Thông Tin:</label>
+                        </div>
+                        <div class="col-10">
+                            <textarea class="form-control" name="thongtin" id="thongtin_e"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Hình Ảnh 1:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="file" name="hinhanh" accept="image/*" id="hinhanh_e1"/>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Hình Ảnh 2:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="file" name="hinhanh" accept="image/*" id="hinhanh_e2"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Hình Ảnh 3:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="file" name="hinhanh" accept="image/*"  id="hinhanh_e3"/>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Hình Ảnh 4:</label>
+                        </div>
+                        <div class="col-3" id="hinhanh_e4">
+                            <input type="file" name="hinhanh" accept="image/*" id="hinhanh_e4"/>
+                        </div>
+                    </div>
 
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Chiều Cao:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="chieucao" id="chieucao_e" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Chiều rộng:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="chieurong" id="chieurong_e" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Chiều dài:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="chieudai" id="chieudai_e" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Cân nặng:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="cannang" id="cannang_e" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success" value="Cập Nhật">
+                        <small><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></small>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
 </div>
-<div id="myModal1" class="modal fade" role="dialog">
+
+<!--Modal Create SanPham-->
+<div id="CreateSanPham" class="modal fade" role="dialog">
     <div class="modal-dialog  modal-xl">
         @using (Html.BeginForm("CreateSanPham", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
         {
@@ -327,7 +330,7 @@
                             <label>Số Lượng:</label>
                         </div>
                         <div class="col-3">
-                            <input type="text" name="soluong" class="form-control" />
+                            <input type="text" name="soluong" class="form-control" readonly/>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -469,32 +472,35 @@
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script src="~/Areas/Manage/assets/vendor/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
-    function EditLoaiSP(idsp) {
+    function EditSanPham(idsp) {
         $.ajax({
             url: "/Manage/Manage/Get_SanPham_id/?id_sanpham=" + idsp,
             type: "GET",
             contentType: "application/json;charset=utf-8",
             dataType: "json",
-            success: function (result) {
-                var html = "";
-                result.forEach(function (value, key) {
-                    $('#id_sanpham').val(value.id_sanpham);
-                    $('#tensp').val(value.tensp);
-                    $('#id_loaisp').val(value.id_loaisp);
-                    $('#tenngan').val(value.tenngan);
-                    $('#soluong').val(value.soluong);
-                    $('#dongia').val(value.dongia);
-                    $('#giasale').val(value.giasale);
-                    $('#trangthai').val(value.trangthai);
-                    $('#thongtin').val(value.thongtin);
-                    $('#xeploai').val(value.xeploai);
-                    $('#chieucao').val(value.chieucao);
-                    $('#chieurong').val(value.chieurong);
-                    $('#chieudai').val(value.chieudai);
-                    $('#cannang').val(value.cannang);
-                    //document.getElementById('img-hinhanh').src = "~/Source/img-public/images.jpg";
-                })
-                //$('#loadLoaiSP').html(html);
+            success: function (value) {
+                console.log(value);
+                $('#tensp_e').val(value.tensp);
+                $('#id_loaisp').val(value.id_loaisp);
+                $('#tenngan_e').val(value.tenngan);
+                if (Number($('#soluong_e').val(value.soluong)) == 0 || $('#soluong_e').val(value.soluong)=="") {
+                    $('#soluong_e').val("Cập nhật từ màu.");
+                }
+                else {
+                    $('#soluong_e').val(value.soluong);
+                }
+                $('#dongia_e').val(value.dongia);
+                $('#giasale_e').val(value.giasale);
+                $('#trangthai_e').val(value.trangthai);
+                $('#thongtin_e').val(value.thongtin);
+                $('#xeploai_e').val(value.xeploai);
+                $('#chieucao_e').val(value.chieucao);
+                $('#chieurong_e').val(value.chieurong);
+                $('#chieudai_e').val(value.chieudai);
+                $('#cannang_e').val(value.cannang);
+                $('#tinhtrang_e').val(value.tinhtrang);
+                $('#hienthi_e').val(value.hienthi);
+                $('#id_sanpham_e').val(value.id_sanpham);
             },
             error: function (errormessage) {
                 alert(errormessage.responseText);

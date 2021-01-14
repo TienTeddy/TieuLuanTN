@@ -18,6 +18,7 @@ namespace Modal.EF
         public virtual DbSet<HoaDonCT> HoaDonCTs { get; set; }
         public virtual DbSet<LichSuDG> LichSuDGs { get; set; }
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; }
+        public virtual DbSet<LuongTruyCap> LuongTruyCaps { get; set; }
         public virtual DbSet<NguoiBan> NguoiBans { get; set; }
         public virtual DbSet<NguoiMua> NguoiMuas { get; set; }
         public virtual DbSet<PhieuThanhToan> PhieuThanhToans { get; set; }

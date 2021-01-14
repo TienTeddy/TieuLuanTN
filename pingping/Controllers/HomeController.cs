@@ -20,12 +20,17 @@ namespace pingping.Controllers
             var session_acc = SessionHelper.GetSession();
             if (session_acc == null)
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Trang Chủ","Khách Vãn Lai");
+
                 ViewBag.Name = "My Account";
                 ViewBag.Messager = "Đăng Nhập";
                 ViewBag.Login = "../Accounts/Login";
             }
             else
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Trang Chủ", "Khách Hàng");
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
@@ -131,6 +136,8 @@ namespace pingping.Controllers
             var session_acc = SessionHelper.GetSession();
             if (session_acc == null)
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Giỏ Hàng", "Khách Vãn Lai");
                 ViewBag.Name = "My Account";
                 ViewBag.Messager = "Đăng Nhập";
                 ViewBag.Login = "../Accounts/Login";
@@ -138,6 +145,8 @@ namespace pingping.Controllers
             }
             else
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_tc = dao_tc.update_truycap_soluong("Giỏ Hàng", "Khách Hàng");
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
@@ -505,12 +514,16 @@ namespace pingping.Controllers
             var session_acc = SessionHelper.GetSession();
             if (session_acc == null)
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Sản Phẩm", "Khách Vãn Lai");
                 ViewBag.Name = "My Account";
                 ViewBag.Messager = "Đăng Nhập";
                 ViewBag.Login = "../Accounts/Login";
             }
             else
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Sản Phẩm", "Khách Hàng");
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
@@ -588,12 +601,16 @@ namespace pingping.Controllers
             var session_acc = SessionHelper.GetSession();
             if (session_acc == null)
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Liên Hệ", "Khách Vãn Lai");
                 ViewBag.Name = "My Account";
                 ViewBag.Messager = "Đăng Nhập";
                 ViewBag.Login = "../Accounts/Login";
             }
             else
             {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Liên Hệ", "Khách Hàng");
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
@@ -601,6 +618,7 @@ namespace pingping.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult SingleProcduct(int id)
         {
             var session_acc = SessionHelper.GetSession();
@@ -701,23 +719,22 @@ namespace pingping.Controllers
         }
         public ActionResult MyOrder()
         {
-            //var session_acc = SessionHelper.GetSession();
-            //var dao_1 = new HoaDon_DAO();
-            //var hoadon = dao_1.get_hoadon_idtaikhoan(session_acc.id_taikhoan);
-            //if (hoadon != null)
-            //{
-            //    MyOrder_Model res = new MyOrder_Model();
-            //    foreach (var hd in hoadon)
-            //    {
-            //        var dao_2 = new HoaDonCT_DAO();
-            //        var hoadonchitiet = dao_2.get_hoadonct(hd.id_hoadon);
-            //        res.hoadon = hoadon;
-            //        foreach (var hdct in hoadonchitiet)
-            //        {
-            //            res.hoadonct_ = hoadonchitiet;
-            //        }
-            //    }
-            //}
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                ViewBag.Name = "My Account";
+                ViewBag.Messager = "Đăng Nhập";
+                ViewBag.Login = "../Accounts/Login";
+                return View("Index");
+            }
+            else
+            {
+                var dao_tc = new LuongTruyCap_DAO();
+                var res_ = dao_tc.update_truycap_soluong("Đơn Hàng", "Khách Hàng");
+                ViewBag.Name = session_acc.hoten;
+                ViewBag.Messager = "Đăng Xuất";
+                ViewBag.Login = "../Accounts/Logout";
+            }
             return View();
         }
         

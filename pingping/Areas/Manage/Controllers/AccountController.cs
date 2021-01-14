@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace pingping.Areas.Manage.Controllers
 {
     public class AccountController : Controller

@@ -23,7 +23,7 @@ namespace Modal.EF
         [StringLength(20)]
         public string status_ { get; set; }
 
-        public DateTime time_start { get; set; }
+        public DateTime? time_start { get; set; }
 
         public DateTime time_end { get; set; }
 

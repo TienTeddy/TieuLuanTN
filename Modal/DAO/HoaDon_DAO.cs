@@ -14,11 +14,31 @@ namespace Modal.DAO
         {
             db = new Context_();
         }
+        
+        public double? get_hoadon_doanhthu()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            double? total= 0;
+            var res_= db.HoaDons.Where(x => x.trangthai == "Đã Thanh Toán").ToList();
+            foreach(var i in res_)
+            {
+                total += i.tonggia;
+            }
+            return total;
+        }
         public int get_count()
         {
             db.Configuration.ProxyCreationEnabled = false;
 
-            return db.HoaDons.Count(x=>x.trangthai=="Đã Thanh Toán");
+            return db.HoaDons.Count();
+        }
+        
+        public int get_count_trangthai(string trangthai)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.HoaDons.Count(x=>x.trangthai==trangthai);
         }
 
         public HoaDon get_hoadon_id(int id_hoadon)

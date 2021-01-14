@@ -212,6 +212,16 @@ create table LichSuDG
 	CONSTRAINT FK_LichSuDG_DauGia FOREIGN KEY (id_daugia) REFERENCES DauGia(id_daugia),
 	CONSTRAINT FK_LichSuDG_TaiKhoan FOREIGN KEY (id_taikhoan) REFERENCES TaiKhoan(id_taikhoan)
 )
+
+create table LuongTruyCap
+(
+	id_ltc int identity primary key,
+	namepage nvarchar(20),
+	soluong_vl int,
+	soluong_kh int,
+	time_update datetime
+)
+
 -- xử lý sp trùng nhau trong hoadonct
 --CREATE TRIGGER trg_hdct_sp ON HoaDonCT AFTER INSERT AS 
 --BEGIN
@@ -230,10 +240,10 @@ create table LichSuDG
 --END
 --GO
 
-select *from DauGia
+select *from LuongTruyCap
 select *from NguoiMua
-select *from LichSuDG
-select *from HoaDonCT
+select *from TheTich
+select *from TaiKhoan
 
-delete from HoaDon
+delete from LuongTruyCap
 delete from HoaDonCT 

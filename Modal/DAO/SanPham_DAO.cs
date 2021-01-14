@@ -97,7 +97,7 @@ namespace Modal.DAO
             var type = db.SanPhams.SingleOrDefault(x => x.id_sanpham == id);
             if (type != null)
             {
-                type.hienthi = "Ẩn";
+                type.hienthi = "ẨN";
                 db.SaveChanges();
                 return type;
             }

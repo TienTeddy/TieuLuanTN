@@ -25,89 +25,97 @@
         <div class="row">
             <div class="col-12">
                 <!-- Shopping Summery -->
-
+                @if (ViewBag.Messager == "Đăng Xuất")
+                {
+                    <div class="row">
+                        <div class="col-lg-9"></div>
+                        <div class="col-lg-3 text-right">
+                            <a href="~/Home/MyOrder" style="color:lightseagreen;margin-bottom:2%"><strong>Đơn Hàng</strong></a>
+                        </div>
+                    </div>
+                }
                 @if (Model != null)
                 {
-                <table class="table shopping-summery bill">
-                    <thead>
-                        <tr class="main-hading">
-                            <th>Sản Phẩm</th>
-                            <th>Tên</th>
-                            <th class="text-center">Đơn Giá</th>
-                            <th class="text-center">Size</th>
-                            <th class="text-center">Màu</th>
-                            <th class="text-center">Số Lượng</th>
-                            <th class="text-center">Tổng</th>
-                            <th class="text-center"><i class="ti-trash remove-icon"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var hdct in Model.hoadonct_)
-                        {
-                            double? gia=0, sum=0; 
-                            foreach (var sp in Model.sanpham_)
+                    <table class="table shopping-summery bill">
+                        <thead>
+                            <tr class="main-hading">
+                                <th>Sản Phẩm</th>
+                                <th>Tên</th>
+                                <th class="text-center">Đơn Giá</th>
+                                <th class="text-center">Size</th>
+                                <th class="text-center">Màu</th>
+                                <th class="text-center">Số Lượng</th>
+                                <th class="text-center">Tổng</th>
+                                <th class="text-center"><i class="ti-trash remove-icon"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var hdct in Model.hoadonct_)
                             {
-                                if (hdct.id_sanpham == sp.id_sanpham)
+                                double? gia = 0, sum = 0;
+                                foreach (var sp in Model.sanpham_)
                                 {
-                                    gia = sp.dongia;
-                                    <tr id="loadHoaDon_@hdct.id_hoadonct">
-                                        <td class="image" data-title="No"><img src="https://via.placeholder.com/100x100" alt="#"></td>
-                                        <td class="product-des" data-title="Description">
-                                            <p class="product-name"><a href="#">@sp.tensp</a></p>
-                                            <p class="product-des">@sp.thongtin</p>
-                                        </td>
-                                        <td class="price" data-title="Price"><span>@sp.dongia.ToString("#,##") VNĐ</span></td>
-                                        <td class="price">
-                                            <select id="select_size" onchange="LoadColor_(value)">
-                                                @foreach (var s in Model.size_)
-                                                {
-                                                    if (sp.id_sanpham == s.id_sanpham)
+                                    if (hdct.id_sanpham == sp.id_sanpham)
+                                    {
+                                        gia = sp.dongia;
+                                        <tr id="loadHoaDon_@hdct.id_hoadonct">
+                                            <td class="image" data-title="No"><img src="https://via.placeholder.com/100x100" alt="#"></td>
+                                            <td class="product-des" data-title="Description">
+                                                <p class="product-name"><a href="~/Home/SingleProcduct/@sp.id_sanpham">@sp.tensp</a></p>
+                                                <p class="product-des">@sp.thongtin</p>
+                                            </td>
+                                            <td class="price" data-title="Price"><span>@sp.dongia.ToString("#,##") VNĐ</span></td>
+                                            <td class="price">
+                                                <select id="select_size" onchange="LoadColor_(value)">
+                                                    @foreach (var s in Model.size_)
                                                     {
-                                                        if (hdct.id_size == s.id_size)
+                                                        if (sp.id_sanpham == s.id_sanpham)
                                                         {
-                                                            <option value="@s.id_size @hdct.id_hoadonct" name="@hdct.id_hoadonct" selected>@s.size</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@s.id_size @hdct.id_hoadonct" name="@hdct.id_hoadonct">@s.size</option>
+                                                            if (hdct.id_size == s.id_size)
+                                                            {
+                                                                <option value="@s.id_size @hdct.id_hoadonct" name="@hdct.id_hoadonct" selected>@s.size</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@s.id_size @hdct.id_hoadonct" name="@hdct.id_hoadonct">@s.size</option>
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            </select>
-                                        </td>
-                                        <td class="price">
-                                            <input id="id_color_@hdct.id_hoadonct" hidden />
-                                            <span id="select_@hdct.id_hoadonct">@hdct.color</span>
-                                            <div id="loadColor_@hdct.id_hoadonct"></div>
-                                        </td>
-                                        <td>
-                                            <!-- Input Order -->
-                                            <div class="input-group">
-                                                <input type="number" id="quantity_@hdct.id_hoadonct" max="100" min="1" value="@hdct.soluong" />
-                                            </div>
-                                            <!--/ End Input Order -->
-                                        </td>
-                                        <td class="total-amount" data-title="Total"><span id="Total_@hdct.id_hoadonct">@((hdct.soluong * hdct.dongia)?.ToString("#,##")) VNĐ</span></td>
-                                        <td class="action" data-title="Remove"><a href="#" onclick="removeItem(@hdct.id_hoadonct,@hdct.id_hoadon)"><i class="ti-trash remove-icon"></i></a></td>
-                                        <td class="combat" hidden>@(hdct.soluong*hdct.dongia)</td>
-                                    </tr>
-                                    break;
+                                                </select>
+                                            </td>
+                                            <td class="price">
+                                                <input id="id_color_@hdct.id_hoadonct" hidden />
+                                                <span id="select_@hdct.id_hoadonct">@hdct.color</span>
+                                                <div id="loadColor_@hdct.id_hoadonct"></div>
+                                            </td>
+                                            <td>
+                                                <!-- Input Order -->
+                                                <div class="input-group">
+                                                    <input type="number" id="quantity_@hdct.id_hoadonct" max="100" min="1" value="@hdct.soluong" />
+                                                </div>
+                                                <!--/ End Input Order -->
+                                            </td>
+                                            <td class="total-amount" data-title="Total"><span id="Total_@hdct.id_hoadonct">@((hdct.soluong * hdct.dongia)?.ToString("#,##")) VNĐ</span></td>
+                                            <td class="action" data-title="Remove"><a href="#" onclick="removeItem(@hdct.id_hoadonct,@hdct.id_hoadon)"><i class="ti-trash remove-icon"></i></a></td>
+                                            <td class="combat" hidden>@(hdct.soluong * hdct.dongia)</td>
+                                        </tr>
+                                        break;
+                                    }
                                 }
-                            }
 
-                                    <script>
+                                <script>
 
                                 //var input1 = 1;
                                 const input_@hdct.id_hoadonct = document.getElementById('quantity_@hdct.id_hoadonct'); //quantity
                                 const log_@hdct.id_hoadonct = document.getElementById('Total_@hdct.id_hoadonct');
 
-                                
+
 
                                 (input_@hdct.id_hoadonct).addEventListener('input', updateValue);
 
                                 function updateValue(e) {
                                     (log_@hdct.id_hoadonct).textContent = (Number(e.target.value) * (@gia)).toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                                        
+
                                     updateItem(@hdct.id_hoadonct,@hdct.id_hoadon, Number(e.target.value));
                                 }
                                 function removeItem(id_hdct,id_hoadon) {
@@ -145,20 +153,20 @@
                                         }
                                     });
                                 }
-                                    </script>
-                        }
-                    </tbody>
-                    <!--/ End Shopping Summery -->
-                </table>
+                                </script>
+                            }
+                        </tbody>
+                        <!--/ End Shopping Summery -->
+                    </table>
                 }
                 else
                 {
-                <div class="alert-info shopping-summery bill">
-                    <h4 class="alert-heading center">Chưa có đơn hàng nào.</h4>
-                </div>
-                
+                    <div class="alert-info shopping-summery bill">
+                        <h4 class="alert-heading center">Chưa có đơn hàng nào.</h4>
+                    </div>
+
                 }
-                    
+
             </div>
         </div>
         <div class="row">
@@ -201,9 +209,6 @@
     </div>
 </div>
 <!--/ End Shopping Cart -->
-<!--Footer-start-->
-@Html.Partial("_Footer")
-<!--Footer-end-->
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>

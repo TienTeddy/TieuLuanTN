@@ -1,5 +1,6 @@
 ﻿using Modal.DAO;
 using Modal.EF;
+using pingping.Areas.Manage.Models;
 using pingping.Common;
 using pingping.Models;
 using System;
@@ -27,6 +28,10 @@ namespace pingping.Areas.Manage.Controllers
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
+
+                var dao = new LuongTruyCap_DAO();
+                var res_ = dao.get_luongtruycap();
+                ViewBag.listLuongTruyCap=res_;
                 return View();
             }
         }
@@ -43,6 +48,53 @@ namespace pingping.Areas.Manage.Controllers
             return View();
         }
 
+        [ChildActionOnly]
+        public ActionResult Chart_Line()
+        {
+            //Statistis_Model statistis = new Statistis_Model();
+
+            var dao_sp = new SanPham_DAO();
+            var dao_hd = new HoaDon_DAO();
+            var dao_mb = new TaiKhoan_DAO();
+            var dao_dg = new DauGia_DAO();
+
+            int sp = dao_sp.get_count();
+            int sphide = dao_sp.get_count_hide();
+
+            int hd = dao_hd.get_count();
+            int hdtt = dao_hd.get_count_trangthai("Đã Thanh Toán");
+
+            int member = dao_mb.get_count();
+            int mbad = dao_mb.get_count_loai(false);
+            int mbkh = dao_mb.get_count_loai(true);
+
+            int dg = dao_dg.get_count();
+            int dgrun = dao_dg.get_count_stop();
+            int dgstop = dao_dg.get_count_run();
+
+            double? total = dao_hd.get_hoadon_doanhthu();
+            //statistis = new Statistis_Model()
+            //{
+            //    sp = sp,
+            //    sphide = sphide,
+            //    hd = hd,
+            //    mb = member,
+            //    mbad = mbad,
+            //    mbkh = mbkh,
+            //    dg = dg,
+            //    dgrun = dgrun,
+            //    dgstop = dgstop
+            //};
+            ViewBag.hdtt = hdtt;
+            ViewBag.total = total;
+            ViewBag.sp = sp;
+            ViewBag.hd = hd;
+            ViewBag.kh = mbkh;
+            ViewBag.dg = dg;
+            //ViewBag.statistis = statistis;
+            return PartialView("Chart_Line");
+        }
+
         public JsonResult Count_statistis()
         {
             Object statistis = new Object();
@@ -56,6 +108,7 @@ namespace pingping.Areas.Manage.Controllers
             int sphide = dao_sp.get_count_hide();
 
             int hd= dao_hd.get_count();
+            int hdtt = dao_hd.get_count_trangthai("Đã Thanh Toán");
 
             int member = dao_mb.get_count();
             int mbad = dao_mb.get_count_loai(false);
@@ -75,7 +128,8 @@ namespace pingping.Areas.Manage.Controllers
                 mbkh=mbkh,
                 dg = dg,
                 dgrun=dgrun,
-                dgstop=dgstop
+                dgstop=dgstop,
+                hdtt= hdtt
             };
             if (statistis != null)
             {
@@ -544,12 +598,16 @@ namespace pingping.Areas.Manage.Controllers
             var res_ = dao.Get_id_taikhoanAdmin(tk);
             return Json(res_, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Get_SanPham_id(int sp)
-        {
+
+        [HttpGet]
+        public JsonResult Get_SanPham_id(int id_sanpham)
+        { 
             var dao = new SanPham_DAO();
-            SanPham res_ = dao.get_product_idsanpham(sp);
+            SanPham res_ = dao.get_product_idsanpham(id_sanpham);
+
             var dao1 = new TheTich_DAO();
-            TheTich res1 = dao1.get_vol(sp);
+            TheTich res1 = dao1.get_vol(id_sanpham); // volumn phải tồn tại
+
             SanPham_TheTich_Model lst = new SanPham_TheTich_Model();
             lst.id_sanpham = res_.id_sanpham;
             lst.tensp = res_.tensp;
@@ -567,8 +625,12 @@ namespace pingping.Areas.Manage.Controllers
             lst.chieurong = res1.chieurong;
             lst.chieudai = res1.chieudai;
             lst.cannang = res1.cannang;
+            lst.hinhanh1 = res_.hinhanh1;
+            lst.hinhanh2 = res_.hinhanh2;
+            lst.hinhanh3 = res_.hinhanh3;
+            lst.hinhanh4 = res_.hinhanh4;
             return Json(lst, JsonRequestBehavior.AllowGet);
-        }
+        } //load editsanpham
         public ActionResult DeleteSanPham(int? id)
         {
             if (id == null)
@@ -740,6 +802,10 @@ namespace pingping.Areas.Manage.Controllers
             double.TryParse(c, out dg);
             double gias;
             double.TryParse(d, out gias);
+            if (b == "" || b!="0")
+            {
+                b = "1"; //b=""
+            }
             var res3 = dao.update_product(Int32.Parse(e), f["tensp"], Int32.Parse(a), f["tenngan"], Int32.Parse(b),dg,gias, f["trangthai"], f["hienthi"], f["tinhtrang"], f["thongtin"], f["XepLoai"]);
             if (res3 != null)
             {

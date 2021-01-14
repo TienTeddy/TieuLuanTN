@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Modal.EF
+@{
     ViewBag.Title = "Index";
 }
 
@@ -13,14 +14,12 @@
                     <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                         <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                             <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="#">Dashboards</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Trang Chủ</li>
+                            <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
                         </ol>
                     </nav>
                 </div>
                 <div class="col-lg-6 col-5 text-right">
-                    <a href="#" class="btn btn-sm btn-neutral">New</a>
-                    <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+                    <a href="#" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#newaccount">New</a>
                 </div>
             </div>
             <!-- Card stats -->
@@ -85,7 +84,7 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2" id="number_bills_ok"></span>
+                                <span class="text-success mr-2" id="number_bills_ok">Đã Thanh Toán: 0</span>
                                 <span class="text-danger" id="number_bills_no"></span>
                             </p>
                         </div>
@@ -120,7 +119,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--6">
     <div class="row">
-        <div class="col-xl-8">
+        <div class="col-xl-12">
             <div class="card bg-gradient-white" >
                 @*<div class="card-header bg-transparent">
                     <div class="row align-items-center">
@@ -148,11 +147,13 @@
                 </div>*@
                 <div class="card-body">
                     <!-- Chart -->
-                    @Html.Partial("Chart-Line")
+                    @{
+                        Html.RenderAction("Chart_Line", "Manage");
+                    }
                 </div>
             </div>
         </div>
-        <div class="col-xl-4">
+        @*<div class="col-xl-4">
             <div class="card">
                 <div class="card-header bg-transparent">
                     <div class="row align-items-center">
@@ -169,109 +170,58 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
     <div class="row">
-        <div class="col-xl-8">
+        <div class="col-xl-12">
             <div class="card">
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h3 class="mb-0">Page visits</h3>
-                        </div>
-                        <div class="col text-right">
-                            <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                            <h3 class="mb-0">Lượng Truy Cập</h3>
                         </div>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <!-- Projects table -->
+                    <!-- LuongTruyCap -->
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
-                                <th scope="col">Page name</th>
-                                <th scope="col">Visitors</th>
-                                <th scope="col">Unique users</th>
-                                <th scope="col">Bounce rate</th>
+                                <th scope="col">Trang</th>
+                                <th scope="col">Khách Vãn Lai</th>
+                                <th scope="col">Khách Hàng</th>
+                                <th scope="col">Tỉ Lệ(KH)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">
-                                    /argon/
-                                </th>
-                                <td>
-                                    4,569
-                                </td>
-                                <td>
-                                    340
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-up text-success mr-3"></i> 46,53%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/index.html
-                                </th>
-                                <td>
-                                    3,985
-                                </td>
-                                <td>
-                                    319
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-down text-warning mr-3"></i> 46,53%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/charts.html
-                                </th>
-                                <td>
-                                    3,513
-                                </td>
-                                <td>
-                                    294
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-down text-warning mr-3"></i> 36,49%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/tables.html
-                                </th>
-                                <td>
-                                    2,050
-                                </td>
-                                <td>
-                                    147
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-up text-success mr-3"></i> 50,87%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/profile.html
-                                </th>
-                                <td>
-                                    1,795
-                                </td>
-                                <td>
-                                    190
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-down text-danger mr-3"></i> 46,53%
-                                </td>
-                            </tr>
+                            @{IEnumerable<LuongTruyCap> listLuongTruyCap = (IEnumerable<LuongTruyCap>)ViewBag.listLuongTruyCap;}
+                            @if (listLuongTruyCap != null)
+                            {
+                                foreach (var i in listLuongTruyCap)
+                                {
+                                    <tr>
+                                        <th scope="row"><a href="#">/@i.namepage/</a></th>
+                                        <td>@i.soluong_vl</td>
+                                        <td>@i.soluong_kh</td>
+                                        @if((((float)(i.soluong_kh) / (float)(i.soluong_vl + i.soluong_kh)) * 100)>0)
+                                        {
+                                        <td><i class="fas fa-arrow-up text-success mr-3"></i>@(((float)(i.soluong_kh) / (float)(i.soluong_vl + i.soluong_kh)) * 100)%</td>
+                                        }
+                                        else {
+                                        <td><i class="fas fa-arrow-down text-warning mr-3"></i>@(((float)(i.soluong_kh) / (float)(i.soluong_vl + i.soluong_kh)) * 100)%</td>
+                                        }
+
+                                    </tr>
+                                    @*<i class="fas fa-arrow-down text-warning mr-3"></i>*@
+                                }
+                            }
+
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4">
+        @*<div class="col-xl-4">
             <div class="card">
                 <div class="card-header border-0">
                     <div class="row align-items-center">
@@ -388,9 +338,110 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
     @Html.Partial("_Footer")
+</div>
+<!--Modal New Account-->
+<div id="newaccount" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        @using (Html.BeginForm("CreateBuyer", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <!-- Modal content-->
+            <div class="modal-content" id="loadLoaiSP">
+                <div class="modal-header">
+                    <h4 class="modal-title">THÊM MỚI KHÁCH HÀNG</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Họ Tên:</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="hoten" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Tài khoản:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="username" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Mật Khẩu:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="password" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>EMAIL:</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="email" name="email" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Số điện thoại:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="phone" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>ĐƯỜNG:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="street" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>PHƯỜNG/XÃ:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="ward" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>QUẬN/HUYỆN:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="district" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>TỈNH/TP:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="text" name="province" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success" value="Cập Nhật">
+                        <small><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></small>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
 </div>
 @section scripts{
     <script>
@@ -406,14 +457,15 @@
                 dataType: "json",
                 success: function (result) {
                     if (result != 0) {
-                        $('#number_products').html();
+                        $('#number_products').html(result.sp);
                         $('#number_products_an').html("Ẩn: " + result.sphide);
 
                         $('#number_member').html(result.mb);
                         $('#number_member_ad').html("Quản Lý: "+result.mbad);
                         $('#number_member_kh').html("Khách Hàng: "+result.mbkh);
 
-                        $('#number_bills').html(result.hd);
+                        $('#number_bills').html(result.hd); 
+                        $('#number_bills_ok').html("Thanh Toán: "+result.hdtt);
 
                         $('#number_auctions').html(result.dg);
                         $('#number_auctions_run').html("Run: "+result.dgrun);
