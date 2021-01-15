@@ -22,6 +22,8 @@ namespace Modal.EF
 
         [StringLength(20)]
         public string status_ { get; set; }
+        public string status_use { get; set; }
+
 
         public DateTime? time_start { get; set; }
 

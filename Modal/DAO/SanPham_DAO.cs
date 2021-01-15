@@ -53,7 +53,12 @@ namespace Modal.DAO
 
             return db.SanPhams.FirstOrDefault(x => x.id_sanpham == id);
         }
+        public SanPham get_product_id(int? id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
 
+            return db.SanPhams.FirstOrDefault(x => x.id_sanpham == id);
+        }
         public int get_count()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -103,11 +108,15 @@ namespace Modal.DAO
             }
             return null;
         }
-        public SanPham update_product(int? id_sanpham, string tensp, int id_loaisp, string tenngan, int soluong, double dongia, double giasale, string trangthai, string hienthi, string tinhtrang, string thongtin, string XepLoai)
+        public SanPham update_product(int? id_sanpham, string tensp, int id_loaisp, string tenngan, int soluong, double dongia, double giasale, string trangthai, string hienthi, string tinhtrang, string thongtin, string XepLoai,string hinhanh1,string hinhanh2,string hinhanh3,string hinhanh4)
         {
             var type = db.SanPhams.SingleOrDefault(x => x.id_sanpham == id_sanpham);
             if (type != null)
             {
+                type.hinhanh1 = hinhanh1;
+                type.hinhanh2 = hinhanh2;
+                type.hinhanh3 = hinhanh3;
+                type.hinhanh4 = hinhanh4;
                 type.tensp = tensp;
                 type.tensp = tensp;
                 type.id_loaisp = id_loaisp;

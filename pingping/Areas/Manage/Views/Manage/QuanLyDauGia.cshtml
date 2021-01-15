@@ -1,0 +1,155 @@
+﻿@using Modal.EF
+@model IEnumerable<DauGia>
+@{
+    ViewBag.Title = "Quản Lý Đấu Giá";
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 10);
+}
+@{
+    IEnumerable<SanPham> lstsp = ViewBag.sp as IEnumerable<SanPham>;
+}
+
+<script>
+    $(function () {
+        $(".NgayNhap").datepicker();
+    });
+</script>
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">Quản Lý Đấu Giá</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Quản Lý Đấu Giá</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-5 text-right">
+                    <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#myModal1">Thêm Mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Quản Lý Đấu Giá</h3>
+                </div>
+                <div class="@ViewBag.Alert" style="margin:20px">@ViewBag.notify</div>
+                <!-- Light table -->
+                <div class="table-responsive">
+
+                    @grid.GetHtml(
+                        tableStyle: "table align-items-center table-flush",
+                        headerStyle: "thead-light",
+                        footerStyle: "btn-group",
+                        rowStyle: "",
+                        alternatingRowStyle: "gridAltRow",
+                        columns: grid.Columns(
+                        grid.Column("id_sanpham", header: "Tên sản phẩm", format: p => p.id_sanpham != null ? p.SanPham.tensp : ""),
+                        grid.Column("status_", header: "Trạng thái", format: p => p.status_ == "Đang áp dụng" ? "Đang Đâu Giá" : p.status_),
+                        grid.Column("time_start", header: "Thời gian bắt đầu"),
+                        grid.Column("time_end", header: "Thời gian két thúc"),
+                        grid.Column("time_left", header: "Thời gian đấu giá cuối"),
+                        grid.Column("result", header: "Người chiến thắng"),
+                        grid.Column("status_use", header: "Tình trạng"),
+                        grid.Column("status_", format: p => p.status_ == "Mới Thêm" ? Html.ActionLink("Bắt Đầu", "StartDG", new { id = p.id_daugia }, new { @class = "btn btn-green" }) :Html.ActionLink("Xem lịch sử đấu giá", "XemLichSuDG", new {id=p.id_daugia }) ),
+                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteDauGia", new { id = p.id_daugia }, new { @class = "btn btn-danger" }))
+                    ))
+
+                </div>
+
+                <!-- Card footer -->
+                @*<div class="card-footer py-4">
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-end mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">
+                                        <i class="fas fa-angle-left"></i>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        <i class="fas fa-angle-right"></i>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    @Html.Partial("_Footer")
+</div>
+<!-- Modal content-->
+<div id="myModal1" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        @using (Html.BeginForm("AddDauGia", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <!-- Modal content-->
+            <div class="modal-content" id="loadLoaiSP">
+                <div class="modal-header">
+                    <h4 class="modal-title">THÊM MỚI ĐẤU GIÁ</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Tên Sản Phẩm:</label>
+                        </div>
+                        <div class="col-6">
+                            <select class="id_loaisp form-control" type="text" name="id_sanpham">
+                                @foreach (var item in lstsp)
+                                {
+                                    <option value="@item.id_sanpham">@item.tensp</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Thời gian bắt đầu:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="date" name="time_start" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label>Thời gian Kết Thúc:</label>
+                        </div>
+
+                        <div class="col-6">
+                            <input type="date" name="time_end" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success" id="btnCapNhat" value="Thêm Mới">
+                        <small><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></small>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

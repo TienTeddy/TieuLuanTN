@@ -1,6 +1,5 @@
-﻿
-@{
-    ViewBag.Title = "Contact";
+﻿@{
+    ViewBag.Title = "Liên Hệ";
 }
 
 
@@ -12,48 +11,49 @@
                 <div class="col-lg-8 col-12">
                     <div class="form-main">
                         <div class="title">
-                            <h4>Get in touch</h4>
-                            <h3>Write us a message</h3>
+                            <h3>Đặt câu hỏi</h3>
                         </div>
-                        <form class="form" method="post" action="mail/mail.php">
+                        @using (Html.BeginForm("Contact", "Home", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "form" }))
+                        {
                             <div class="row">
                                 <div class="col-lg-6 col-12">
                                     <div class="form-group">
-                                        <label>Your Name<span>*</span></label>
-                                        <input name="name" type="text" placeholder="">
+                                        <label>Họ Tên:<span>*</span></label>
+                                        <input name="hoten" type="text" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12">
                                     <div class="form-group">
-                                        <label>Your Subjects<span>*</span></label>
-                                        <input name="subject" type="text" placeholder="">
+                                        <label>Chủ Đề<span>*</span></label>
+                                        <input name="chude" type="text" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12">
                                     <div class="form-group">
-                                        <label>Your Email<span>*</span></label>
+                                        <label>Email<span>*</span></label>
                                         <input name="email" type="email" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12">
                                     <div class="form-group">
-                                        <label>Your Phone<span>*</span></label>
-                                        <input name="company_name" type="text" placeholder="">
+                                        <label>Số điện thoại</label>
+                                        <input name="sdt" type="text" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group message">
-                                        <label>your message<span>*</span></label>
-                                        <textarea name="message" placeholder=""></textarea>
+                                        <label>Nội Dung:<span>*</span></label>
+                                        <textarea name="noidung" placeholder=""></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group button">
-                                        <button type="submit" class="btn ">Send Message</button>
+                                        <button type="submit" class="btn ">Gửi</button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        }
+
                     </div>
                 </div>
                 <div class="col-lg-4 col-12">

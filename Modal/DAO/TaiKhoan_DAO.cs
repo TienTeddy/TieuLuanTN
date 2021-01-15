@@ -120,5 +120,41 @@ namespace Modal.DAO
             var res = db.TaiKhoans.FirstOrDefault(x => x.id_taikhoan == id);
             return res;
         }
+
+        #region 15/01
+        public TaiKhoan forgotpassword(string email, string username, string mk)
+        {
+            var res = db.TaiKhoans.FirstOrDefault(x => x.username == username && x.email == email);
+            if (res != null)
+            {
+                res.password_old = res.password;
+                res.password = mk;
+                db.SaveChanges();
+                return res;
+            }
+            return null;
+        }
+        public TaiKhoan update_admin(int? id)
+        {
+            var res = db.TaiKhoans.FirstOrDefault(x => x.id_taikhoan == id);
+            if (res != null)
+            {
+                res.loaitk = false;
+                var res1 = db.NguoiMuas.FirstOrDefault(x => x.id_taikhoan == res.id_taikhoan);
+                NguoiBan nm = new NguoiBan();
+                nm.id_taikhoan = res1.id_taikhoan;
+                nm.phone = res1.phone;
+                nm.street = res1.street;
+                nm.ward = res1.ward;
+                nm.district = res1.district;
+                nm.province = res1.province;
+                db.NguoiBans.Add(nm);
+                db.NguoiMuas.Remove(res1);
+                db.SaveChanges();
+                return res;
+            }
+            return null;
+        }
+        #endregion
     }
 }

@@ -62,8 +62,8 @@
                         <!-- Top Left -->
                         <div class="top-left">
                             <ul class="list-main">
-                                <li><i class="ti-headphone-alt"></i> +060 (800) 801-582</li>
-                                <li><i class="ti-email"></i> support@shophub.com</li>
+                                <li><i class="ti-headphone-alt"></i> +033 4303506</li>
+                                <li><i class="ti-email"></i> Tienle10998@gmail.com</li>
                             </ul>
                         </div>
                         <!--/ End Top Left -->
@@ -72,10 +72,18 @@
                         <!-- Top Right -->
                         <div class="right-content">
                             <ul class="list-main">
-                                <li><i class="ti-location-pin"></i> Store location</li>
-                                <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
+                                <li><i class="ti-notepad"></i> @Html.RouteLink("Đơn Hàng của tôi", "donhangcuatoi")</li>
+                                @*<li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>*@
                                 <li><i class="ti-user"></i> <a href="~/Accounts/MyAccount">@ViewBag.Name</a></li>
-                                <li><i class="ti-power-off"></i><a href="@ViewBag.Login">@ViewBag.Messager</a></li>
+                                @if (@ViewBag.Messager == "Đăng Nhập")
+                                {
+                                    <li><i class="ti-power-off"></i>@Html.RouteLink("Đăng Nhập", "dangnhap")</li>
+                                }
+                                else
+                                {
+                                    <li><i class="ti-power-off"></i><a href="@ViewBag.Login">@ViewBag.Messager</a></li>
+                                }
+
                             </ul>
                         </div>
                         <!-- End Top Right -->
@@ -128,11 +136,25 @@
                         <div class="right-bar">
                             <!-- Search Form -->
                             <div class="sinlge-bar">
-                                <a href="#" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                            </div>
-                            <div class="sinlge-bar">
                                 <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                             </div>
+                            <!-- Notify Item -->
+                            <div class="sinlge-bar shopping">
+                                <a href="#" class="single-icon"><i class="ti-info"></i> <span class="total-count" id="total_count_notify">0</span></a>
+                                <div class="shopping-item">
+                                    <div class="dropdown-cart-header">
+                                        <a href="#">Thông báo</a>
+                                        <br />
+                                    </div>
+                                    <ul id="notify">
+                                        <li class="product_1">
+                                            <p><i class="ni-notification-70"></i>Không có thông báo.</p>
+                                        </li><hr />
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                            <!--/ End notify Item -->
                             <div class="sinlge-bar shopping">
                                 <a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">0</span></a>
                                 <!-- Shopping Item -->
@@ -252,11 +274,11 @@
                                     <div class="navbar-collapse">
                                         <div class="nav-inner">
                                             <ul class="nav main-menu menu navbar-nav">
-                                                <li class="active"><a href="~/Home/Index">Trang Chủ</a></li>
+                                                <li class="active">@Html.RouteLink("Trang Chủ", "trangchu")</li>
                                                 <li>
-                                                    <a href="#">Sản Phẩm<i class="ti-angle-down"></i></a><!--<span class="new">New</span>-->
+                                                    @Html.RouteLink("Sản Phẩm", "sanpham")<!--<span class="new">New</span>-->
                                                     <ul class="dropdown">
-                                                        <li><a href="~/Home/ProductPage">Thịnh Hành</a></li>
+                                                        <li>    @Html.RouteLink("Thịnh Hành", "sanpham")</li>
                                                         <li><a href="~/Home/ProductPage">Sale</a></li>
                                                         <li><a href="~/Home/ProductPage">Hot</a></li>
                                                         <li><a href="~/Home/ProductPage">Mua Nhiều Nhất</a></li>
@@ -264,9 +286,9 @@
                                                 </li>
                                                 <li><a href="#">Giới Thiệu</a></li>
                                                 <li><a href="#">Sale</a></li>
-                                                <li><a href="~/Home/Contact">Liên Hệ</a></li>
-                                                <li><a href="contact.html">Khuyến Mãi</a></li>
-                                                <li><a href="~/Home/CheckOut">Giỏ Hàng</a></li>
+                                                <li>@Html.RouteLink("Liên Hệ", "lienhe")</li>
+                                                <li><a href="#">Khuyến Mãi</a></li>
+                                                <li>@Html.RouteLink("Giỏ Hàng", "giohang")</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -327,6 +349,7 @@
     <script>
         $(document).ready(function () {
             LoadCategory();
+            notify();
         })
         function LoadCategory() {
             $.ajax({
@@ -348,7 +371,32 @@
                 }
             });
         }
-
+        function notify() {
+            $.ajax({
+                url: "/Home/Get_WinnerAuction",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = ""; var i = 0;
+                    result.forEach(function (value, key) {
+                        html += '<li class="product_' + value.id_daugia + '">';
+                        html += '<small class="cart-img" > Đầu giá thành công</small >&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;';
+                        html += '<a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>';
+                        html += '<h5><a href="../Home/SingleProcduct/' + value.id_sanpham + '">' + value.tensp + '</a></h5>';
+                        html += '<p><strong>' + value.coupon + '</strong></p>';
+                        html += '<p class="quantity">1x - <span class="amount">' + value.value + ' VNĐ</span></p>';
+                        html += '</li > <hr />';
+                        i = i+ 1;
+                    });
+                    $('#total_count_notify').html(i);
+                    $('#notify').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
     </script>
     @RenderSection("scripts", required: false)
 </body>

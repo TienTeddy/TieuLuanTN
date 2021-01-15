@@ -25,16 +25,16 @@
                 <div class="product-gallery">
                     <div class="quickview-slider-active">
                         <div class="single-slider">
-                            <img src="https://via.placeholder.com/569x528" alt="#">
+                            <img src="~/Source/img-public/@Model.SanPham_.hinhanh1" alt="#">
                         </div>
                         <div class="single-slider">
-                            <img src="https://via.placeholder.com/569x528" alt="#">
+                            <img src="~/Source/img-public/@Model.SanPham_.hinhanh2" alt="#">
                         </div>
                         <div class="single-slider">
-                            <img src="https://via.placeholder.com/569x528" alt="#">
+                            <img src="~/Source/img-public/@Model.SanPham_.hinhanh3" alt="#">
                         </div>
                         <div class="single-slider">
-                            <img src="https://via.placeholder.com/569x528" alt="#">
+                            <img src="~/Source/img-public/@Model.SanPham_.hinhanh4" alt="#">
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <h3>
-                        @if (@Model.SanPham_.giasale < @Model.SanPham_.dongia)
+                        @if (@Model.SanPham_.giasale < @Model.SanPham_.dongia || @Model.SanPham_.giasale!=0)
                         {
                             <b>@Model.SanPham_.giasale.ToString("#,##") VND</b>
                             <span>@Model.SanPham_.dongia.ToString("#,##") VND</span>

@@ -41,6 +41,10 @@ namespace Modal.EF
 
         public int? soluong { get; set; }
 
+        public double? sotiendathanhtoan { get; set; }
+
+        public string magiaodich { get; set; }
+
         public virtual NguoiMua NguoiMua { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

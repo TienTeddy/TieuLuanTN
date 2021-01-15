@@ -178,8 +178,8 @@
                             <div class="left">
                                 <div class="coupon">
                                     <form action="#" target="_blank">
-                                        <input name="Coupon" placeholder="Enter Your Coupon">
-                                        <button class="btn">Apply</button>
+                                        <input name="Coupon" id="txtCoupon"  placeholder="Sử Dụng Coupon">
+                                        <button class="btn" onclick="UseCoupon()">Sử Dụng</button>
                                     </form>
                                 </div>
                                 <div class="checkbox">
@@ -192,12 +192,12 @@
                                 <ul>
                                     <li>Tổng<span id="CartSubtotal">0</span></li>
                                     <li>Shipping<span>Free</span></li>
-                                    <li>You Save<span>0</span></li>
-                                    <li class="last">You Pay<span>0</span></li>
+                                    <li>Mã Giảm<span id="giam">@ViewBag.giam.ToString("#,##") VNĐ</span></li>
+                                    <li class="last" >Thanh Toán<span id="youpay">@ViewBag.youpay.ToString("#,##") VNĐ</span></li>
                                 </ul>
                                 <div class="button5">
-                                    <a href="#" class="btn">Checkout</a>
-                                    <a href="#" class="btn">Continue shopping</a>
+                                    <a href="@Url.Action("payment")" class="btn">Checkout</a>
+                                    <a href="@Url.Action("trangchu")" class="btn">Continue shopping</a>
                                 </div>
                             </div>
                         </div>
@@ -212,19 +212,23 @@
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
+    var sum_ = 0;
     $(document).ready(function () {
         $('.all-category').hide();
         //LoadBill("Chưa Thanh Toán");
-
+        
         var sum = 0;
         $('tr').find('.combat').each(function () {
             var combat = $(this).text();
             if (!isNaN(combat) && combat.length !== 0) {
                 sum += parseFloat(combat);
+                sum_ = sum;
             }
         });
 
         $('#CartSubtotal').html(sum.toLocaleString('vi', { style: 'currency', currency: 'VND' }));
+        
+
     });
     function GetHoaDonCT_id(id_hdct,html) {
         $.ajax({
@@ -297,5 +301,22 @@
         });
         $('#select_' + hd).hide();
     }
-    
+    function UseCoupon() {
+        $.ajax({
+            url: "/Home/UseCoupon?mcp="+ $('#txtCoupon').val(),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result == 0) { alert("Chưa có đơn hàng hoặc chưa đăng nhập."); }
+                else if (result == -1) { alert("ERROR"); }
+                else {
+                    location.reload();
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
 </script>

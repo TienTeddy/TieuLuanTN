@@ -79,5 +79,11 @@ namespace Modal.DAO
             return 0;
         }
         #endregion
+
+        public Size get_size_id(int? id_size)
+        {
+            return db.Sizes.FirstOrDefault(x => x.id_size == id_size);
+        }
+
     }
 }

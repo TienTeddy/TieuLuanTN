@@ -85,5 +85,13 @@ namespace Modal.DAO
             if (tk_ != null) return tk_;
             return null;
         }
+
+        public NguoiMua get_infor_(int id_taikhoan)
+        {
+            //db.Configuration.ProxyCreationEnabled = false;
+
+            return db.NguoiMuas.FirstOrDefault(x => x.id_taikhoan == id_taikhoan);
+        }
+
     }
 }

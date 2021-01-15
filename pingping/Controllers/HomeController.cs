@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -15,6 +16,8 @@ namespace pingping.Controllers
 {
     public class HomeController : Controller
     {
+
+        public double? xx = 0;
         public ActionResult Index()
         {
             var session_acc = SessionHelper.GetSession();
@@ -132,7 +135,8 @@ namespace pingping.Controllers
         }
         public ActionResult CheckOut()
         {
-            
+            ViewBag.youpay = 0;
+            ViewBag.giam = 0;
             var session_acc = SessionHelper.GetSession();
             if (session_acc == null)
             {
@@ -145,17 +149,17 @@ namespace pingping.Controllers
             }
             else
             {
+                double x = 0;
                 var dao_tc = new LuongTruyCap_DAO();
                 var res_tc = dao_tc.update_truycap_soluong("Giỏ Hàng", "Khách Hàng");
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
-
                 var dao_sp = new SanPham_DAO();
 
                 var dao = new HoaDon_DAO();
                 var result = dao.get_hoadon_trangthai(session_acc.id_nguoi, "Chưa Thanh Toán");
-
+                
                 if (result != null)
                 {
                     var dao_hdct = new HoaDonCT_DAO();
@@ -170,6 +174,7 @@ namespace pingping.Controllers
                     var order = new MyOrder_Model();
                     foreach (HoaDonCT i in result_hdct)
                     {
+                         x += Convert.ToDouble(i.dongia) * Convert.ToInt32(i.soluong);
                         //var res = dao_sp.get_product_idsanpham(i.id_sanpham);
                         var res_ = dao_sp.get_product_idsanpham_(i.id_sanpham);
 
@@ -208,32 +213,6 @@ namespace pingping.Controllers
                                             }
                                         }
                                     }
-                                    //else
-                                    //{
-                                    //    int flat = 0;
-                                    //    foreach (var c in color)
-                                    //    {
-                                    //        if (s.id_size == c.id_size)
-                                    //        {
-                                    //            flat += 1;
-                                    //        }
-                                    //    }
-                                    //    if (flat == 0)
-                                    //    {
-                                    //        //get color
-                                    //        var res_color = dao_color.get_color_size_id(s.id_size);
-                                    //        foreach (var c in res_color)
-                                    //        {
-                                    //            color.Add(new Color()
-                                    //            {
-                                    //                id_color = c.id_color,
-                                    //                id_size = c.id_size,
-                                    //                color1 = c.color1,
-                                    //                soluong = s.soluong
-                                    //            });
-                                    //        }
-                                    //    }
-                                    //}
                                 }
                                 else
                                 {
@@ -381,11 +360,13 @@ namespace pingping.Controllers
                     order.hoadonct_ = result_hdct;
                     order.size_ = size;
                     order.color_ = color;
+                    ViewBag.youpay = result.tonggia;
+                    ViewBag.giam = x-result.tonggia;
                     return View(order);
                 }
                 else
                 {
-                    return View();
+                   return View();
                 }
             }
             
@@ -734,11 +715,12 @@ namespace pingping.Controllers
                 ViewBag.Name = session_acc.hoten;
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
+                var dao = new HoaDonCT_DAO();
+                var res = dao.hdct_khachhang(session_acc.id_nguoi);
+                return View(res);
             }
-            return View();
         }
-        
-        
+
         [HttpPost]
         public JsonResult Update_HDCT(int id_hdct,int id_size,string color)
         {
@@ -825,6 +807,236 @@ namespace pingping.Controllers
                     return Json(1, JsonRequestBehavior.AllowGet);
                 }
             }
+        }
+
+        
+        public JsonResult Get_WinnerAuction()
+        {
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var dao_dg = new DauGia_DAO();
+                var dao_sp = new SanPham_DAO();
+                var dao_lsdg = new LichSuDG_DAO();
+
+                var res_dg = dao_dg.get_daugia_use("Kết Thúc","Chưa Sử Dụng");
+
+                List<object> model = new List<object>();
+                object obj = new object();
+                foreach(var dg in res_dg)
+                {
+
+                    //xác định kh này có win ko
+                    var res_lsdg_all = dao_lsdg.get_lichsudg_daugia_id(dg.id_daugia);
+                    double? max_win = 0; int? id_win = 0;
+                    foreach(var i in res_lsdg_all)
+                    {
+                        if (i.value > max_win)
+                        {
+                            max_win = i.value;
+                            id_win = i.id_taikhoan;
+                        }
+                    }
+
+                    // kh này win
+                    if (id_win == session_acc.id_taikhoan)
+                    {
+
+                        var res_sp = dao_sp.get_product_id(dg.id_sanpham);
+                        if (res_sp != null) //get sp
+                        {
+
+                            var dao_cp = new Coupon_DAO();
+                            var res_cp = dao_cp.get_coupon_id(res_sp.id_sanpham, "Chưa Sử Dụng");
+                            if (res_cp != null)
+                            {
+                                obj = new
+                                {
+                                    id_daugia = dg.id_daugia,
+                                    id_sanpham = res_sp.id_sanpham,
+                                    value = max_win,
+                                    tensp = res_sp.tensp,
+                                    coupon=res_cp.Ma_Coupon
+                                };
+                            }
+                        }
+                        model.Add(obj);
+                    }
+
+                }
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
+        public JsonResult UseCoupon(string mcp)
+        {
+
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet); //chưa có hd
+            }
+            else
+            {
+                // kh đã có hd
+                var dao_hd = new HoaDon_DAO();
+                var dao_cp = new Coupon_DAO();
+
+                //create HD
+                var res_hd = dao_hd.get_hoadon_trangthai(session_acc.id_nguoi,"Chưa Thanh Toán");
+                if (res_hd != null)
+                {
+                    var cp = dao_cp.get_coupon_MaCoupon(mcp);
+                    if (cp!=null)
+                    {
+                        var dao_dg = new DauGia_DAO();
+                        var dao_sp = new SanPham_DAO();
+                        var dao_lsdg = new LichSuDG_DAO();
+                        var res_dg = dao_dg.get_daugia_use_sanpham("Kết Thúc", "Chưa Sử Dụng",cp.id_sanpham);
+
+                        foreach (var dg in res_dg)
+                        {
+
+                            //xác định kh này có win ko
+                            var res_lsdg_all = dao_lsdg.get_lichsudg_daugia_id(dg.id_daugia);
+                            double? max_win = 0; int? id_win = 0;
+                            foreach (var i in res_lsdg_all)
+                            {
+                                if (i.value > max_win)
+                                {
+                                    max_win = i.value;
+                                    id_win = i.id_taikhoan;
+                                }
+                            }
+
+                            // kh này win
+                            if (id_win == session_acc.id_taikhoan)
+                            {
+                                var res_sp = dao_sp.get_product_(cp.id_sanpham);
+                                if (res_sp != null)
+                                {
+                                    double gia = 0;
+                                    if (res_sp.giasale > res_sp.dongia && res_sp.giasale != 0)
+                                    {
+                                        gia = res_sp.dongia;
+                                    }
+                                    else
+                                    {
+                                        gia = res_sp.giasale;
+                                    }
+                                    xx = max_win;
+                                    var res_uphd = dao_hd.updateHoaDon_coupon(res_hd.id_hoadon,(gia - max_win)); //trừ tiền
+                                    var res_upcp = dao_cp.update_coupon(mcp); //trạng thái coupon
+                                    var res_updg = dao_dg.update_daugia_status_(dg.id_daugia); //trạng thái đấu giá
+                                    return Json(1, JsonRequestBehavior.AllowGet);
+                                }
+                                
+                            }
+
+                        }
+
+                    }
+                }
+                else
+                {
+                    return Json(0, JsonRequestBehavior.AllowGet); //chưa có hd
+                }
+
+            }
+            return Json(-1, JsonRequestBehavior.AllowGet); //lỗi
+        }
+
+        #region 15/01
+        public ActionResult Payment()
+        {
+            var acc = SessionHelper.GetSession();
+            if (acc == null)
+            {
+                return RedirectToAction("Login", "Accounts");
+            }
+            else
+            {
+                ViewBag.Name = acc.hoten;
+                ViewBag.Messager = "Đăng Xuất";
+                ViewBag.Login = "../Accounts/Logout";
+            }
+            var dao = new HoaDon_DAO();
+            var hd = dao.get_hoadon_NguoiMua(acc.id_taikhoan);
+            var dao1 = new HoaDonCT_DAO();
+            var lstHoaDonChiTiet = dao1.get_hdct_hoadon(hd.id_hoadon);
+
+            var dao_namesize = new Size_DAO();
+            //object model = new object();
+            List<Size> model_total = new List<Size>();
+            object model = new object();
+            foreach (var m in lstHoaDonChiTiet)
+            {
+
+                var namesize = dao_namesize.get_size_id(m.id_size); //get name size
+
+                model_total.Add(namesize);
+            }
+            ViewBag.lstSize = model_total;
+            ViewBag.lstHoaDonChiTiet = lstHoaDonChiTiet;
+            return View(hd);
+        }
+        
+        public ActionResult PayPal()
+        {
+            var getData = new GetDataPaypal();
+            var order = getData.InformationOrder(getData.GetPayPalResponse(Request.QueryString["tx"]));
+            if (order.PaymentStatus == "Completed")
+            {
+                var acc = SessionHelper.GetSession();
+                var dao = new HoaDon_DAO();
+                var res = dao.set_hd_paypal(acc.id_nguoi, order.GrossTotal, Request.QueryString["tx"]);
+                var dao1 = new HoaDonCT_DAO();
+                var lsthdct = dao1.get_hdct_hoadon_(res.id_hoadon);
+                ViewBag.ThongBao = lsthdct;
+            }
+            else
+            {
+                return RedirectToAction("FailPaypal");
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Contact(FormCollection f)
+        {
+            if (f["hoten"] == null || f["chude"] == null || f["email"] == null || f["noidung"] == null)
+            {
+                ViewBag.TB = "Bạn Vui Lòng đầy đủ thông tin";
+            }
+            else
+            {
+                GuiEmail(f["chude"].ToString(), "phongnt3099@gmail.com", "testecommercehcmue@gmail.com", "Taogmail.com", f["noidung"].ToString());
+                var content = "Cảm ơn Bạn " + f["hoten"] + " Đã Liên Hệ Với Chúng Tôi!<br /> Vấn đề bạn gặp phải là: " + f["chude"] + "<br /> Chúng tôi sẽ trả lời bạn sớm nhất trong thời gian tới.";
+                GuiEmail(f["chude"].ToString(), f["email"], "testecommercehcmue@gmail.com", "Taogmail.com", content.ToString());
+            }
+            return View();
+        }
+        public void GuiEmail(string Title, string ToEmail, string FromEmail, string Password, string Content)
+        {
+            MailMessage mail = new MailMessage();
+            mail.To.Add(ToEmail);// Địa Chỉ Người Nhận 
+            mail.From = new MailAddress(ToEmail); // Địa Chỉ Người Gửi
+            mail.Subject = Title;// Tieu Đê
+            mail.Body = Content;// Noi Dung
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";// host gui Email
+            smtp.Port = 587;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential
+            (FromEmail, Password);//Tai Khoan Nguoi Gui
+            smtp.EnableSsl = true;// kich hoat giao tiep an toan SSL
+            smtp.Send(mail);//Gui mail di
+
         }
         #endregion
     }

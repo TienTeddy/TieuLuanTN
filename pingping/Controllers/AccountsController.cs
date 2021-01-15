@@ -4,6 +4,8 @@ using pingping.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -303,6 +305,63 @@ namespace pingping.Controllers
             ViewBag.Messager = "Đăng Xuất";
             ViewBag.Login = "../Accounts/Logout";
             return View("MyAccount", acc);
+        }
+
+        [HttpGet]
+        public ActionResult Forgotpassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Forgotpassword(FormCollection f)
+        {
+            if (f == null)
+            {
+                return RedirectToAction("Forgotpassword");
+            }
+            StringBuilder sb = new StringBuilder();
+            char c;
+            Random rand = new Random();
+
+            for (int i = 0; i < 5; i++)
+            {
+                c = Convert.ToChar(Convert.ToInt32(rand.Next(65, 87)));
+                sb.Append(c);
+            }
+            var dao = new TaiKhoan_DAO();
+            var res = dao.forgotpassword(f["email"], f["taikhoan"], sb.ToString());
+            if (res != null)
+            {
+                var content = "<div style=" + "color:#FFCC00" + ">Hệ Thống PingPing Chào Bạn!</div></br><div style=" + "font-size:20px" + ">Mật Khẩu của bạn là: <strong style=" + "color:#0000FF" + ">" + sb + "</strong></div>";
+                GuiEmail("Reset Password PingPing", res.email.ToString(), "testecommercehcmue@gmail.com", "Taogmail.com", content.ToString());
+
+                ViewBag.TB = "Mời bạn vào hộp thư email:" + res.email + " để nhận lại mật khảu";
+            }
+            else
+            {
+
+                ViewBag.TB = "Bạn nhập sai tài khoản hoặc email";
+            }
+            return View();
+        }
+
+        public void GuiEmail(string Title, string ToEmail, string FromEmail, string Password, string Content)
+        {
+            MailMessage mail = new MailMessage();
+            mail.To.Add(ToEmail);// Địa Chỉ Người Nhận 
+            mail.From = new MailAddress(ToEmail); // Địa Chỉ Người Gửi
+            mail.Subject = Title;// Tieu Đê
+            mail.Body = Content;// Noi Dung
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";// host gui Email
+            smtp.Port = 587;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential
+            (FromEmail, Password);//Tai Khoan Nguoi Gui
+            smtp.EnableSsl = true;// kich hoat giao tiep an toan SSL
+            smtp.Send(mail);//Gui mail di
+
         }
     }
 }

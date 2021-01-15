@@ -146,8 +146,8 @@ create table HoaDonCT
 	CONSTRAINT FK_HoaDonCT_HoaDon FOREIGN KEY (id_hoadon) REFERENCES HoaDon (id_hoadon) ON DELETE CASCADE,
 	CONSTRAINT FK_HoaDonCT_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham) ON DELETE CASCADE,
 )
-alter table HoaDonCT
-add id_size int check(trangthai in(N'Chưa Thanh Toán',N'Đã Thanh Toán')) default N'Chưa Thanh Toán',
+alter table HoaDon
+add magiaodich nvarchar(50)
 create table PhieuThanhToan
 (
 	id_phieutt int identity primary key,
@@ -197,10 +197,11 @@ create table DauGia
 	time_start datetime,
 	time_end datetime,
 	time_left datetime,
+	status_use nvarchar(20) check(status_use in(N'Đã Sử Dụng',N'Chưa Sử Dụng'))  default N'Chưa Sử Dụng',
 	result nvarchar(20),
 	CONSTRAINT FK_DauGia_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham(id_sanpham),
 )
-drop table DauGia
+select *from DauGia where status_=N'Kết Thúc'	
 drop table LichSuDG
 create table LichSuDG
 (
@@ -222,28 +223,41 @@ create table LuongTruyCap
 	time_update datetime
 )
 
--- xử lý sp trùng nhau trong hoadonct
---CREATE TRIGGER trg_hdct_sp ON HoaDonCT AFTER INSERT AS 
---BEGIN
---	UPDATE HoaDonCT
---	SET soluong = soluong + (
---		SELECT soluong
---		FROM inserted
---		WHERE id_sanpham = HoaDonCT.id_sanpham
---		), thoigian=(
---		SELECT thoigian
---		FROM inserted
---		WHERE id_sanpham = HoaDonCT.id_sanpham
---		)
---	FROM HoaDonCT
---	JOIN inserted ON HoaDonCT.id_sanpham = inserted.id_sanpham
---END
---GO
+create table Coupon(
+	id_coupon int identity primary key,
+	--id_khachhang int kh nào cũng use đc khi có mã
+	id_sanpham int,
+	thestart varchar(20),
+	theend varchar(20),
+	discount varchar(10),
+	status_ nvarchar(50) check(status_ in(N'Chưa Sử Dụng',N'Đã Sử Dụng',N'Đã Hết Hạn')) default N'Chưa Sử Dụng',
+	Ma_Coupon varchar(50)
+)
+drop table Coupon
+create trigger trg_RamdomCoupon on Coupon after insert
+as declare @ramdom varchar(50)
+begin
+	set @ramdom = ''
+	SELECT @ramdom = SUBSTRING(CONVERT(varchar(50), NEWID()),0,9)
 
-select *from LuongTruyCap
-select *from NguoiMua
-select *from TheTich
+	if(@ramdom!='')
+		begin 
+			update dbo.Coupon set Ma_Coupon= @ramdom
+			where id_coupon = (select id_coupon from inserted)
+		end
+end
+go
+alter table D
+create trigger trg_createDauGia on DauGia after insert
+as
+begin
+	insert into Coupon(id_sanpham) values((select id_sanpham from inserted))
+end
+go
 select *from TaiKhoan
+select *from NguoiMua
+select *from NguoiBan
+select *from SanPham 
 
 delete from LuongTruyCap
 delete from HoaDonCT 

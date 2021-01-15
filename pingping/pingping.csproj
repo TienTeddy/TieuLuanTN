@@ -165,9 +165,11 @@
     <Compile Include="Models\Account_buyer_Model.cs" />
     <Compile Include="Models\CheckOut_Model.cs" />
     <Compile Include="Models\DauGia_SanPham_LichSu_Model.cs" />
+    <Compile Include="Models\GetDataPaypal.cs" />
     <Compile Include="Models\HoaDon_HoaDonCT_Model.cs" />
     <Compile Include="Models\Login_Models.cs" />
     <Compile Include="Models\MyOrder_Model.cs" />
+    <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Register_Model.cs" />
     <Compile Include="Models\SanPham_Size_Model.cs" />
     <Compile Include="Models\SanPham_TheTich_Model.cs" />
@@ -3632,6 +3634,8 @@
     <Content Include="Areas\Manage\assets\Chart\dist\locales\ua.json" />
     <Content Include="Areas\Manage\assets\Chart\dist\locales\zh-cn.json" />
     <Content Include="Areas\Manage\Views\Shared\Chart_Line.cshtml" />
+    <Content Include="Areas\Manage\Views\Manage\QuanLyDauGia.cshtml" />
+    <Content Include="Areas\Manage\Views\Manage\XemLichSuDG.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -3768,6 +3772,9 @@
     <Content Include="Views\Accounts\Register.cshtml" />
     <Content Include="Views\Home\SingleProcduct.cshtml" />
     <Content Include="Views\Home\MyOrder.cshtml" />
+    <Content Include="Views\Home\Payment.cshtml" />
+    <Content Include="Views\Home\PayPal.cshtml" />
+    <Content Include="Views\Accounts\Forgotpassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

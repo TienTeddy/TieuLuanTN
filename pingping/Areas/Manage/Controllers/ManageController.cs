@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -806,7 +808,7 @@ namespace pingping.Areas.Manage.Controllers
             {
                 b = "1"; //b=""
             }
-            var res3 = dao.update_product(Int32.Parse(e), f["tensp"], Int32.Parse(a), f["tenngan"], Int32.Parse(b),dg,gias, f["trangthai"], f["hienthi"], f["tinhtrang"], f["thongtin"], f["XepLoai"]);
+            var res3 = dao.update_product(Int32.Parse(e), f["tensp"], Int32.Parse(a), f["tenngan"], Int32.Parse(b),dg,gias, f["trangthai"], f["hienthi"], f["tinhtrang"], f["thongtin"], f["XepLoai"],sp.hinhanh1,sp.hinhanh2,sp.hinhanh3,sp.hinhanh4);
             if (res3 != null)
             {
                 a = f["chieurong"];
@@ -1012,7 +1014,7 @@ namespace pingping.Areas.Manage.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var dao = new HoaDon_DAO();
-            var res = dao.get_hoadon_id(id);
+            var res = dao.get_hoadon_idd(id);
             if (res == null)
             {
                 return HttpNotFound();
@@ -1024,5 +1026,122 @@ namespace pingping.Areas.Manage.Controllers
         }
 
         #endregion
+
+        public ActionResult ResetPassword(int id)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            StringBuilder sb = new StringBuilder();
+            char c;
+            Random rand = new Random();
+            for (int i = 0; i < 5; i++)
+            {
+                c = Convert.ToChar(Convert.ToInt32(rand.Next(65, 87)));
+                sb.Append(c);
+            }
+            var dao = new NguoiMua_DAO();
+            var res = dao.get_infor_(id);
+            var content = "<div style=" + "color:#FFCC00" + ">Hệ Thống PingPing Chào Bạn!</div></br><div style=" + "font-size:20px" + ">Mật Khẩu của bạn là: <strong style=" + "color:#0000FF" + ">" + sb + "</strong></div>";
+            GuiEmail("Reset Password PingPing", res.TaiKhoan.email.ToString(), "testecommercehcmue@gmail.com", "Taogmail.com", content.ToString());
+            var dao1 = new TaiKhoan_DAO();
+            dao1.update_pass(res.TaiKhoan.id_taikhoan, sb.ToString());
+            return RedirectToAction("QuanLyKhachHang");
+        }
+        public void GuiEmail(string Title, string ToEmail, string FromEmail, string Password, string Content)
+        {
+            MailMessage mail = new MailMessage();
+            mail.To.Add(ToEmail);// Địa Chỉ Người Nhận 
+            mail.From = new MailAddress(ToEmail); // Địa Chỉ Người Gửi
+            mail.Subject = Title;// Tieu Đê
+            mail.Body = Content;// Noi Dung
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";// host gui Email
+            smtp.Port = 587;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential
+            (FromEmail, Password);//Tai Khoan Nguoi Gui
+            smtp.EnableSsl = true;// kich hoat giao tiep an toan SSL
+            smtp.Send(mail);//Gui mail di
+
+        }
+        public ActionResult UpdateAdmin(int id)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var dao = new TaiKhoan_DAO();
+            var dao1 = new NguoiMua_DAO();
+            var res = dao1.get_infor_(id);
+            dao.update_admin(res.TaiKhoan.id_taikhoan);
+            return RedirectToAction("QuanLyKhachHang");
+        }
+        public ActionResult QuanLyDauGia()
+        {
+            var dao = new DauGia_DAO();
+            var res = dao.get_DauGia_all();
+            var dao1 = new SanPham_DAO();
+            ViewBag.sp = dao1.get_product_all();
+            return View(res);
+        }
+        public ActionResult DeleteDauGia(int id)
+        {
+            var dao = new DauGia_DAO();
+            var res = dao.get_DauGia_id(id);
+            if (res == "Xoá Thành Công")
+            {
+                ViewBag.Alert = "alert-info";
+            }
+            else
+            {
+                ViewBag.Alert = "alert-danger";
+            }
+            ViewBag.notify = res;
+            var res1 = dao.get_DauGia_all();
+            return RedirectToAction("QuanLyDauGia", res1);
+        }
+        public ActionResult AddDauGia(FormCollection dg)
+        {
+            var dao = new DauGia_DAO();
+            DauGia daugia = new DauGia();
+            daugia.id_sanpham = Int32.Parse(dg["id_sanpham"]);
+            var a = dg["time_start"];
+            var b = dg["time_end"];
+
+            var start = DateTime.Parse(a);
+            var end = DateTime.Parse(b);
+            end = end.AddHours(23);
+            end = end.AddMinutes(59);
+            end = end.AddSeconds(59);
+            if (start == null || end == null || start >= end || DateTime.Now > start)
+            {
+                return RedirectToAction("QuanLyDauGia");
+            }
+            daugia.status_ = "Mới Thêm";
+            daugia.status_use = "Chưa Sử Dụng";
+            daugia.time_start = start;
+            daugia.time_end = end;
+            var res = dao.setdaugia(daugia);
+            var res1 = dao.get_DauGia_all();
+            return RedirectToAction("QuanLyDauGia");
+        }
+        public ActionResult XemLichSuDG(int id)
+        {
+            var dao = new DauGia_DAO();
+            var res = dao.get_DauGia_id_(id);
+            var dao1 = new LichSuDG_DAO();
+            ViewBag.lstLSDauGia = dao1.get_lsdg(id);
+            return View(res);
+        }
+        public ActionResult StartDG(int id)
+        {
+            var dao = new DauGia_DAO();
+            var res = dao.update_DauGia_id_(id);
+            var res1 = dao.get_DauGia_all();
+            return RedirectToAction("QuanLyDauGia");
+        }
     }
 }

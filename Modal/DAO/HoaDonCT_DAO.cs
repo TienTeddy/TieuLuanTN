@@ -227,6 +227,68 @@ namespace Modal.DAO
         }
         #endregion
 
-
+        #region 15/01
+        public List<HoaDonCT> hdct_khachhang(int? id)
+        {
+            return db.HoaDonCTs.Where(x => x.HoaDon.id_nguoimua == id && x.trangthai == "Đã Thanh Toán").ToList();
+        }
+        public string get_hdct_hoadon_(int? id)
+        {
+            var res = db.HoaDonCTs.Where(x => x.id_hoadon == id && x.trangthai == "Chưa Thanh Toán").ToList();
+            foreach (var item in res)
+            {
+                var res1 = db.SanPhams.FirstOrDefault(x => x.id_sanpham == item.id_sanpham);
+                if (res1 != null)
+                {
+                    res1.soluong -= item.soluong;
+                    if (res1.soluong < 0)
+                    {
+                        res1.tinhtrang = "HẾT HÀNG";
+                        res1.soluong = 0;
+                    }
+                    else if (res1.soluong < 5)
+                    {
+                        res1.tinhtrang = "SẮP HẾT";
+                    }
+                    db.SaveChanges();
+                    var res3 = db.Colors.FirstOrDefault(x => x.color1 == item.color && x.Size.id_sanpham == item.id_sanpham);
+                    //var res2 = db.Sizes.FirstOrDefault(x => x.id_size == item.id_size);
+                    if (res3 != null)
+                    {
+                        res3.soluong -= item.soluong;
+                        if (res3.soluong <= 0)
+                        {
+                            db.Colors.Remove(res3);
+                        }
+                        db.SaveChanges();
+                        var res2 = db.Sizes.FirstOrDefault(x => x.id_size == item.id_size);
+                        //var res3 = db.Colors.FirstOrDefault(x => x.color1 == item.color&&x.Size.id_sanpham==item.id_sanpham);
+                        if (res2 != null)
+                        {
+                            res3.soluong -= item.soluong;
+                            if (res2.soluong <= 0)
+                            {
+                                db.Sizes.Remove(res2);
+                            }
+                            db.SaveChanges();
+                        }
+                        //else return "Sản Phẩm: " + item.SanPham.tensp + " Size: " + item.id_size + " Màu:"+item.color+" Không được tìm thấy";
+                        else return "Sản Phẩm: " + item.SanPham.tensp + " Size: " + item.id_size + " Không được tìm thấy";
+                    }
+                    else return "Sản Phẩm: " + item.SanPham.tensp + " Size: " + item.id_size + " Màu:" + item.color + " Không được tìm thấy";
+                }
+                else
+                {
+                    return "Sản Phẩm" + item.SanPham.tensp + "Không được tìm thấy";
+                }
+            }
+            foreach (var item in res)
+            {
+                item.trangthai = "Đã Thanh Toán";
+                db.SaveChanges();
+            }
+            return "Đặt Hàng Thành Công";
+        }
+        #endregion
     }
 }

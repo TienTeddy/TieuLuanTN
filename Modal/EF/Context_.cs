@@ -27,6 +27,7 @@ namespace Modal.EF
         public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<TheTich> TheTiches { get; set; }
+        public virtual DbSet<Coupon> Coupons { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

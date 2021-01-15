@@ -120,5 +120,45 @@ namespace Modal.DAO
             return db.HoaDons.Where(n => n.trangthai == "Đã Thanh Toán").OrderBy(n => n.thoigian).ToList();
         }
         #endregion
+
+        public int updateHoaDon_coupon(int id_hoadon,double? value)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            
+            var res = db.HoaDons.FirstOrDefault(x => x.id_hoadon == id_hoadon);
+            if (res != null)
+            {
+                res.tonggia -= value;
+                db.SaveChanges();
+
+                return 1;
+            }
+            return 0;
+        }
+
+        public HoaDon get_hoadon_NguoiMua(int id_nguoimua)
+        {
+            return db.HoaDons.FirstOrDefault(n => n.id_nguoimua == id_nguoimua && n.trangthai == "Chưa Thanh Toán");
+        }
+        public HoaDon set_hd_paypal(int id_nguoimua, double sotiendathanhtoan, string magiaodich)
+        {
+            var res = db.HoaDons.FirstOrDefault(n => n.id_nguoimua == id_nguoimua && n.trangthai == "Chưa Thanh Toán");
+            res.hinhthuctt = "PayPal";
+            res.trangthai = "Đã Thanh Toán";
+            double a = 229.5;
+            res.sotiendathanhtoan = sotiendathanhtoan * a;
+            res.magiaodich = magiaodich;
+            db.SaveChanges();
+            return res;
+        }
+        public List<HoaDon> get_hoadon_taikhoan_dtt(int id_taikhoan)
+        {
+            return db.HoaDons.Where(x => x.id_nguoimua == id_taikhoan && x.trangthai == "Đã Thanh Toán").ToList();
+        }
+        public HoaDon get_hoadon_idd(int id_hoadon)
+        {
+            
+            return db.HoaDons.FirstOrDefault(x => x.id_hoadon == id_hoadon);
+        }
     }
 }
