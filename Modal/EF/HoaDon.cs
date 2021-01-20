@@ -41,6 +41,8 @@ namespace Modal.EF
 
         public int? soluong { get; set; }
 
+        public bool duyet { get; set; }
+
         public double? sotiendathanhtoan { get; set; }
 
         public string magiaodich { get; set; }

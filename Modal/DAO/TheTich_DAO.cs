@@ -34,6 +34,15 @@ namespace Modal.DAO
             }
             return null;
         }
+        public TheTich get_vol_(int? id)
+        {
+            //db.Configuration.ProxyCreationEnabled = false;
+            if (id != 0)
+            {
+                return db.TheTiches.FirstOrDefault(x => x.id_sanpham == id);
+            }
+            return null;
+        }
         public TheTich update_vol(int id_sanpham, double chieucao, double chieurong, double chieudai, double cannang)
         {
             var type = db.TheTiches.SingleOrDefault(x => x.id_sanpham == id_sanpham);

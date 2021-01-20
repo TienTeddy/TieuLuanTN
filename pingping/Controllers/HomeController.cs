@@ -2,13 +2,17 @@
 using MailChimp.Helper;
 using Modal.DAO;
 using Modal.EF;
+using Newtonsoft.Json;
 using pingping.Common;
 using pingping.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -379,6 +383,52 @@ namespace pingping.Controllers
             var dao = new LoaiSanPham_DAO();
             var result = dao.get_category_all();
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet] 
+        public JsonResult GetTheTichHoaDon()
+        {
+
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                return Json(-1, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var dao_hd = new HoaDon_DAO();
+                var dao_hdct = new HoaDonCT_DAO();
+                var res_hd = dao_hd.get_hoadon_NguoiMua(session_acc.id_nguoi);
+                var res_hdct = dao_hdct.get_hdct_hoadon(res_hd.id_hoadon);
+                if (res_hdct != null)
+                {
+                    object thetich = new object();
+                    double? h = 0, we = 0,lmax=0,wimax=0;
+                    var dao_tt = new TheTich_DAO();
+                    foreach (var ct in res_hdct)
+                    {
+                        
+                        var res_tt = dao_tt.get_vol_(ct.id_sanpham); //thetich,soluong
+                        h += res_tt.chieucao * ct.soluong;
+                        we += res_tt.cannang * ct.soluong;
+
+                        if (res_tt.chieurong > wimax) { wimax = res_tt.chieurong; }
+                        if (res_tt.chieudai > lmax) { lmax = res_tt.chieudai; }
+                    }
+
+                    thetich =new {
+                        lenght=lmax,
+                        width=wimax,
+                        height=h,
+                        weight=we,
+                        total=res_hd.tonggia
+                    };
+                    return Json(thetich, JsonRequestBehavior.AllowGet);
+                }
+                
+
+                return Json(-1, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpGet]
@@ -810,6 +860,7 @@ namespace pingping.Controllers
         }
 
         
+        [HttpGet]
         public JsonResult Get_WinnerAuction()
         {
             var session_acc = SessionHelper.GetSession();
@@ -1039,5 +1090,41 @@ namespace pingping.Controllers
 
         }
         #endregion
+
+        [HttpPost]
+        public JsonResult Pick_OrderGHN(List<PickOrder_Model> data)
+        {
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet); //chưa có hd
+            }
+            else
+            {
+                if (data == null) { return Json(0, JsonRequestBehavior.AllowGet); }
+                else
+                {
+                    string url = "https://online-gateway.ghn.vn/shiip/public-api/master-data/district";
+                   // var s = pickGHN(url, data);
+
+                    var client = new HttpClient();
+                    var httpRequestMessage = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Post,
+                        RequestUri = new Uri(url),
+                        Headers = {
+                        { HttpRequestHeader.Authorization.ToString(), "token "+data[1].token.ToString() },
+                        { HttpRequestHeader.Accept.ToString(), "application/json" },
+                        { "X-Version", "1" }
+                        },
+                        Content = new StringContent(JsonConvert.SerializeObject(data[1].id_dictrict))
+                    };
+
+                    var response = client.SendAsync(httpRequestMessage).Result;
+                    return Json(1, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
     }
 }

@@ -56,6 +56,7 @@
                         //grid.Column("soluong", header: "Hiển Thị"),
                         grid.Column("freeship", header: "Phí Giao Hàng"),
                         //grid.Column("trangthai", header: "Xếp Loại"), 
+                        grid.Column(format: p => Html.ActionLink("Duyệt", "Duyet", new { id = p.id_hoadon }, new { @class = "btn btn-primary" })),
                         grid.Column(format: p => Html.ActionLink("Xem hoá đơn chi tiết", "HoaDonChiTiet", new { id = p.id_hoadon }, new { @class = "btn btn-block" }))
                     ))
 

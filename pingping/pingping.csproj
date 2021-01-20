@@ -170,6 +170,7 @@
     <Compile Include="Models\Login_Models.cs" />
     <Compile Include="Models\MyOrder_Model.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\PickOrder_Model.cs" />
     <Compile Include="Models\Register_Model.cs" />
     <Compile Include="Models\SanPham_Size_Model.cs" />
     <Compile Include="Models\SanPham_TheTich_Model.cs" />
@@ -3567,6 +3568,7 @@
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
     <Content Include="Scripts\esm\popper.min.js" />
+    <Content Include="Scripts\FreeShip.js" />
     <Content Include="Scripts\index.js.flow" />
     <Content Include="Scripts\esm\popper.min.js.map" />
     <Content Include="Scripts\esm\popper.js.map" />

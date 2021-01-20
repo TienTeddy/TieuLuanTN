@@ -346,6 +346,7 @@
     <script src="~/Scripts/main/active.js"></script>
 
     <script src="~/Scripts/main/addtocart.js"></script>
+
     <script>
         $(document).ready(function () {
             LoadCategory();
@@ -378,19 +379,22 @@
                 contentType: "application/json;charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    var html = ""; var i = 0;
-                    result.forEach(function (value, key) {
-                        html += '<li class="product_' + value.id_daugia + '">';
-                        html += '<small class="cart-img" > Đầu giá thành công</small >&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;';
-                        html += '<a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>';
-                        html += '<h5><a href="../Home/SingleProcduct/' + value.id_sanpham + '">' + value.tensp + '</a></h5>';
-                        html += '<p><strong>' + value.coupon + '</strong></p>';
-                        html += '<p class="quantity">1x - <span class="amount">' + value.value + ' VNĐ</span></p>';
-                        html += '</li > <hr />';
-                        i = i+ 1;
-                    });
-                    $('#total_count_notify').html(i);
-                    $('#notify').html(html);
+                    if (result != null) {
+                        var html = ""; var i = 0;
+                        (result).forEach(function (value, key) {
+                            html += '<li class="product_' + value.id_daugia + '">';
+                            html += '<small class="cart-img" > Đầu giá thành công</small >&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;';
+                            html += '<a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>';
+                            html += '<h5><a href="../Home/SingleProcduct/' + value.id_sanpham + '">' + value.tensp + '</a></h5>';
+                            html += '<p><strong>' + value.coupon + '</strong></p>';
+                            html += '<p class="quantity">1x - <span class="amount">' + value.value + ' VNĐ</span></p>';
+                            html += '</li > <hr />';
+                            i = i + 1;
+                        });
+                        $('#total_count_notify').html(i);
+                        $('#notify').html(html);
+                        console.log(result);
+                    }
                 },
                 error: function (errormessage) {
                     alert(errormessage.responseText);

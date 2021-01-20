@@ -66,7 +66,7 @@
                                             </td>
                                             <td class="price" data-title="Price"><span>@sp.dongia.ToString("#,##") VNĐ</span></td>
                                             <td class="price">
-                                                <select id="select_size" onchange="LoadColor_(value)">
+                                                <select id="select_size" class="form-control" onchange="LoadColor_(value)">
                                                     @foreach (var s in Model.size_)
                                                     {
                                                         if (sp.id_sanpham == s.id_sanpham)
@@ -178,12 +178,9 @@
                             <div class="left">
                                 <div class="coupon">
                                     <form action="#" target="_blank">
-                                        <input name="Coupon" id="txtCoupon"  placeholder="Sử Dụng Coupon">
+                                        <input name="Coupon" id="txtCoupon" placeholder="Sử Dụng Coupon">
                                         <button class="btn" onclick="UseCoupon()">Sử Dụng</button>
                                     </form>
-                                </div>
-                                <div class="checkbox">
-                                    <label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox"> Shipping (+10$)</label>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +190,7 @@
                                     <li>Tổng<span id="CartSubtotal">0</span></li>
                                     <li>Shipping<span>Free</span></li>
                                     <li>Mã Giảm<span id="giam">@ViewBag.giam.ToString("#,##") VNĐ</span></li>
-                                    <li class="last" >Thanh Toán<span id="youpay">@ViewBag.youpay.ToString("#,##") VNĐ</span></li>
+                                    <li class="last">Thanh Toán<span id="youpay">@ViewBag.youpay.ToString("#,##") VNĐ</span></li>
                                 </ul>
                                 <div class="button5">
                                     <a href="@Url.Action("payment")" class="btn">Checkout</a>
@@ -215,7 +212,12 @@
     var sum_ = 0;
     $(document).ready(function () {
         $('.all-category').hide();
+        $('#form-shipping').hide();
         //LoadBill("Chưa Thanh Toán");
+
+        //$('.nice-select').hide(); 
+        //$('#select_size').show();
+        $('.ghn').hide(); $('.ghtk').hide();
         
         var sum = 0;
         $('tr').find('.combat').each(function () {

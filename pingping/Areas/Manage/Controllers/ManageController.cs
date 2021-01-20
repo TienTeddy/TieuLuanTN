@@ -117,8 +117,8 @@ namespace pingping.Areas.Manage.Controllers
             int mbkh = dao_mb.get_count_loai(true);
 
             int dg = dao_dg.get_count();
-            int dgrun = dao_dg.get_count_stop();
-            int dgstop = dao_dg.get_count_run();
+            int dgrun = dao_dg.get_count_run();
+            int dgstop = dao_dg.get_count_stop();
 
             statistis = new
             {

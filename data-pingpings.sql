@@ -233,6 +233,33 @@ create table Coupon(
 	status_ nvarchar(50) check(status_ in(N'Chưa Sử Dụng',N'Đã Sử Dụng',N'Đã Hết Hạn')) default N'Chưa Sử Dụng',
 	Ma_Coupon varchar(50)
 )
+
+create table GHN_Ship(
+	id_ship int identity primary key,
+	payment_type_id int,
+	--note 
+	--required_note 
+
+	--return_phone
+	--return_address
+	--return_district_id
+	--return_ward_code
+	client_order_code =null
+	to_name
+	to_phone
+	to_address
+	to_ward_code
+	to_district_id
+	cod_amount
+	content
+	weight
+	length
+	width
+	height
+	pick_station_id
+	insurance_value
+	service_id
+)
 drop table Coupon
 create trigger trg_RamdomCoupon on Coupon after insert
 as declare @ramdom varchar(50)
@@ -256,8 +283,8 @@ end
 go
 select *from TaiKhoan
 select *from NguoiMua
-select *from NguoiBan
-select *from SanPham 
+select *from TaiKhoan
+select *from HoaDon
 
 delete from LuongTruyCap
-delete from HoaDonCT 
+delete from HoaDonCT
