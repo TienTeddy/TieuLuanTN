@@ -1,0 +1,408 @@
+﻿@using Modal.EF
+@{
+    ViewBag.Title = "Slider";
+}
+
+<link href="~/Areas/Manage/assets/css/slider.css" rel="stylesheet" />
+@{IEnumerable<Slider> lstslider = (IEnumerable<Slider>)ViewBag.slider;}
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">Slider</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Slider</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card" id="slider1">
+                <div class="@ViewBag.Alert" style="text-align:center">@ViewBag.notify</div>
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <label class="mb-0" style="text-align:left;font-size:medium;font-weight:bold;">Slider Head</label>
+                    <label class="col-2" style="margin-left:90%"><input type="button" class="btn btn-outline-primary" value="Xem" id="xem1" /></label>
+                    <label class="col-2" style="margin-left:90%"><input type="button" class="btn btn-outline-danger" style="display:none" value="Đóng" id="dong1" /></label>
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <tr class="thead-light">
+                            <th>Hình Ảnh</th>
+                            <th>Tiêu Đề</th>
+                            <th>Nội Dung</th>
+                            <th>Giảm Giá</th>
+                            <th></th>
+                        </tr>
+                        <tr class="list">
+                            @foreach (var item in lstslider)
+                            {
+                                if (item.id_slider == 1)
+                                {
+                                    <th><img width="150" height="120" src="@Url.Content("~/Source/Images/"+item.image)" /></th>
+                                    <th>@item.title</th>
+                                    <th>@Html.Raw(item.description)</th>
+                                    <th>@item.sale</th>
+                                    <th>@Html.ActionLink("Thay Đổi", "#", new { id = item.id_slider }, new { @class = "btn btn-block", data_toggle = "modal", data_target = "#editslider_" + item.id_slider })</th>
+                                    break;
+                                }
+                            }
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="card" id="slider2">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <label class="mb-0" style="text-align:left;font-size:medium;font-weight:bold;">Slider Middler</label>
+                    <label class="col-2" style="margin-left:90%"><input type="button" class="btn btn-outline-primary" value="Xem" id="xem2" /></label>
+                    <label class="col-2" style="margin-left:90%;"><input type="button" class="btn btn-outline-danger" style="display:none;" value="Đóng" id="dong2" /></label>
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <tr class="thead-light">
+                            <th>Hình Ảnh</th>
+                            <th>Tiêu Đề</th>
+                            <th>Nội Dung</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var item in lstslider)
+                        {
+                            <tr class="list">
+                                @if (item.id_slider > 1 && item.id_slider < 5)
+                                {
+                                    <th><img width="150" height="120" src="@Url.Content("~/Source/Images/" + item.image)" /></th>
+                                    <th>@item.title</th>
+                                    <th>@Html.Raw(item.description)</th>
+                                    <th>@Html.ActionLink("Thay Đổi", "#", new { id = item.id_slider }, new { @class = "btn btn-block", data_toggle = "modal", data_target = "#editslider_" + item.id_slider })</th>
+                                }
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+            <div class="card" id="slider3">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <label class="mb-0" style="text-align:left;font-size:medium;font-weight:bold;">Slider Footer</label>
+                    <label class="col-2" style="margin-left:90%"><input type="button" class="btn btn-outline-primary" value="Xem" id="xem3" /></label>
+                    <label class="col-2" style="margin-left:90%;"><input type="button" class="btn btn-outline-danger" style="display:none;" value="Đóng" id="dong3" /></label>
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <tr class="thead-light">
+                            <th>Hình Ảnh</th>
+                            <th>Tiêu Đề</th>
+                            <th>Nội Dung</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var item in lstslider)
+                        {
+                            <tr class="list">
+                                @if (item.id_slider > 4)
+                                {
+                                    <th><img width="150" height="120" src="@Url.Content("~/Source/Images/" + item.image)" /></th>
+                                    <th>@item.title</th>
+                                    <th>@Html.Raw(item.description)</th>
+                                    <th>@Html.ActionLink("Thay Đổi", "#", new { id = item.id_slider }, new { @class = "btn btn-block", data_toggle = "modal", data_target = "#editslider_" + item.id_slider })</th>
+                                }
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@foreach (var item in lstslider)
+{
+    if (item.id_slider == 1)
+    {
+        <div style="display:none;" id="1">
+            <section class="hero-slider">
+                <!-- Single Slider -->
+                <div class="single-slider" style="background-image: url('../../Source/Images/@item.image')">
+                    <div class="container">
+                        <div class="row no-gutters">
+                            <div class="col-lg-9 offset-lg-3 col-12">
+                                <div class="text-inner">
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">
+                                            <div class="hero-text">
+                                                <h1><span>Sale đến @item.sale%</span>@item.title</h1>
+                                                <p>@Html.Raw(item.description)</p>
+                                                <div class="button">
+                                                    <a href="#" class="btn">Shop Now!</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ End Single Slider -->
+            </section>
+        </div>
+        break;
+    }
+}
+<div style="display:none" id="2">
+    <section class="small-banner section">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- Single Banner  -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="single-banner">
+                        @foreach (var item in lstslider)
+                        {
+                            if (item.id_slider == 2)
+                            {
+                                <img src="~/Source/Images/@item.image" alt="#">
+                                <div class="content">
+                                    <p>@item.title</p>
+                                    <h3>@Html.Raw(item.description)</h3>
+                                    <a href="#">Shop Now</a>
+                                </div>
+                                break;
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- /End Single Banner  -->
+                <!-- Single Banner  -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="single-banner">
+                        @foreach (var item in lstslider)
+                        {
+                            if (item.id_slider == 3)
+                            {
+                                <img src="~/Source/Images/@item.image" alt="#">
+                                <div class="content">
+                                    <p>@item.title</p>
+                                    <h3>@Html.Raw(item.description)</h3>
+                                    <a href="#">Shop Now</a>
+                                </div>
+                                break;
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- /End Single Banner  -->
+                <!-- Single Banner  -->
+                <div class="col-lg-4 col-12">
+                    <div class="single-banner tab-height">
+                        @foreach (var item in lstslider)
+                        {
+                            if (item.id_slider == 4)
+                            {
+                                <img src="~/Source/Images/@item.image" alt="#">
+                                <div class="content">
+                                    <p>@item.title</p>
+                                    <h3>@Html.Raw(item.description)</h3>
+                                    <a href="#">Shop Now</a>
+                                </div>
+                                break;
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- /End Single Banner  -->
+            </div>
+        </div>
+    </section>
+</div>
+<div style="display:none" id="3">
+    <section class="midium-banner">
+        <div class="container">
+            <div class="row trendingitem2">
+                <!-- Single Banner  -->
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="single-banner">
+                        @foreach (var item in lstslider)
+                        {
+                            if (item.id_slider == 5)
+                            {
+                                <img src="~/Source/Images/@item.image" alt="#">
+                                <div class="content">
+                                    <p>@item.title</p>
+                                    <h3 style="color:white;background-color:aqua">@Html.Raw(item.description)</h3>
+                                    <a href="#">Shop Now</a>
+                                </div>
+                                break;
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- /End Single Banner  -->
+                <!-- Single Banner  -->
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="single-banner">
+                        @foreach (var item in lstslider)
+                        {
+                            if (item.id_slider == 6)
+                            {
+                                <img src="~/Source/Images/@item.image" alt="#">
+                                <div class="content">
+                                    <p>@item.title</p>
+                                    <h3 style="color:white;background-color:aqua">@Html.Raw(item.description)</h3>
+                                    <a href="#">Shop Now</a>
+                                </div>
+                                break;
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- /End Single Banner  -->
+            </div>
+        </div>
+    </section>
+</div>
+@foreach (var item in lstslider)
+{
+    <div id="editslider_@item.id_slider" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                @using (Html.BeginForm("Slider", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thay đổi Slider</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label>Tiêu đề:</label>
+                            </div>
+                            <div class="col-10">
+                                <input type="text" id="idslider" value="@item.id_slider" name="id_slider" class="form-control" hidden />
+                                <input type="text" id="tieude" value="@item.title" name="title" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label>Thông tin:</label>
+                            </div>
+                            <div class="col-10">
+                                <div id="thongtin"></div>
+                                <textarea class="textarea" name="description">@item.description</textarea>
+                            </div>
+                        </div>
+                        @if (item.id_slider == 1)
+                        {
+                            <div class="form-group row">
+                                <div class="col-2">
+                                    <label>Giảm Giá</label>
+                                </div>
+                                <div class="col-10">
+                                    <input type="number" id="giamgia" value="@item.sale" name="sale" placeholder="%" class="form-control" />
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label>Hình Ảnh:</label>
+                            </div>
+                            <div class="col-10">
+                                <input type="file" id="hinhanh" value="@item.image" name="hinhanh" accept="image/*" /><br />
+                                <img src="~/Source/Images/@item.image" height="250px" width="300px" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-success" value="Thay đổi">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+}
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>tinymce.init({ selector: '.textarea' });</script>
+<!-- Footer -->
+@Html.Partial("_Footer")
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">function EditSlider(id_slider) {
+        $.ajax({
+            url: "/Manage/Manage/Get_Slider_id/?id_slider=" + id_slider,
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = "";
+                // result.forEach(function (value, key) {
+                $('#idslider').val(result.id_slider);
+                $('#tieude').val(result.title);
+                $('#thongtin').html(result.description);
+                $('#giamgia').val(result.sale);
+                $('#ti').html(result.description);
+                //$("#tinymce").append("<div class='txt'></div>");
+                //})
+                //$('#loadLoaiSP').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }</script>
+<script language="javascript">document.getElementById("xem1").onclick = function () {
+document.getElementById("dong1").style.display = 'block';
+        document.getElementById("xem1").style.display = 'none';
+        document.getElementById("slider2").style.display = 'none';
+        document.getElementById("slider3").style.display = 'none';
+        document.getElementById("1").style.display = 'block';
+    };
+    document.getElementById("xem2").onclick = function () {
+        document.getElementById("dong2").style.display = 'block';
+        document.getElementById("xem2").style.display = 'none';
+        document.getElementById("slider1").style.display = 'none';
+        document.getElementById("slider3").style.display = 'none';
+        document.getElementById("2").style.display = 'block';
+    };
+    document.getElementById("xem3").onclick = function () {
+        document.getElementById("dong3").style.display = 'block';
+        document.getElementById("xem3").style.display = 'none';
+        document.getElementById("slider1").style.display = 'none';
+        document.getElementById("slider2").style.display = 'none';
+        document.getElementById("3").style.display = 'block';
+    };
+    document.getElementById("dong1").onclick = function () {
+        document.getElementById("dong1").style.display = 'none';
+        document.getElementById("xem1").style.display = 'block';
+        document.getElementById("slider2").style.display = 'block';
+        document.getElementById("slider3").style.display = 'block';
+        document.getElementById("1").style.display = 'none';
+    };
+    document.getElementById("dong2").onclick = function () {
+        document.getElementById("dong2").style.display = 'none';
+        document.getElementById("xem2").style.display = 'block';
+        document.getElementById("slider1").style.display = 'block';
+        document.getElementById("slider3").style.display = 'block';
+        document.getElementById("2").style.display = 'none';
+    };
+    document.getElementById("dong3").onclick = function () {
+        document.getElementById("dong3").style.display = 'none';
+        document.getElementById("xem3").style.display = 'block';
+        document.getElementById("slider2").style.display = 'block';
+        document.getElementById("slider1").style.display = 'block';
+        document.getElementById("3").style.display = 'none';
+    };</script>

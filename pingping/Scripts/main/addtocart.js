@@ -47,6 +47,7 @@ function DetailCart() {
         html += '</li>';
         total += Number(item.price) * item.quantity;
         i += 1;
+        notify();
 });
 
     $('.shopping-list').html(html);
@@ -88,6 +89,9 @@ function checkout() {
                     window.location.replace('../../Home/CheckOut');
                 }
                 else if (result == -1) { alert("Bạn Cần Đăng Nhập Để Mua Hàng!"); }
+                else {
+                    alert("Bạn Cần Đăng Nhập Bằng Tài Khoản Người Mua.");
+                }
                 //setTimeout(function () {
                 //    $("#overlay").fadeOut(300);
                 //}, 500);
@@ -98,3 +102,4 @@ function checkout() {
         });
     }
 }
+

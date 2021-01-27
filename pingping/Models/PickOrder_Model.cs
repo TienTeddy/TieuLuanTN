@@ -16,5 +16,10 @@ namespace pingping.Models
         public string name_address { get; set; }
         public int id_service { get; set; }
         public string token { get; set; }
+        public float length { get; set; }
+        public float width { get; set; }
+        public float height { get; set; }
+        public float weight { get; set; }
+        public float feeship { get; set; }
     }
 }

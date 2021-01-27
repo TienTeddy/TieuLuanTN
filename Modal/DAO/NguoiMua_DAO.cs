@@ -93,5 +93,12 @@ namespace Modal.DAO
             return db.NguoiMuas.FirstOrDefault(x => x.id_taikhoan == id_taikhoan);
         }
 
+        public NguoiMua get_nguoimua_id(int id_nguoimua)
+        {
+            //db.Configuration.ProxyCreationEnabled = false;
+
+            return db.NguoiMuas.FirstOrDefault(x => x.id_nguoimua == id_nguoimua);
+        }
+
     }
 }

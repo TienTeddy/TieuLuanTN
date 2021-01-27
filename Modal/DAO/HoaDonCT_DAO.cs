@@ -232,6 +232,10 @@ namespace Modal.DAO
         {
             return db.HoaDonCTs.Where(x => x.HoaDon.id_nguoimua == id && x.trangthai == "Đã Thanh Toán").ToList();
         }
+        public List<HoaDonCT> hdct_khachhang_(int? id)
+        {
+            return db.HoaDonCTs.Where(x=>x.HoaDon.id_nguoimua==id).ToList();
+        }
         public string get_hdct_hoadon_(int? id)
         {
             var res = db.HoaDonCTs.Where(x => x.id_hoadon == id && x.trangthai == "Chưa Thanh Toán").ToList();
@@ -241,7 +245,7 @@ namespace Modal.DAO
                 if (res1 != null)
                 {
                     res1.soluong -= item.soluong;
-                    if (res1.soluong < 0)
+                    if (res1.soluong <= 0)
                     {
                         res1.tinhtrang = "HẾT HÀNG";
                         res1.soluong = 0;
@@ -265,7 +269,7 @@ namespace Modal.DAO
                         //var res3 = db.Colors.FirstOrDefault(x => x.color1 == item.color&&x.Size.id_sanpham==item.id_sanpham);
                         if (res2 != null)
                         {
-                            res3.soluong -= item.soluong;
+                            res2.soluong -= item.soluong;
                             if (res2.soluong <= 0)
                             {
                                 db.Sizes.Remove(res2);

@@ -56,7 +56,7 @@
                         grid.Column("color1", header: "Màu"),
                         grid.Column("soluong", header: "Số lượng màu"),
                         grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_color }, new { @class = "btn btn-info", onclick = "EditColor(" + p.id_color + ")", data_toggle = "modal", data_target = "#editColor" })),
-                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteSize_Color", new { id = p.id_color }, new { @class = "btn btn-danger" }))
+                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteSize_Color", new { id = p.id_color }, new { @class = "btn btn-danger", onclick = "return confirm('Bạn Có Muốn Xoá Sản Phẩm:" + p.Size.SanPham.tensp + "; Size:" + p.Size.size + "; Màu:" + p.color1 + "; số lượng:" + p.soluong + " Không?')" }))
                     ))
 
                 </div>

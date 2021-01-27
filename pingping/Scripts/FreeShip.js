@@ -2,7 +2,7 @@
 var tokenGHTK = "46b6093CA6daA69ea42de5d2B70624B290040600";
 var ShopId = "1257313";
 
-var l = 0; var w = 0; var h = 0; var we = 0; var to = 0;
+var l = 0; var w = 0; var h = 0; var we = 0; var to = 0; var feeship = 0;
 $(document).ready(function () {
 
     LoadProvince();
@@ -26,6 +26,11 @@ $(document).ready(function () {
                         name_ward: $('#to_ward option:selected').text(),
                         name_address: $('#to_address').val(),
                         id_service: $('#service').val(),
+                        length: l,
+                        width: w,
+                        height: h,
+                        weight: we,
+                        feeship: feeship,
 
                         token: token,
                         shopid: ShopId
@@ -124,6 +129,7 @@ function GHN_CheckFeeShip(length, width, height, weight, total) {
             else {
                 $('#freeship_GHN').html(result.data.service_fee.toLocaleString('vi', { style: 'currency', currency: 'VND' }));
                 $('#t').html((Number($('#tonggia').val()) + result.data.service_fee).toLocaleString('vi', { style: 'currency', currency: 'VND' }));
+                feeship = result.data.service_fee;
             }
         },
         error: function (errormessage) {

@@ -324,6 +324,7 @@
 
         //hiden nav Product
         $('.all-category').hide();
+
     })
     function LoadCategoryProduct() {
         $.ajax({
@@ -357,7 +358,7 @@
                     html += '<div class="col-lg-4 col-md-6 col-12">';
                     html += '<div class="single-product" >';
                     html += '<div class="product-img">';
-                    html += '<a href="product-details.html">';
+                    html += '<a href="../Home/SingleProcduct/' + value.id_sanpham + '">';
                     html += '<img class="default-img" src="../Source/img-public/' + value.hinhanh1 + '" alt="#">';
                     html += '<img class="hover-img" src="../Source/img-public/' + value.hinhanh2 + '" alt="#">';
                     html += '</a>';
@@ -368,21 +369,22 @@
                     html += '<a title="Compare" href="#"><i class="ti-share"></i><span>Share</span></a>';
                     html += '</div>';
                     html += '<div class="product-action-2">';
-                    if (Number(value.giasale) >= Number(value.dongia)) {
-                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                    if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale!=0)) {
+                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                        
                     }
                     else {
-                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                     }
                     html += '</div>';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="product-content">';
-                    html += '<h3><a href="product-details.html">' + value.tensp + '</a></h3>';
+                    html += '<h3><a href="../Home/SingleProcduct/' + value.id_sanpham + '">' + value.tensp + '</a></h3>';
                     html += '<div class="product-price">';
                     if (Number(value.giasale) > 0 && Number(value.giasale) != Number(value.dongia)) {
-                        html += '<span class="old">' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
                         html += '<span>' + (value.giasale).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
+                        html += '<span class="old">' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
                     }
                     else {
                         html += '<span>' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
@@ -400,7 +402,7 @@
                     meta += '<meta property="og:image" content="https://newstore.somee.com/Content/img-sp/SanPham/@Model.HinhAnh" />';
                     meta += '}';*@
                 })
-                $('.loadProductPage').html(html);
+                $('.loadProductPage').html(html + '<div class="pagination"></div>');
                 //$('#myTab').html(tab);
             },
             error: function (errormessage) {
@@ -421,7 +423,7 @@
                     html += '<div class="col-lg-4 col-md-6 col-12">';
                     html += '<div class="single-product" >';
                     html += '<div class="product-img">';
-                    html += '<a href="product-details.html">';
+                    html += '<a href="../Home/SingleProcduct/' + value.id_sanpham + '">';
                     html += '<img class="default-img" src="../Source/img-public/' + value.hinhanh1 + '" alt="#">';
                     html += '<img class="hover-img" src="../Source/img-public/' + value.hinhanh2 + '" alt="#">';
                     html += '</a>';
@@ -432,21 +434,21 @@
                     html += '<a title="Compare" href="#"><i class="ti-share"></i><span>Share</span></a>';
                     html += '</div>';
                     html += '<div class="product-action-2">';
-                    if (Number(value.giasale) >= Number(value.dongia)) {
-                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                    if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                     }
                     else {
-                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                        html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                     }
                     html += '</div>';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="product-content">';
-                    html += '<h3><a href="product-details.html">' + value.tensp + '</a></h3>';
+                    html += '<h3><a href="../Home/SingleProcduct/' + value.id_sanpham + '">' + value.tensp + '</a></h3>';
                     html += '<div class="product-price">';
                     if (Number(value.giasale) > 0 && Number(value.giasale) != Number(value.dongia)) {
-                        html += '<span class="old">' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
                         html += '<span>' + (value.giasale).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
+                        html += '<span class="old">' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';
                     }
                     else {
                         html += '<span>' + (value.dongia).toLocaleString('vi', { style: 'currency', currency: 'VND' }) + '</span>';

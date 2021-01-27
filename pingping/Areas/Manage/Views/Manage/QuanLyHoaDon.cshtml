@@ -55,38 +55,12 @@
                         grid.Column("hinhthuctt", header: "Hình Thức Thanh Toán"),
                         //grid.Column("soluong", header: "Hiển Thị"),
                         grid.Column("freeship", header: "Phí Giao Hàng"),
-                        //grid.Column("trangthai", header: "Xếp Loại"), 
-                        grid.Column(format: p => Html.ActionLink("Duyệt", "Duyet", new { id = p.id_hoadon }, new { @class = "btn btn-primary" })),
+                        //grid.Column("trangthai", header: "Xếp Loại"),
+                        grid.Column("duyet", format: p => p.duyet == true ? Html.ActionLink("GHN", "GiaoHang", new { id = p.id_hoadon }, new { @class = "btn btn-warning" }) : Html.ActionLink("Duyệt", "#", new { id = p.id_hoadon }, new { @class = "btn btn-primary", onclick = "EditLoaiSP(" + p.id_hoadon + ")", data_toggle = "modal", data_target = "#duyethd" })),
                         grid.Column(format: p => Html.ActionLink("Xem hoá đơn chi tiết", "HoaDonChiTiet", new { id = p.id_hoadon }, new { @class = "btn btn-block" }))
                     ))
 
                 </div>
-                <!-- Card footer -->
-                @*<div class="card-footer py-4">
-                        <nav aria-label="...">
-                            <ul class="pagination justify-content-end mb-0">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">
-                                        <i class="fas fa-angle-left"></i>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#">1</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        <i class="fas fa-angle-right"></i>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>*@
             </div>
         </div>
     </div>
@@ -94,3 +68,229 @@
     <!-- Footer -->
     @Html.Partial("_Footer")
 </div>
+<div id="duyethd" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+        @using (Html.BeginForm("CreateOrder_GHN", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <!-- Modal content-->
+            <div class="modal-content" id="">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông Tin Hàng Hoá</h4>
+                    <input type="text" name="id_ship" id="id_ship" hidden />
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Thu Hộ: </label>@*với những thằng thanh toán rồi ko phải trả gì nữa*@
+                        </div>
+                        <div class="col-3">
+                            <p name="cod_amount" id="cod_amount" ></p>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Note:</label>
+                        </div>
+                        <div class="col-3">
+                            <select name="required_note" id="required_note">
+                                <option>----</option>
+                                <option value="KHONGCHOXEMHANG">KHONGCHOXEMHANG</option>
+                                <option value="CHOTHUHANG">CHOTHUHANG</option>
+                                <option value="CHOXEMHANGKHONGTHU">CHOXEMHANGKHONGTHU</option>
+                            </select>
+                            <textarea name="note" id="note"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Chiều dài:</label>
+                        </div>
+                        <div class="col-3">
+                            <p name="lenght" id="lenght">cm</p>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Chiều rộng:</label>
+                        </div>
+                        <div class="col-3">
+                            <p name="width" id="width">cm</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Chiều cao:</label>
+                        </div>
+                        <div class="col-3">
+                            <p name="height" id="height" ></p>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Trọng lượng:</label>
+                        </div>
+                        <div class="col-3">
+                            <p name="weight" id="weight"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông Tin Người Gửi</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Họ và Tên:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="tenng" id="from_name" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Sô Điện Thoại:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="return_phone" id="from_phone" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Địa Chỉ:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="return_address" id="from_address" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Tỉnh/Thành Phố:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="ttpng" id="from_province" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Quận/Huyện:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="qhng" id="from_district" class="form-control" />
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Phường/Xã:</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="pxng" id="from_ward" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông Tin Nhận</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Họ và Tên:</label>
+                        </div>
+                        <div class="col-3">
+                            <p type="text" name="tennn" id="to_name" class=""></p>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Số Điện Thoại:</label>
+                        </div>
+                        <div class="col-3">
+                            <p type="text" name="sdtnn" id="to_phone" class=""></p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Địa Chỉ:</label>
+                        </div>
+                        <div class="col-3">
+                            <p type="text" name="dcnn" id="to_address" class=""></p>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Tỉnh/Thành Phố:</label>
+                        </div>
+                        <div class="col-3">
+                            <p type="text" name="ttpnn" id="to" class=""></p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Quận/Huyện:</label>
+                        </div>
+                        <div class="col-3">
+                            <p type="text" name="qhnn" id="to_name_district" class=""></p>
+                        </div>
+                        <div class="col-2" style="margin-left:10%">
+                            <label>Phường/Xã:</label>
+                        </div>
+                        <div class="col-3">
+                            <p type="text" name="pxnn" id="to_name_ward" class=""></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" value="Duyệt">
+                    <small><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></small>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts{
+
+
+    <script>
+        function LoadDuyet(id_hoadon){
+            $.ajax({
+                url: "/Manage/Manage/LoadHoaDonDuyet?id=" + id_hoadon,
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result != 0) {
+
+                        $('#to_name_district').html(result.to_name_district);
+                        $('#to_name_ward').html(result.to_name_ward);
+                        $('#to_name_province').html(result.to_name_province); 
+                        $('#id_ship').val(result.id_ship);
+                        $('#lenght').html(result.lenght+" cm");
+                        $('#height').html(result.height + " cm");
+                        $('#weight').html(result.weight + " kg");
+                        $('#width').html(result.width + " cm");
+                        $('#required_note').val(result.required_note); 
+                        $('#cod_amount').html(result.cod_amount+" VNĐ");
+                        $('#to_name').html(result.to_name);
+                        $('#to_phone').html(result.to_phone);
+                        $('#to_address').html(result.to_address);
+                        $('#note').val(result.note); 
+
+                        LoadNguoiGui();
+                    }
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        function LoadNguoiGui() {
+            $.ajax({
+                url: "/Manage/Manage/LoadNguoiGui",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result != 0) {
+
+                        $('#from_name').val(result.hoten);
+                        $('#from_phone').val("0"+result.phone);
+                        $('#from_ward').val(result.ward);
+                        $('#from_district').val(result.dictrict);
+
+                        $('#from_province').val(result.province);
+                        $('#from_address').val(result.street);
+                        //$('#to_name_distr').html(result.hoten);
+                    }
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+    </script>
+}

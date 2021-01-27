@@ -21,9 +21,12 @@ namespace Modal.DAO
 
             double? total= 0;
             var res_= db.HoaDons.Where(x => x.trangthai == "Đã Thanh Toán").ToList();
-            foreach(var i in res_)
+            if (res_ != null)
             {
-                total += i.tonggia;
+                foreach (var i in res_)
+                {
+                    total += i.tonggia;
+                }
             }
             return total;
         }
@@ -54,6 +57,12 @@ namespace Modal.DAO
 
             return db.HoaDons.FirstOrDefault(x => x.id_nguoimua == id_nguoimua&&x.trangthai== status);
         }
+        public HoaDon get_hoadon_trangthai_(int id_nguoimua, string status)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            return db.HoaDons.FirstOrDefault(x => x.id_nguoimua == id_nguoimua && x.trangthai == status && x.hinhthuctt == "Mới Đặt");
+        }
 
         // nếu hóa đơn nào chưa đc thanh toán thì lấy ra
         public int get_hoadon_trangthai(int id_nguoimua)
@@ -78,6 +87,30 @@ namespace Modal.DAO
                 res.soluong = quantity;
                 res.tonggia = gia;
                 db.SaveChanges();
+
+                return 1;
+            }
+            return 0;
+        }
+        
+        public int update_hoadon_maghn(int? id_hoadon, string maghn)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            //var dao = new HoaDonCT_DAO();
+            var res = db.HoaDons.FirstOrDefault(x => x.id_hoadon == id_hoadon);
+            if (res != null)
+            {
+                res.duyet = true;
+                res.maghn = maghn;
+                res.trangthaigh = "Đang Đóng Gói";
+                db.SaveChanges();
+
+                var res_hdct = db.HoaDonCTs.Where(x => x.id_hoadon == id_hoadon).ToList();
+                foreach (var c in res_hdct)
+                {
+                    c.trangthai = "Đã Thanh Toán";
+                    db.SaveChanges();
+                }
 
                 return 1;
             }
@@ -136,6 +169,21 @@ namespace Modal.DAO
             return 0;
         }
 
+        public int update_hoadon(HoaDon hd)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            var res = db.HoaDons.FirstOrDefault(x => x.id_hoadon == hd.id_hoadon);
+            if (res != null)
+            {
+                res.freeship = hd.freeship;
+                res.hinhthuctt = hd.hinhthuctt;
+                db.SaveChanges();
+                return 1;
+            }
+            return 0;
+        }
+
         public HoaDon get_hoadon_NguoiMua(int id_nguoimua)
         {
             return db.HoaDons.FirstOrDefault(n => n.id_nguoimua == id_nguoimua && n.trangthai == "Chưa Thanh Toán");
@@ -145,7 +193,9 @@ namespace Modal.DAO
             var res = db.HoaDons.FirstOrDefault(n => n.id_nguoimua == id_nguoimua && n.trangthai == "Chưa Thanh Toán");
             res.hinhthuctt = "PayPal";
             res.trangthai = "Đã Thanh Toán";
-            double a = 229.5;
+            double a = 22950;
+            DateTime now = DateTime.Now;
+            res.thoigian = now;
             res.sotiendathanhtoan = sotiendathanhtoan * a;
             res.magiaodich = magiaodich;
             db.SaveChanges();

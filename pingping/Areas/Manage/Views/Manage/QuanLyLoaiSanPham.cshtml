@@ -54,7 +54,7 @@
                         grid.Column("xeploai", header: "Xếp Loại"),
                         grid.Column("theloai", header: "Thể Loại"),
                         grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_loaisp}, new { @class = "btn btn-info", onclick = "EditLoaiSP(" + p.id_loaisp + ")", data_toggle = "modal", data_target = "#editloaisp" })),
-                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteLoaiSP", new { id = p.id_loaisp }, new { @class = "btn btn-danger" }))
+                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteLoaiSP", new { id = p.id_loaisp }, new { @class = "btn btn-danger", onclick = "return confirm('Bạn Có Muốn Xoá Loai: " + p.tenloai + "?')" }))
                     ))
 
                 </div>

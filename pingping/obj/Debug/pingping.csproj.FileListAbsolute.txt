@@ -94,3 +94,7 @@ T:\TieuLuan\pingping\pingping\bin\EntityFramework.SqlServer.xml
 T:\TieuLuan\pingping\pingping\bin\MailChimp.dll
 T:\TieuLuan\pingping\pingping\bin\ServiceStack.Text.dll
 T:\TieuLuan\pingping\pingping\bin\ServiceStack.Text.xml
+T:\TieuLuan\pingping\pingping\bin\PagedList.dll
+T:\TieuLuan\pingping\pingping\bin\PagedList.Mvc.dll
+T:\TieuLuan\pingping\pingping\bin\PagedList.xml
+T:\TieuLuan\pingping\pingping\bin\PagedList.Mvc.xml

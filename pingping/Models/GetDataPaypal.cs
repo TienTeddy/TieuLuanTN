@@ -81,7 +81,7 @@ namespace pingping.Models
                         case "payer_email":
                             order.PayerEmail = value;
                             break;
-                        case "Tx Token":
+                        case "txn_id":
                             order.TxToken = value;
                             break;
                         case "last_name":
@@ -95,9 +95,6 @@ namespace pingping.Models
                             break;
                         case "mc_currency":
                             order.Currency = value;
-                            break;
-                        case "txn_id":
-                            order.ReceiverEmail = value;
                             break;
                         case "custom":
                             order.Custom = value;

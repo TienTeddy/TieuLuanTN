@@ -66,7 +66,7 @@
                         grid.Column("hinhanh3", header: "Hình Ảnh 3", format: p => Html.Raw("<img width=\"150\" height=\"100\" src=\"../../Source/img-public/" + p.hinhanh3 + "\">")),
                         grid.Column("hinhanh4", header: "Hình Ảnh 4", format: p => Html.Raw("<img width=\"150\" height=\"100\" src=\"../../Source/img-public/" + p.hinhanh4 + "\">")),
                         grid.Column(format: p => Html.ActionLink("Sửa", "#", new {id=p.id_sanpham }, new { @class = "btn btn-info", onclick = "EditSanPham(" + p.id_sanpham + ")", data_toggle = "modal", data_target = "#EditSanPham" })),
-                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteSanPham", new { id = p.id_sanpham }, new { @class = "btn btn-danger" }))
+                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteSanPham", new { id = p.id_sanpham }, new { @class = "btn btn-danger", onclick = "return confirm('Bạn Có Muốn Xoá Sản Phẩm: " + p.tensp + "?')" }))
                     ))
 
                 </div>

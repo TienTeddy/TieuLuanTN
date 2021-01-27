@@ -13,7 +13,9 @@ namespace Modal.EF
         }
 
         public virtual DbSet<Color> Colors { get; set; }
+        public virtual DbSet<Coupon> Coupons { get; set; }
         public virtual DbSet<DauGia> DauGias { get; set; }
+        public virtual DbSet<GHN_Ship> GHN_Ship { get; set; }
         public virtual DbSet<HoaDon> HoaDons { get; set; }
         public virtual DbSet<HoaDonCT> HoaDonCTs { get; set; }
         public virtual DbSet<LichSuDG> LichSuDGs { get; set; }
@@ -27,12 +29,40 @@ namespace Modal.EF
         public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<TheTich> TheTiches { get; set; }
-        public virtual DbSet<Coupon> Coupons { get; set; }
+        public virtual DbSet<Slider> Slider { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Coupon>()
+                .Property(e => e.thestart)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Coupon>()
+                .Property(e => e.theend)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Coupon>()
+                .Property(e => e.discount)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Coupon>()
+                .Property(e => e.Ma_Coupon)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<GHN_Ship>()
+                .Property(e => e.return_phone)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<GHN_Ship>()
+                .Property(e => e.to_phone)
+                .IsUnicode(false);
+
             modelBuilder.Entity<HoaDon>()
                 .Property(e => e.mahd)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(e => e.maghn)
                 .IsUnicode(false);
 
             modelBuilder.Entity<HoaDon>()

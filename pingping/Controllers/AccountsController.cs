@@ -32,7 +32,7 @@ namespace pingping.Controllers
             if (model != null)
             {
                 var dao_tk = new TaiKhoan_DAO();
-                var res_tk = dao_tk.create_taikhoan(model.username,model.password,model.hoten,model.email);
+                var res_tk = dao_tk.create_taikhoan(model.username, CreateMD5(model.password.ToString()),model.hoten,model.email);
                 if (res_tk != null)
                 {
                     
@@ -80,7 +80,7 @@ namespace pingping.Controllers
         public ActionResult Login(Login_Models Login)
         {
             var dao = new TaiKhoan_DAO();
-            int result = dao.CheckLogin(Login.username, Login.password);
+            int result = dao.CheckLogin(Login.username, CreateMD5(Login.password.ToString()));
             if (result > 0)
             {
                 // add session
@@ -98,7 +98,7 @@ namespace pingping.Controllers
                 if (result == 2) //saller
                 {
                     var dao1 = new NguoiBan_DAO();
-                    var res = dao.Get_id_taikhoan(Login.username, Login.password);
+                    var res = dao.Get_id_taikhoan(Login.username, CreateMD5(Login.password.ToString()));
                     var res_infoSaller = dao1.get_infor(res.id_taikhoan);
 
                     //int? s = res_infoSaller.phone;
@@ -124,7 +124,7 @@ namespace pingping.Controllers
                 else if (result == 1) //manager
                 {
                     var dao1 = new NguoiMua_DAO();
-                    var res = dao.Get_id_taikhoan(Login.username, Login.password);
+                    var res = dao.Get_id_taikhoan(Login.username, CreateMD5(Login.password.ToString()));
                     var res_infoSaller = dao1.get_infor(res.id_taikhoan);
                     SessionHelper.SetSession(new AccLogin()
                     {
@@ -253,14 +253,14 @@ namespace pingping.Controllers
                 ViewBag.Messager = "Đăng Xuất";
                 ViewBag.Login = "../Accounts/Logout";
 
-                if (f["password_old"] != acc.password)
+                if (CreateMD5(f["password_old"]).ToString() != acc.password)
                 {
                     ViewBag.notify = "Mật khẩu không đúng!";
                     ViewBag.Alert = "alert-danger";
                     return View("MyAccount", acc);
 
                 }
-                else if (f["password"] == acc.password_old)
+                else if (CreateMD5(f["password"]).ToString() == acc.password_old)
                 {
                     ViewBag.notify = "Bạn đã sử dụng mật khẩu này!";
                     ViewBag.Alert = "alert-danger";
@@ -269,7 +269,7 @@ namespace pingping.Controllers
                 else
                 {
                     var dao_1 = new TaiKhoan_DAO();
-                    var res_nm = dao_1.update_pass(acc.id_taikhoan, f["password"].ToString());
+                    var res_nm = dao_1.update_pass(acc.id_taikhoan, CreateMD5(f["password"].ToString()));
                     if (res_nm != null)
                     {
                         ViewBag.notify = "Đổi mật khẩu thành công";
@@ -329,7 +329,7 @@ namespace pingping.Controllers
                 sb.Append(c);
             }
             var dao = new TaiKhoan_DAO();
-            var res = dao.forgotpassword(f["email"], f["taikhoan"], sb.ToString());
+            var res = dao.forgotpassword(f["email"], f["taikhoan"], CreateMD5(sb.ToString()));
             if (res != null)
             {
                 var content = "<div style=" + "color:#FFCC00" + ">Hệ Thống PingPing Chào Bạn!</div></br><div style=" + "font-size:20px" + ">Mật Khẩu của bạn là: <strong style=" + "color:#0000FF" + ">" + sb + "</strong></div>";
@@ -362,6 +362,24 @@ namespace pingping.Controllers
             smtp.EnableSsl = true;// kich hoat giao tiep an toan SSL
             smtp.Send(mail);//Gui mail di
 
+        }
+
+        public static string CreateMD5(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Convert the byte array to hexadecimal string
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }

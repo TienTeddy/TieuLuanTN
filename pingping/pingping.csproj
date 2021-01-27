@@ -58,6 +58,12 @@
       <HintPath>..\packages\MailChimp.NET.1.1.92\lib\net40\MailChimp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -528,6 +534,7 @@
     <Content Include="Areas\Manage\assets\css\bootstrap\bootstrap-reboot.min.css" />
     <Content Include="Areas\Manage\assets\css\bootstrap\bootstrap.css" />
     <Content Include="Areas\Manage\assets\css\bootstrap\bootstrap.min.css" />
+    <Content Include="Areas\Manage\assets\css\slider.css" />
     <Content Include="Areas\Manage\assets\fonts\nucleo\nucleo-icons.svg" />
     <Content Include="Areas\Manage\assets\img\brand\blue.png" />
     <Content Include="Areas\Manage\assets\img\brand\favicon.png" />
@@ -3061,11 +3068,13 @@
     <Content Include="Content\main\nice-select.css" />
     <Content Include="Content\main\niceselect.css" />
     <Content Include="Content\main\owl-carousel.css" />
+    <Content Include="Content\main\PagedList.css" />
     <Content Include="Content\main\reset.css" />
     <Content Include="Content\main\responsive.css" />
     <Content Include="Content\main\slicknav.min.css" />
     <Content Include="Content\main\style.css" />
     <Content Include="Content\main\themify-icons.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\popupModal.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -3638,6 +3647,7 @@
     <Content Include="Areas\Manage\Views\Shared\Chart_Line.cshtml" />
     <Content Include="Areas\Manage\Views\Manage\QuanLyDauGia.cshtml" />
     <Content Include="Areas\Manage\Views\Manage\XemLichSuDG.cshtml" />
+    <Content Include="Areas\Manage\Views\Manage\Slider.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -3777,6 +3787,7 @@
     <Content Include="Views\Home\Payment.cshtml" />
     <Content Include="Views\Home\PayPal.cshtml" />
     <Content Include="Views\Accounts\Forgotpassword.cshtml" />
+    <Content Include="Views\Home\resultSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

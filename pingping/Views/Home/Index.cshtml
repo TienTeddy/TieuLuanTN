@@ -5,7 +5,7 @@
 }
 
 <!-- Slider Area -->
-<section class="hero-slider">
+<section class="hero-slider" style="background-image: url('../../Source/Images/@ViewBag.slider1_img');">
     <!-- Single Slider -->
     <div class="single-slider">
         <div class="container">
@@ -15,8 +15,8 @@
                         <div class="row">
                             <div class="col-lg-7 col-12">
                                 <div class="hero-text">
-                                    <h1><span>Sale đến 50% </span>Áo Ngắn Nam</h1>
-                                    <p>Tự tin mang lại phái mạnh cho nam<br> giới. Đầy khí chất, kiểu dáng đến từ <br> Châu Âu - Châu Á.</p>
+                                    <h1><span>Sale đến @ViewBag.slider1_sale%</span>@ViewBag.slider1_title</h1>
+                                    <p>@Html.Raw(ViewBag.slider1_description)</p>
                                     <div class="button">
                                         <a href="#" class="btn">Shop Now!</a>
                                     </div>
@@ -38,10 +38,10 @@
             <!-- Single Banner  -->
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="single-banner">
-                    <img src="~/Source/Images/slider-ao.jpg" alt="#">
+                    <img src="~/Source/Images/@ViewBag.slider2_img" alt="#">
                     <div class="content">
-                        <p>Man's Collectons</p>
-                        <h3>Summer travel <br> collection</h3>
+                        <p>@ViewBag.slider2_title</p>
+                        <h3>@Html.Raw(ViewBag.slider2_description)</h3>
                         <a href="#">Discover Now</a>
                     </div>
                 </div>
@@ -50,10 +50,10 @@
             <!-- Single Banner  -->
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="single-banner">
-                    <img src="~/Source/Images/slider-quan.jpg" alt="#">
+                    <img src="~/Source/Images/@ViewBag.slider3_img" alt="#">
                     <div class="content">
-                        <p>Bag Collectons</p>
-                        <h3>Awesome Bag <br> 2020</h3>
+                        <p>@ViewBag.slider3_title</p>
+                        <h3>@Html.Raw(ViewBag.slider3_description)</h3>
                         <a href="#">Shop Now</a>
                     </div>
                 </div>
@@ -62,11 +62,11 @@
             <!-- Single Banner  -->
             <div class="col-lg-4 col-12">
                 <div class="single-banner tab-height">
-                    <img src="~/Source/Images/slider-mu.jpg" alt="#">
+                    <img src="~/Source/Images/@ViewBag.slider4_img" alt="#">
                     <div class="content">
-                        <p>Flash Sale</p>
-                        <h3>Mid Season <br> Up to <span>40%</span> Off</h3>
-                        <a href="#">Discover Now</a>
+                        <p>@ViewBag.slider4_title</p>
+                        <h3>@Html.Raw(ViewBag.slider4_description)</h3>
+                        <a href="#">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -1343,10 +1343,10 @@
             <!-- Single Banner  -->
             <div class="col-lg-6 col-md-6 col-12">
                 <div class="single-banner">
-                    <img src="~/Source/img-public/top-4-shop-ban-ao-so-mi-cho-nam-dep-tren-duong-au-co-thumb-557-1566442458-5d5e03da06f91.jpg" alt="#">
+                    <img src="~/Source/Images/@ViewBag.slider5_img" alt="#">
                     <div class="content">
-                        <p>Man's Collectons</p>
-                        <h3 style="color:white;background-color:aqua">Sơ Mi Nam</span></h3>
+                        <p>@ViewBag.slider5_title</p>
+                        <h3 style="color:white;background-color:aqua">@ViewBag.slider5_description</span></h3>
                         <a href="#">Shop Now</a>
                     </div>
                 </div>
@@ -1355,10 +1355,10 @@
             <!-- Single Banner  -->
             <div class="col-lg-6 col-md-6 col-12">
                 <div class="single-banner">
-                    <img style="height:30%" src="~/Source/img-public/QuanNgan.jpg" alt="#">
+                    <img style="height:30%" src="~/Source/Images/@ViewBag.slider6_img" alt="#">
                     <div class="content">
-                        <p>shoes women</p>
-                        <h3 style="color:white;background-color:aqua">Quần Short</span></h3>
+                        <p>@ViewBag.slider6_title</p>
+                        <h3 style="color:white;background-color:aqua">@ViewBag.slider6_description</span></h3>
                         <a href="#" class="btn">Shop Now</a>
                     </div>
                 </div>
@@ -1792,7 +1792,7 @@
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="quickview-content">
-                            <h2>Flared Shift Dress</h2>
+                            <h2 id="pro_name">Flared Shift Dress</h2>
                             <div class="quickview-ratting-review">
                                 <div class="quickview-ratting-wrap">
                                     <div class="quickview-ratting">
@@ -1921,16 +1921,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Xem</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
 
                         html += '</div>';
@@ -1978,16 +1978,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2035,16 +2035,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2092,16 +2092,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2149,16 +2149,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2206,16 +2206,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2263,16 +2263,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2320,16 +2320,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2377,16 +2377,16 @@
                         html += '</a>';
                         html += '<div class="button-head">';
                         html += '<div class="product-action">';
-                        html += '<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
+                        html += '<a data-toggle="modal" onclick="detail(' + value.id_sanpham + ')" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>';
                         html += '<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>';
                         html += '<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>';
                         html += '</div>';
                         html += '<div class="product-action-2">';
-                        if (Number(value.giasale) >= Number(value.dongia)) {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
+                        if (Number(value.giasale) < Number(value.dongia) && Number(value.giasale != 0)) {
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
                         }
                         else {
-                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.giasale + '\')">Add to cart</a>';
+                            html += '<a title="Add to cart" href="#" onclick="addtocart(' + value.id_sanpham + ',\'' + value.tensp + '\',\'' + value.dongia + '\')">Add to cart</a>';
                         }
                         html += '</div>';
                         html += '</div>';
@@ -2637,6 +2637,25 @@
                     });
                     $('.topviewed').html(html);
 
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function detail(id_sanpham) {
+        $.ajax({
+            url: "/Home/GetProduct_modal?id=" + id_sanpham,
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result != null) {
+                    
+                    $('#pro_name').html(result.tensp);
+                    alert(result.tensp);
                 }
             },
             error: function (errormessage) {

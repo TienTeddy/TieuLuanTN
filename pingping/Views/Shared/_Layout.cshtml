@@ -106,10 +106,14 @@
                             <div class="top-search"><a href="#0"><i class="ti-search"></i></a></div>
                             <!-- Search Form -->
                             <div class="search-top">
-                                <form class="search-form">
-                                    <input type="text" placeholder="Search here..." name="search">
-                                    <button value="search" type="submit"><i class="ti-search"></i></button>
-                                </form>
+                                <div class="search-form">
+                                    @using (Html.BeginForm("Search", "Home"))
+                                    {
+                                        <input type="text" value="All" name="searchselect" hidden>
+                                        <input type="text" placeholder="Search here..." name="sTuKhoa">
+                                        <button value="search" type="submit"><i class="ti-search"></i></button>
+                                    }
+                                </div>
                             </div>
                             <!--/ End Search Form -->
                         </div>
@@ -118,17 +122,18 @@
                     </div>
                     <div class="col-lg-8 col-md-7 col-12">
                         <div class="search-bar-top">
-                            <div class="search-bar">
-                                <select>
-                                    <option selected="selected">All Category</option>
-                                    <option>watch</option>
-                                    <option>mobile</option>
-                                    <option>kid’s item</option>
-                                </select>
-                                <form>
-                                    <input name="search" placeholder="Search Products Here....." type="search">
-                                    <button class="btnn"><i class="ti-search"></i></button>
-                                </form>
+                            <div style="display: inline-block; float: left;margin-left:23%">
+
+                                @using (Html.BeginForm("Search", "Home"))
+                                {
+                                    <select name="searchselect">
+                                        <option selected="selected" value="All">Tất Cả</option>
+                                        <option value="Quần">Quần</option>
+                                        <option value="Áo">Áo</option>
+                                    </select>
+                                    <input name="sTuKhoa" style="height: 48px; background: transparent; color: #666; border-radius: 0; border: none; font-size: 14px; font-weight: 400; padding: 0 25px 0 20px; width: 328px;" placeholder="Search Products Here....." type="search">
+                                    <button class="btnn" style="height: 50px; line-height: 53px; width: 62px; font-size: 18px; color: #fff; background: #333333; position: absolute;"><i class="ti-search"></i></button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -149,9 +154,10 @@
                                     <ul id="notify">
                                         <li class="product_1">
                                             <p><i class="ni-notification-70"></i>Không có thông báo.</p>
-                                        </li><hr />
+                                        </li>
+                                        <hr />
                                     </ul>
-                                    
+
                                 </div>
                             </div>
                             <!--/ End notify Item -->
@@ -165,17 +171,17 @@
                                     </div>
                                     <ul class="shopping-list">
                                         @*<li class="product_1">
-                                            <a href="#" class="remove" title="Remove this item" onclick="RemoveItem(product_1)"><i class="fa fa-remove"></i></a>
-                                            <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                            <h4><a href="#">Woman Ring</a></h4>
-                                            <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                        </li>
-                                        <li class="product_2">
-                                            <a href="#" class="remove" title="Remove this item" onclick="RemoveItem(product_2)"><i class="fa fa-remove"></i></a>
-                                            <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                            <h4><a href="#">Woman Necklace</a></h4>
-                                            <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                        </li>*@
+                                        <a href="#" class="remove" title="Remove this item" onclick="RemoveItem(product_1)"><i class="fa fa-remove"></i></a>
+                                        <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
+                                        <h4><a href="#">Woman Ring</a></h4>
+                                        <p class="quantity">1x - <span class="amount">$99.00</span></p>
+                                    </li>
+                                    <li class="product_2">
+                                        <a href="#" class="remove" title="Remove this item" onclick="RemoveItem(product_2)"><i class="fa fa-remove"></i></a>
+                                        <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
+                                        <h4><a href="#">Woman Necklace</a></h4>
+                                        <p class="quantity">1x - <span class="amount">$35.00</span></p>
+                                    </li>*@
                                     </ul>
                                     <div class="bottom">
                                         <div class="total">

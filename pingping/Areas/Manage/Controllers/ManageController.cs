@@ -1,15 +1,20 @@
 ﻿using Modal.DAO;
 using Modal.EF;
+using Newtonsoft.Json;
 using pingping.Areas.Manage.Models;
 using pingping.Common;
 using pingping.Models;
+using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Mail;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -36,14 +41,6 @@ namespace pingping.Areas.Manage.Controllers
                 ViewBag.listLuongTruyCap=res_;
                 return View();
             }
-        }
-        public ActionResult Icons()
-        {
-            return View();
-        }
-        public ActionResult Profile()
-        {
-            return View();
         }
         public ActionResult Tables()
         {
@@ -393,7 +390,7 @@ namespace pingping.Areas.Manage.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var dao = new TaiKhoan_DAO();
-            TaiKhoan res = dao.create_taikhoan(acc.username, acc.password, acc.hoten, acc.email);
+            TaiKhoan res = dao.create_taikhoan(acc.username, CreateMD5(acc.password), acc.hoten, acc.email);
 
             if (res != null)
             {
@@ -1022,6 +1019,17 @@ namespace pingping.Areas.Manage.Controllers
             var dao1 = new HoaDonCT_DAO();
             var res1 = dao1.get_hdct_hoadon(id);
             ViewBag.ListHoaDonChiTiet = res1;
+
+            var dao_namesize = new Size_DAO();
+            //object model = new object();
+            List<Size> model_total = new List<Size>();
+            object model = new object();
+            foreach (var m in res1)
+            {
+                var namesize = dao_namesize.get_size_id(m.id_size); //get name size
+                model_total.Add(namesize);
+            }
+            ViewBag.lstSize = model_total;
             return View(res);
         }
 
@@ -1046,7 +1054,7 @@ namespace pingping.Areas.Manage.Controllers
             var content = "<div style=" + "color:#FFCC00" + ">Hệ Thống PingPing Chào Bạn!</div></br><div style=" + "font-size:20px" + ">Mật Khẩu của bạn là: <strong style=" + "color:#0000FF" + ">" + sb + "</strong></div>";
             GuiEmail("Reset Password PingPing", res.TaiKhoan.email.ToString(), "testecommercehcmue@gmail.com", "Taogmail.com", content.ToString());
             var dao1 = new TaiKhoan_DAO();
-            dao1.update_pass(res.TaiKhoan.id_taikhoan, sb.ToString());
+            dao1.update_pass(res.TaiKhoan.id_taikhoan, CreateMD5(sb.ToString()));
             return RedirectToAction("QuanLyKhachHang");
         }
         public void GuiEmail(string Title, string ToEmail, string FromEmail, string Password, string Content)
@@ -1142,6 +1150,258 @@ namespace pingping.Areas.Manage.Controllers
             var res = dao.update_DauGia_id_(id);
             var res1 = dao.get_DauGia_all();
             return RedirectToAction("QuanLyDauGia");
+        }
+
+
+        public JsonResult LoadHoaDonDuyet(int? id)
+        {
+            if (id != null)
+            {
+                var dao_ghn = new GHN_DAO();
+                var res_ghn = dao_ghn.get_dhn_hoadon_id(id);
+                if (res_ghn != null)
+                {
+                    return Json(res_ghn, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(0, JsonRequestBehavior.AllowGet);
+        }
+        
+        public JsonResult LoadNguoiNhan(int id)
+        {
+            if (id != null)
+            {
+                var dao_hd = new HoaDon_DAO();
+                var res_ghn = dao_hd.get_hoadon_id(id);
+
+                var dao_ngm= new NguoiMua_DAO();
+                var res_ngm = dao_ngm.get_nguoimua_id(id);
+                if (res_ngm != null)
+                {
+                    return Json(res_ngm, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(0, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult LoadNguoiGui()
+        {
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(session_acc, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+
+
+        public async Task<ActionResult> CreateOrder_GHN(GHN_Ship ship)
+        
+{
+            var dao_ghn = new GHN_DAO();
+            var res_ghn = dao_ghn.get_ghn_id(ship.id_ship);
+            if (ship.note == null) ship.note = "Shippings";
+            //object data = new
+            //{
+            //    payment_type_id = res_ghn.payment_type_id,
+            //    note= ship.note,
+            //    required_note= ship.required_note,
+            //    return_phone= ship.return_phone,
+            //    return_address= ship.return_address,
+            //    return_district_id= 1450,
+            //    return_ward_code= 20804,
+            //    client_order_code= "",
+            //    to_name= res_ghn.to_name,
+            //    to_phone= res_ghn.to_phone,
+            //    to_address= res_ghn.to_address,
+            //    to_ward_code= res_ghn.to_ward_code,
+            //    to_district_id= res_ghn.to_name_district,
+            //    cod_amount= res_ghn.cod_amount,
+            //    //content= res_ghn.,
+            //    weight= res_ghn.weight*1000,
+            //    length= res_ghn.length,
+            //    width= res_ghn.width,
+            //    height= res_ghn.height,
+            //    pick_station_id= res_ghn.pick_station_id,
+            //    insurance_value= res_ghn.insurance_value,
+            //    service_id= res_ghn.service_id,
+            //    //service_type_id= res_ghn.
+            //};
+
+            //var content = new StringContent(data.ToString(), Encoding.UTF8, "application/json");
+            var content_= "payment_type_id="+res_ghn.payment_type_id+"&note="+ship.note+ "&required_note="+ ship.required_note+
+                            "&return_phone=" + ship.return_phone + "&return_address=" + ship.return_address + "&return_district_id=" + 1450 + "&return_ward_code="+ 20804 + "&client_order_code=null"+
+                            "&to_name=" + res_ghn.to_name + "&to_phone=" + res_ghn.to_phone + "&to_address="+ res_ghn.to_address + "&to_ward_code="+ res_ghn.to_ward_code + "&to_district_id="+ res_ghn.to_name_district + "&cod_amount="+ res_ghn.cod_amount +
+                            "&content=" + "sanphamtengi" +"&weight="+ res_ghn.weight*1000 + "&length="+ res_ghn.length + "&width="+ res_ghn.width + "&height="+ res_ghn.height + "&pick_station_id=" + res_ghn.pick_station_id + "&insurance_value="+ res_ghn.insurance_value + "&service_id="+ res_ghn.service_id;
+
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Add("token", "ef26267b-c8c7-11ea-b16d-9289328232ea");
+            httpClient.DefaultRequestHeaders.Add("ShopId", "1257313");
+
+            HttpResponseMessage result = httpClient.PostAsync("https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create?"+content_,null).Result;
+            if (result.IsSuccessStatusCode)
+            {
+                var response = await result.Content.ReadAsStringAsync();
+                var a = result.Content.ReadAsStringAsync().Result;
+                //var deserialized = JsonConvert.DeserializeObject<object>(response);
+                string[] arrListStr = response.Split(new char[] { '\"','"'});
+
+                var dao_hd = new HoaDon_DAO();
+                var res_hd = dao_hd.update_hoadon_maghn(res_ghn.id_hoadon,arrListStr[11]);
+
+                var dao_hdct = new HoaDonCT_DAO();
+                var res_hdct = dao_hdct.get_hdct_hoadon_(res_ghn.id_hoadon); //trừ đi sl san pham
+
+                if (arrListStr[11] == "" || arrListStr[11] == "0")
+                {
+                    return RedirectToAction("QuanLyHoaDon");
+                }
+
+                return RedirectToAction("QuanLyHoaDon");
+            }
+
+            return RedirectToAction("QuanLyHoaDon");
+        }
+
+        public static string CreateMD5(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Convert the byte array to hexadecimal string
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
+        }
+
+        public ActionResult Slider()
+        {
+            var dao = new Slider_DAO();
+            var res = dao.slider_get_all();
+            ViewBag.slider = res;
+            return View();
+        }
+        [HttpGet]
+        public JsonResult Get_Slider_id(int id_slider)
+        {
+            var dao = new Slider_DAO();
+            var res = dao.get_slider_id(id_slider);
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult Slider(FormCollection f, HttpPostedFileBase hinhanh)
+        {
+            var id = f["id_slider"];
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var dao = new Slider_DAO();
+            if (hinhanh == null)
+            {
+                var slider = new Slider();
+                var res = dao.get_slider_id(Int32.Parse(id));
+                slider.id_slider = res.id_slider;
+                slider.image = res.image;
+                slider.sale = f["sale"];
+                slider.title = f["title"];
+                slider.description = f["description"];
+                if (slider == res)
+                {
+                    ViewBag.notify = "Dữ liệu bị trùng";
+                    ViewBag.Alert = "alert-warning";
+                    return View();
+                }
+                else
+                {
+                    var res1 = dao.set_slider(slider);
+                    if (res1 == 1)
+                    {
+                        ViewBag.notify = "Thay đổi thành công";
+                        ViewBag.Alert = "alert-info";
+                    }
+                    else
+                    {
+                        ViewBag.notify = "Thay đổi thất bại";
+                        ViewBag.Alert = "alert-danger";
+                    }
+                }
+
+            }
+            else if (hinhanh.ContentLength > 0)
+            {
+                if (hinhanh.ContentType != "image/jpeg" && hinhanh.ContentType != "image/png" && hinhanh.ContentType != "image/gif" && hinhanh.ContentType != "image/tiff" && hinhanh.ContentType != "image/BMP" && hinhanh.ContentType != "image/jpg")
+                {
+                    ViewBag.notify = "không phải định dạng của hình ảnh";
+                    ViewBag.Alert = "alert-danger";
+                    return View();
+                }
+                //Lay hinh anh
+                var fileName = Path.GetFileName(hinhanh.FileName);
+                //Lấy hình ảnh chuyển vào thư mục hình ảnh
+                var path = Path.Combine(Server.MapPath("~/Source/Images"), fileName);
+                //Nếu thư mục chứa hình ảnh đó rồi
+                if (System.IO.File.Exists(path))
+                {
+                    var res = dao.get_slider_id(Int32.Parse(id));
+                    res.sale = f["sale"];
+                    res.title = f["title"];
+                    res.description = f["description"];
+                    var res1 = dao.set_slider(res);
+                    if (res1 == 1)
+                    {
+                        ViewBag.notify = "Thay đổi thành công";
+                        ViewBag.Alert = "alert-info";
+                    }
+                    else
+                    {
+                        ViewBag.notify = "Thay đổi thât bại";
+                        ViewBag.Alert = "alert-danger";
+                    }
+                }
+                else
+                {
+                    var res = dao.get_slider_id(Int32.Parse(id));
+                    var path1 = Path.Combine(Server.MapPath("~/Source/Images"), res.image);
+                    System.IO.File.Delete(path1);
+                    //Lấy Hình Ảnh đưa vào thư muc HinhAnhSP
+                    hinhanh.SaveAs(path);
+                    res.image = fileName;
+                    res.sale = f["sale"];
+                    res.title = f["title"];
+                    res.description = f["description"];
+                    var res1 = dao.set_slider(res);
+                    if (res1 == 1)
+                    {
+                        ViewBag.notify = "Thay đổi thành công";
+                        ViewBag.Alert = "alert-info";
+                    }
+                    else
+                    {
+                        ViewBag.notify = "Thay đổi thât bại";
+                        ViewBag.Alert = "alert-danger";
+                    }
+                }
+            }
+            var res2 = dao.slider_get_all();
+            ViewBag.slider = res2;
+            return View();
+        }
+        public void Urlpaypal(string magiaodich)
+        {
+            Response.Redirect("https://www.sandbox.paypal.com/activity/payment/" + magiaodich);
         }
     }
 }

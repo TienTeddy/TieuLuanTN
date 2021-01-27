@@ -12,6 +12,7 @@ namespace Modal.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public HoaDon()
         {
+            GHN_Ship = new HashSet<GHN_Ship>();
             HoaDonCTs = new HashSet<HoaDonCT>();
         }
 
@@ -41,11 +42,20 @@ namespace Modal.EF
 
         public int? soluong { get; set; }
 
-        public bool duyet { get; set; }
-
         public double? sotiendathanhtoan { get; set; }
 
+        [StringLength(50)]
         public string magiaodich { get; set; }
+
+        public bool? duyet { get; set; }
+
+        [StringLength(100)]
+        public string maghn { get; set; }
+
+        public string trangthaigh { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GHN_Ship> GHN_Ship { get; set; }
 
         public virtual NguoiMua NguoiMua { get; set; }
 

@@ -24,8 +24,8 @@ create table LoaiSanPham
 	xeploai nvarchar(100) check(xeploai in('Trending Item','Hot Item','Onsale','Best Saller','Top Viewed')) default 'Hot Item',
 	theloai nvarchar(20)
 )
-alter table SanPham
-add  xeploai nvarchar(100) check(xeploai in('Trending Item','Hot Item','Onsale','Best Saller','Top Viewed')) default 'Hot Item'
+alter table HoaDon
+add duyet bit default 0
 create table SanPham
 (
 	id_sanpham int identity primary key,
@@ -86,9 +86,8 @@ create table TaiKhoan
 	hoten nvarchar(150),
 	password varchar(250),
 	password_old varchar(250), -- default=password
-	email varchar(250),
-	loaitk bit default 1, -- 1=người mua, 0=người bán, 0=người quản lý
-	--tgchuyen datetime --update trở thành người bán hàng
+	email varchar(250), 
+	loaitk bit default 1, -- 1=người mua, 0=người bán, 0=người quản lý pingpings,ai biết n
 )
 
 create table NguoiMua
@@ -128,6 +127,7 @@ create table HoaDon
 	hinhthuctt nvarchar(100),
 	soluong int,
 	freeship float,
+	trangthaigh nvarchar(50),
 	trangthai nvarchar(50) check(trangthai in(N'Chưa Thanh Toán',N'Đã Thanh Toán')) default N'Chưa Thanh Toán',
 	CONSTRAINT FK_HoaDon_NguoiMua FOREIGN KEY (id_nguoimua) REFERENCES NguoiMua (id_nguoimua) ON DELETE CASCADE,
 )
@@ -147,7 +147,7 @@ create table HoaDonCT
 	CONSTRAINT FK_HoaDonCT_SanPham FOREIGN KEY (id_sanpham) REFERENCES SanPham (id_sanpham) ON DELETE CASCADE,
 )
 alter table HoaDon
-add magiaodich nvarchar(50)
+add trangthaigh nvarchar(50)
 create table PhieuThanhToan
 (
 	id_phieutt int identity primary key,
@@ -236,31 +236,39 @@ create table Coupon(
 
 create table GHN_Ship(
 	id_ship int identity primary key,
+	id_hoadon int,
 	payment_type_id int,
-	--note 
-	--required_note 
-
-	--return_phone
-	--return_address
-	--return_district_id
-	--return_ward_code
-	client_order_code =null
-	to_name
-	to_phone
-	to_address
-	to_ward_code
-	to_district_id
-	cod_amount
-	content
-	weight
-	length
-	width
-	height
-	pick_station_id
-	insurance_value
-	service_id
+	note nvarchar(500), 
+	required_note nvarchar(30) check(required_note in('CHOTHUHANG','CHOXEMHANGKHONGTHU','KHONGCHOXEMHANG')) default 'KHONGCHOXEMHANG',
+	return_phone varchar(11),
+	return_address nvarchar(200),
+	return_district_id int,
+	return_ward_code int,
+	return_name_ward nvarchar(150),
+	return_name_district nvarchar(150),
+	client_order_code nvarchar(200) default '',
+	to_name nvarchar(200),
+	to_phone varchar(11),
+	to_address nvarchar(200),
+	to_ward_code int,
+	to_district_id int,
+	to_name_ward nvarchar(150),
+	to_name_district nvarchar(150),
+	to_name_province nvarchar(150),
+	cod_amount float,
+	weight float,
+	length float,
+	width float,
+	height float,
+	pick_station_id int default 0,
+	insurance_value float default 1000000,
+	service_id int,
+	content nvarchar(500) default '',
+	feeship float,
+	CONSTRAINT FK_GHN_HOADON FOREIGN KEY (id_hoadon) REFERENCES HoaDon(id_hoadon),
 )
-drop table Coupon
+alter table GHN_Ship
+add to_name_province nvarchar(150),
 create trigger trg_RamdomCoupon on Coupon after insert
 as declare @ramdom varchar(50)
 begin
@@ -284,7 +292,7 @@ go
 select *from TaiKhoan
 select *from NguoiMua
 select *from TaiKhoan
-select *from HoaDon
+select *from GHN_Ship
 
 delete from LuongTruyCap
 delete from HoaDonCT

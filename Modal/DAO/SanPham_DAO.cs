@@ -141,5 +141,21 @@ namespace Modal.DAO
             return null;
         }
 
+        public IQueryable<SanPham> get_search_product(string sTuKhoa)
+        {
+            if (sTuKhoa == null)
+            {
+                return db.SanPhams.OrderBy(n => n.tensp);
+            }
+            return db.SanPhams.Where(n => n.tensp.Contains(sTuKhoa)).OrderBy(n => n.tensp);
+        }
+        public IQueryable<SanPham> get_search_category(string sTuKhoa, string searchselect)
+        {
+            if (sTuKhoa == null)
+            {
+                return db.SanPhams.Where(n => n.LoaiSanPham.theloai == searchselect).OrderBy(n => n.tensp);
+            }
+            return db.SanPhams.Where(n => n.tensp.Contains(sTuKhoa) && n.LoaiSanPham.theloai == searchselect).OrderBy(n => n.tensp);
+        }
     }
 }

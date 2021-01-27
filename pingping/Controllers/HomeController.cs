@@ -3,6 +3,7 @@ using MailChimp.Helper;
 using Modal.DAO;
 using Modal.EF;
 using Newtonsoft.Json;
+using PagedList;
 using pingping.Common;
 using pingping.Models;
 using System;
@@ -43,7 +44,56 @@ namespace pingping.Controllers
                 ViewBag.Login = "../Accounts/Logout";
             }
 
+            #region Slider
+            var dao5 = new Slider_DAO();
+            var slider = dao5.slider_get_all();
+            foreach (var item in slider)
+            {
+                if (item.id_slider == 1)
+                {
 
+                    ViewBag.slider1_img = item.image;
+                    ViewBag.slider1_title = item.title;
+                    ViewBag.slider1_description = item.description;
+                    ViewBag.slider1_sale = item.sale;
+                }
+                else if (item.id_slider == 2)
+                {
+                    ViewBag.slider2_img = item.image;
+                    ViewBag.slider2_title = item.title;
+                    ViewBag.slider2_description = item.description;
+                    ViewBag.slider2_sale = item.sale;
+                }
+                else if (item.id_slider == 3)
+                {
+                    ViewBag.slider3_img = item.image;
+                    ViewBag.slider3_title = item.title;
+                    ViewBag.slider3_description = item.description;
+                    ViewBag.slider3_sale = item.sale;
+                }
+                else if (item.id_slider == 4)
+                {
+                    ViewBag.slider4_img = item.image;
+                    ViewBag.slider4_title = item.title;
+                    ViewBag.slider4_description = item.description;
+                    ViewBag.slider4_sale = item.sale;
+                }
+                else if (item.id_slider == 5)
+                {
+                    ViewBag.slider5_img = item.image;
+                    ViewBag.slider5_title = item.title;
+                    ViewBag.slider5_description = item.description;
+                    ViewBag.slider5_sale = item.sale;
+                }
+                else if (item.id_slider == 6)
+                {
+                    ViewBag.slider6_img = item.image;
+                    ViewBag.slider6_title = item.title;
+                    ViewBag.slider6_description = item.description;
+                    ViewBag.slider6_sale = item.sale;
+                }
+            }
+            #endregion
             #region Auction
             var dao = new DauGia_DAO();
             var result_dg = dao.get_daugia("Đang áp dụng"); //get daugia có status="đang áp dụng"
@@ -153,82 +203,45 @@ namespace pingping.Controllers
             }
             else
             {
-                double x = 0;
-                var dao_tc = new LuongTruyCap_DAO();
-                var res_tc = dao_tc.update_truycap_soluong("Giỏ Hàng", "Khách Hàng");
-                ViewBag.Name = session_acc.hoten;
-                ViewBag.Messager = "Đăng Xuất";
-                ViewBag.Login = "../Accounts/Logout";
-                var dao_sp = new SanPham_DAO();
-
-                var dao = new HoaDon_DAO();
-                var result = dao.get_hoadon_trangthai(session_acc.id_nguoi, "Chưa Thanh Toán");
-                
-                if (result != null)
+                if (session_acc.loaitk == true)
                 {
-                    var dao_hdct = new HoaDonCT_DAO();
-                    var result_hdct = dao_hdct.get_hoadonct(result.id_hoadon);
+                    double x = 0;
+                    var dao_tc = new LuongTruyCap_DAO();
+                    var res_tc = dao_tc.update_truycap_soluong("Giỏ Hàng", "Khách Hàng");
+                    ViewBag.Name = session_acc.hoten;
+                    ViewBag.Messager = "Đăng Xuất";
+                    ViewBag.Login = "../Accounts/Logout";
+                    var dao_sp = new SanPham_DAO();
 
-                    var dao_size = new Size_DAO();
-                    var dao_color = new Color_DAO();
+                    var dao = new HoaDon_DAO();
+                    var result = dao.get_hoadon_trangthai_(session_acc.id_nguoi, "Chưa Thanh Toán");
 
-                    List<SanPham> sp = new List<SanPham>();
-                    List<Size> size = new List<Size>();
-                    List<Color> color = new List<Color>();
-                    var order = new MyOrder_Model();
-                    foreach (HoaDonCT i in result_hdct)
+                    if (result != null)
                     {
-                         x += Convert.ToDouble(i.dongia) * Convert.ToInt32(i.soluong);
-                        //var res = dao_sp.get_product_idsanpham(i.id_sanpham);
-                        var res_ = dao_sp.get_product_idsanpham_(i.id_sanpham);
+                        var dao_hdct = new HoaDonCT_DAO();
+                        var result_hdct = dao_hdct.get_hoadonct(result.id_hoadon);
 
-                        //get size
-                        var res_size = dao_size.get_size_idsanpham(i.id_sanpham);
+                        var dao_size = new Size_DAO();
+                        var dao_color = new Color_DAO();
 
-                        if (res_size != null)
+                        List<SanPham> sp = new List<SanPham>();
+                        List<Size> size = new List<Size>();
+                        List<Color> color = new List<Color>();
+                        var order = new MyOrder_Model();
+                        foreach (HoaDonCT i in result_hdct)
                         {
-                            foreach (var s in res_size)
-                            {
-                                if (size == null)
-                                {
-                                    size.Add(new Size()
-                                    {
-                                        id_size = s.id_size,
-                                        id_sanpham = s.id_sanpham,
-                                        size = s.size,
-                                        soluong = s.soluong
-                                    });
+                            x += Convert.ToDouble(i.dongia) * Convert.ToInt32(i.soluong);
+                            //var res = dao_sp.get_product_idsanpham(i.id_sanpham);
+                            var res_ = dao_sp.get_product_idsanpham_(i.id_sanpham);
 
-                                    if (color == null)
-                                    {
-                                        //get color
-                                        foreach(var sflat in size)
-                                        {
-                                            var res_color_flat = dao_color.get_color_size_id(sflat.id_size);
-                                            foreach (var c in res_color_flat)
-                                            {
-                                                color.Add(new Color()
-                                                {
-                                                    id_color = c.id_color,
-                                                    id_size = c.id_size,
-                                                    color1 = c.color1,
-                                                    soluong = s.soluong
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                                else
+                            //get size
+                            var res_size = dao_size.get_size_idsanpham(i.id_sanpham);
+
+                            if (res_size != null)
+                            {
+                                foreach (var s in res_size)
                                 {
-                                    int flat = 0;
-                                    foreach (var ss in size)
-                                    {
-                                        if (ss.id_size == s.id_size)
-                                        {
-                                            flat += 1; //set size trùng
-                                        }
-                                    }
-                                    if (flat == 0) //ko có size trùng
+                                    if (size == null)
                                     {
                                         size.Add(new Size()
                                         {
@@ -237,6 +250,7 @@ namespace pingping.Controllers
                                             size = s.size,
                                             soluong = s.soluong
                                         });
+
                                         if (color == null)
                                         {
                                             //get color
@@ -250,88 +264,92 @@ namespace pingping.Controllers
                                                         id_color = c.id_color,
                                                         id_size = c.id_size,
                                                         color1 = c.color1,
-                                                        soluong = c.soluong
+                                                        soluong = s.soluong
                                                     });
                                                 }
                                             }
                                         }
-                                        else
+                                    }
+                                    else
+                                    {
+                                        int flat = 0;
+                                        foreach (var ss in size)
                                         {
-                                            int flat_ = 0;
-                                            foreach (var sss in size)
+                                            if (ss.id_size == s.id_size)
                                             {
-                                                foreach (var cc in color)
+                                                flat += 1; //set size trùng
+                                            }
+                                        }
+                                        if (flat == 0) //ko có size trùng
+                                        {
+                                            size.Add(new Size()
+                                            {
+                                                id_size = s.id_size,
+                                                id_sanpham = s.id_sanpham,
+                                                size = s.size,
+                                                soluong = s.soluong
+                                            });
+                                            if (color == null)
+                                            {
+                                                //get color
+                                                foreach (var sflat in size)
                                                 {
-                                                    if (sss.id_size == cc.id_size)
+                                                    var res_color_flat = dao_color.get_color_size_id(sflat.id_size);
+                                                    foreach (var c in res_color_flat)
                                                     {
-                                                        flat_ += 1; //set color trùng
+                                                        color.Add(new Color()
+                                                        {
+                                                            id_color = c.id_color,
+                                                            id_size = c.id_size,
+                                                            color1 = c.color1,
+                                                            soluong = c.soluong
+                                                        });
                                                     }
                                                 }
                                             }
-                                            if (flat_ == 0)
+                                            else
                                             {
-                                                //get color
-                                                var res_color_ = dao_color.get_color_size_id(s.id_size);
-                                                foreach (var c_ in res_color_)
+                                                int flat_ = 0;
+                                                foreach (var sss in size)
                                                 {
-                                                    color.Add(new Color()
+                                                    foreach (var cc in color)
                                                     {
-                                                        id_color = c_.id_color,
-                                                        id_size = c_.id_size,
-                                                        color1 = c_.color1,
-                                                        soluong = c_.soluong
-                                                    });
+                                                        if (sss.id_size == cc.id_size)
+                                                        {
+                                                            flat_ += 1; //set color trùng
+                                                        }
+                                                    }
+                                                }
+                                                if (flat_ == 0)
+                                                {
+                                                    //get color
+                                                    var res_color_ = dao_color.get_color_size_id(s.id_size);
+                                                    foreach (var c_ in res_color_)
+                                                    {
+                                                        color.Add(new Color()
+                                                        {
+                                                            id_color = c_.id_color,
+                                                            id_size = c_.id_size,
+                                                            color1 = c_.color1,
+                                                            soluong = c_.soluong
+                                                        });
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
 
 
-                        foreach (var item in res_)
-                        {
-                            if (item.dongia > item.giasale)
+                            foreach (var item in res_)
                             {
-                                item.dongia = item.giasale;
-                                //order.sanpham_ = res_;
-                            }
-                            if (sp == null)
-                            {
-                                sp.Add(new SanPham()
+                                if (item.dongia > item.giasale)
                                 {
-                                    id_sanpham = item.id_sanpham,
-                                    id_loaisp = item.id_loaisp,
-                                    tensp = item.tensp,
-                                    tenngan = item.tenngan,
-                                    soluong = item.soluong,
-                                    dongia = item.dongia,
-                                    giasale = item.giasale,
-                                    trangthai = item.trangthai,
-                                    hienthi = item.hienthi,
-                                    barcode = item.barcode,
-                                    tinhtrang = item.tinhtrang,
-                                    thongtin = item.thongtin,
-                                    hinhanh1 = item.hinhanh1,
-                                    hinhanh2 = item.hinhanh2,
-                                    hinhanh3 = item.hinhanh3,
-                                    hinhanh4 = item.hinhanh4,
-                                    size = item.size,
-                                    xeploai = item.xeploai
-                                });
-                            }
-                            else //add sp
-                            {
-                                int flat = 0;
-                                foreach(var s in sp)
-                                {
-                                    if (item.id_sanpham == s.id_sanpham)
-                                    {
-                                        flat += 1;
-                                    }
+                                    item.dongia = item.giasale;
+                                    //order.sanpham_ = res_;
                                 }
-                                if (flat == 0)
+                                if (sp == null)
                                 {
                                     sp.Add(new SanPham()
                                     {
@@ -355,23 +373,59 @@ namespace pingping.Controllers
                                         xeploai = item.xeploai
                                     });
                                 }
+                                else //add sp
+                                {
+                                    int flat = 0;
+                                    foreach (var s in sp)
+                                    {
+                                        if (item.id_sanpham == s.id_sanpham)
+                                        {
+                                            flat += 1;
+                                        }
+                                    }
+                                    if (flat == 0)
+                                    {
+                                        sp.Add(new SanPham()
+                                        {
+                                            id_sanpham = item.id_sanpham,
+                                            id_loaisp = item.id_loaisp,
+                                            tensp = item.tensp,
+                                            tenngan = item.tenngan,
+                                            soluong = item.soluong,
+                                            dongia = item.dongia,
+                                            giasale = item.giasale,
+                                            trangthai = item.trangthai,
+                                            hienthi = item.hienthi,
+                                            barcode = item.barcode,
+                                            tinhtrang = item.tinhtrang,
+                                            thongtin = item.thongtin,
+                                            hinhanh1 = item.hinhanh1,
+                                            hinhanh2 = item.hinhanh2,
+                                            hinhanh3 = item.hinhanh3,
+                                            hinhanh4 = item.hinhanh4,
+                                            size = item.size,
+                                            xeploai = item.xeploai
+                                        });
+                                    }
+                                }
                             }
+
                         }
 
+                        order.sanpham_ = sp;
+                        order.hoadonct_ = result_hdct;
+                        order.size_ = size;
+                        order.color_ = color;
+                        ViewBag.youpay = result.tonggia;
+                        ViewBag.giam = x - result.tonggia;
+                        return View(order);
                     }
-
-                    order.sanpham_=sp;
-                    order.hoadonct_ = result_hdct;
-                    order.size_ = size;
-                    order.color_ = color;
-                    ViewBag.youpay = result.tonggia;
-                    ViewBag.giam = x-result.tonggia;
-                    return View(order);
+                    else
+                    {
+                        return View();
+                    }
                 }
-                else
-                {
-                   return View();
-                }
+                else return View();
             }
             
         }
@@ -568,46 +622,50 @@ namespace pingping.Controllers
             var session_acc = SessionHelper.GetSession();
             if (session_acc != null)
             {
-                int soluong = 0;
-                double? gia = 0;
-                var dao_hd = new HoaDon_DAO();
-                var dao_sp = new SanPham_DAO();
-                var dao_hdct = new HoaDonCT_DAO();
-
-                var res_hd_tt = dao_hd.get_hoadon_trangthai(session_acc.id_nguoi); //id_hoadon ChưaThanhToan
-                //gia = res_hd_tt.tonggia;
-                if (res_hd_tt > 0)
+                if (session_acc.loaitk == true)
                 {
-                    var r_ = dao_hd.get_hoadon_id(res_hd_tt);
-                    gia = r_.tonggia;
-                    //update hoadon
-                    DateTime now = DateTime.Now;
-                    foreach (CheckOut_Model item in data)
-                    {
-                        var res_sp = dao_sp.get_product_(item.id); //sp
+                    int soluong = 0;
+                    double? gia = 0;
+                    var dao_hd = new HoaDon_DAO();
+                    var dao_sp = new SanPham_DAO();
+                    var dao_hdct = new HoaDonCT_DAO();
 
-                        var res_hdct = dao_hdct.createHoaDonCT(res_hd_tt, item.id, item.price, now, item.quantity,0,"");
-                        soluong += 1;
-                        gia += item.price * item.quantity;
-                    }
-                    int res_ = dao_hd.updateHoaDon_quantity(res_hd_tt, soluong,gia); //return 1 or 0
-                    return Json(1, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    //create hoadon
-                    var res_hd = dao_hd.createHoaDon(session_acc.id_nguoi); //return hoadon
-                    foreach (CheckOut_Model item in data)
+                    var res_hd_tt = dao_hd.get_hoadon_trangthai(session_acc.id_nguoi); //id_hoadon ChưaThanhToan
+                                                                                       //gia = res_hd_tt.tonggia;
+                    if (res_hd_tt > 0)
                     {
-                        var res_sp = dao_sp.get_product_(item.id); //sp
+                        var r_ = dao_hd.get_hoadon_id(res_hd_tt);
+                        gia = r_.tonggia;
+                        //update hoadon
+                        DateTime now = DateTime.Now;
+                        foreach (CheckOut_Model item in data)
+                        {
+                            var res_sp = dao_sp.get_product_(item.id); //sp
 
-                        var res_hdct = dao_hdct.createHoaDonCT(res_hd.id_hoadon, item.id, item.price, res_hd.thoigian, item.quantity, 0, "");
-                        soluong += 1;
-                        gia += item.price * item.quantity;
+                            var res_hdct = dao_hdct.createHoaDonCT(res_hd_tt, item.id, item.price, now, item.quantity, 0, "");
+                            soluong += 1;
+                            gia += item.price * item.quantity;
+                        }
+                        int res_ = dao_hd.updateHoaDon_quantity(res_hd_tt, soluong, gia); //return 1 or 0
+                        return Json(1, JsonRequestBehavior.AllowGet);
                     }
-                    int res_ = dao_hd.updateHoaDon_quantity(res_hd.id_hoadon, soluong, gia); //return 1 or 0
-                    return Json(1, JsonRequestBehavior.AllowGet);
+                    else
+                    {
+                        //create hoadon
+                        var res_hd = dao_hd.createHoaDon(session_acc.id_nguoi); //return hoadon
+                        foreach (CheckOut_Model item in data)
+                        {
+                            var res_sp = dao_sp.get_product_(item.id); //sp
+
+                            var res_hdct = dao_hdct.createHoaDonCT(res_hd.id_hoadon, item.id, item.price, res_hd.thoigian, item.quantity, 0, "");
+                            soluong += 1;
+                            gia += item.price * item.quantity;
+                        }
+                        int res_ = dao_hd.updateHoaDon_quantity(res_hd.id_hoadon, soluong, gia); //return 1 or 0
+                        return Json(1, JsonRequestBehavior.AllowGet);
+                    }
                 }
+                else return Json(9, JsonRequestBehavior.AllowGet);
             }
             return Json(-1, JsonRequestBehavior.AllowGet);
         }
@@ -705,46 +763,51 @@ namespace pingping.Controllers
             var session_acc = SessionHelper.GetSession();
             if (session_acc != null)
             {
-                int soluong = 0;
-                double? gia = 0;
-                var dao_hd = new HoaDon_DAO();
-                var dao_sp = new SanPham_DAO();
-                var dao_hdct = new HoaDonCT_DAO();
-
-                var res_hd_tt = dao_hd.get_hoadon_trangthai(session_acc.id_nguoi); //id_hoadon ChưaThanhToan
-                //gia = res_hd_tt.tonggia;
-                if (res_hd_tt > 0)
+                if (session_acc.loaitk == true)
                 {
-                    var r_ = dao_hd.get_hoadon_id(res_hd_tt);
-                    gia = r_.tonggia;
-                    //update hoadon
-                    DateTime now = DateTime.Now;
-                    foreach (CheckOut_Model item in data)
-                    {
-                        var res_sp = dao_sp.get_product_(item.id); //sp
+                    int soluong = 0;
+                    double? gia = 0;
+                    var dao_hd = new HoaDon_DAO();
+                    var dao_sp = new SanPham_DAO();
+                    var dao_hdct = new HoaDonCT_DAO();
 
-                        var res_hdct = dao_hdct.createHoaDonCT(res_hd_tt, item.id, item.price, now, item.quantity,item.id_size,item.color);
-                        soluong += 1;
-                        gia += item.price * item.quantity;
-                    }
-                    int res_ = dao_hd.updateHoaDon_quantity(res_hd_tt, soluong, gia); //return 1 or 0
-                    return Json(1, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    //create hoadon
-                    var res_hd = dao_hd.createHoaDon(session_acc.id_nguoi); //return hoadon
-                    foreach (CheckOut_Model item in data)
+                    var res_hd_tt = dao_hd.get_hoadon_trangthai(session_acc.id_nguoi); //id_hoadon ChưaThanhToan
+                                                                                       //gia = res_hd_tt.tonggia;
+                    if (res_hd_tt > 0)
                     {
-                        var res_sp = dao_sp.get_product_(item.id); //sp
+                        var r_ = dao_hd.get_hoadon_id(res_hd_tt);
+                        gia = r_.tonggia;
+                        //update hoadon
+                        DateTime now = DateTime.Now;
+                        foreach (CheckOut_Model item in data)
+                        {
+                            var res_sp = dao_sp.get_product_(item.id); //sp
 
-                        var res_hdct = dao_hdct.createHoaDonCT(res_hd.id_hoadon, item.id, item.price, res_hd.thoigian, item.quantity, item.id_size, item.color);
-                        soluong += 1;
-                        gia += item.price * item.quantity;
+                            var res_hdct = dao_hdct.createHoaDonCT(res_hd_tt, item.id, item.price, now, item.quantity, item.id_size, item.color);
+                            soluong += 1;
+                            gia += item.price * item.quantity;
+                        }
+                        int res_ = dao_hd.updateHoaDon_quantity(res_hd_tt, soluong, gia); //return 1 or 0
+                        return Json(1, JsonRequestBehavior.AllowGet);
                     }
-                    int res_ = dao_hd.updateHoaDon_quantity(res_hd.id_hoadon, soluong, gia); //return 1 or 0
-                    return Json(1, JsonRequestBehavior.AllowGet);
+                    else
+                    {
+                        //create hoadon
+                        var res_hd = dao_hd.createHoaDon(session_acc.id_nguoi); //return hoadon
+                        foreach (CheckOut_Model item in data)
+                        {
+                            var res_sp = dao_sp.get_product_(item.id); //sp
+
+                            var res_hdct = dao_hdct.createHoaDonCT(res_hd.id_hoadon, item.id, item.price, res_hd.thoigian, item.quantity, item.id_size, item.color);
+                            soluong += 1;
+                            gia += item.price * item.quantity;
+                        }
+                        int res_ = dao_hd.updateHoaDon_quantity(res_hd.id_hoadon, soluong, gia); //return 1 or 0
+                        return Json(1, JsonRequestBehavior.AllowGet);
+                    }
+                    
                 }
+                else return Json(9, JsonRequestBehavior.AllowGet);
             }
             return Json(-1, JsonRequestBehavior.AllowGet);
         }
@@ -760,14 +823,29 @@ namespace pingping.Controllers
             }
             else
             {
-                var dao_tc = new LuongTruyCap_DAO();
-                var res_ = dao_tc.update_truycap_soluong("Đơn Hàng", "Khách Hàng");
-                ViewBag.Name = session_acc.hoten;
-                ViewBag.Messager = "Đăng Xuất";
-                ViewBag.Login = "../Accounts/Logout";
-                var dao = new HoaDonCT_DAO();
-                var res = dao.hdct_khachhang(session_acc.id_nguoi);
-                return View(res);
+                if (session_acc.loaitk == true)
+                {
+                    var dao_tc = new LuongTruyCap_DAO();
+                    var res_ = dao_tc.update_truycap_soluong("Đơn Hàng", "Khách Hàng");
+                    ViewBag.Name = session_acc.hoten;
+                    ViewBag.Messager = "Đăng Xuất";
+                    ViewBag.Login = "../Accounts/Logout";
+                    var dao = new HoaDonCT_DAO();
+                    var res = dao.hdct_khachhang_(session_acc.id_nguoi); //chưa thanh toán
+
+                    var dao_namesize = new Size_DAO();
+                    //object model = new object();
+                    List<Size> model_total = new List<Size>();
+                    object model = new object();
+                    foreach (var m in res)
+                    {
+                        var namesize = dao_namesize.get_size_id(m.id_size); //get name size
+                        model_total.Add(namesize);
+                    }
+                    ViewBag.lstSize = model_total;
+                    return View(res);
+                }
+                else return View();
             }
         }
 
@@ -1017,7 +1095,7 @@ namespace pingping.Controllers
                 ViewBag.Login = "../Accounts/Logout";
             }
             var dao = new HoaDon_DAO();
-            var hd = dao.get_hoadon_NguoiMua(acc.id_taikhoan);
+            var hd = dao.get_hoadon_NguoiMua(acc.id_nguoi);
             var dao1 = new HoaDonCT_DAO();
             var lstHoaDonChiTiet = dao1.get_hdct_hoadon(hd.id_hoadon);
 
@@ -1027,7 +1105,10 @@ namespace pingping.Controllers
             object model = new object();
             foreach (var m in lstHoaDonChiTiet)
             {
-
+                if (m.id_size == 0 || m.id_size == null)
+                {
+                    return RedirectToAction("CheckOut");
+                }
                 var namesize = dao_namesize.get_size_id(m.id_size); //get name size
 
                 model_total.Add(namesize);
@@ -1045,7 +1126,7 @@ namespace pingping.Controllers
             {
                 var acc = SessionHelper.GetSession();
                 var dao = new HoaDon_DAO();
-                var res = dao.set_hd_paypal(acc.id_nguoi, order.GrossTotal, Request.QueryString["tx"]);
+                var res = dao.set_hd_paypal(acc.id_nguoi, order.GrossTotal, order.TxToken);
                 var dao1 = new HoaDonCT_DAO();
                 var lsthdct = dao1.get_hdct_hoadon_(res.id_hoadon);
                 ViewBag.ThongBao = lsthdct;
@@ -1104,27 +1185,122 @@ namespace pingping.Controllers
                 if (data == null) { return Json(0, JsonRequestBehavior.AllowGet); }
                 else
                 {
-                    string url = "https://online-gateway.ghn.vn/shiip/public-api/master-data/district";
-                   // var s = pickGHN(url, data);
+                    var dao_hd = new HoaDon_DAO();
+                    var res_hd = dao_hd.get_hoadon_NguoiMua(session_acc.id_nguoi);
 
-                    var client = new HttpClient();
-                    var httpRequestMessage = new HttpRequestMessage
+                    
+                    if (res_hd != null)
                     {
-                        Method = HttpMethod.Post,
-                        RequestUri = new Uri(url),
-                        Headers = {
-                        { HttpRequestHeader.Authorization.ToString(), "token "+data[1].token.ToString() },
-                        { HttpRequestHeader.Accept.ToString(), "application/json" },
-                        { "X-Version", "1" }
-                        },
-                        Content = new StringContent(JsonConvert.SerializeObject(data[1].id_dictrict))
-                    };
+                        GHN_Ship model = new GHN_Ship();
 
-                    var response = client.SendAsync(httpRequestMessage).Result;
-                    return Json(1, JsonRequestBehavior.AllowGet);
-                }
+                        foreach(var d in data)
+                        {
+                            model = new GHN_Ship
+                            {
+                                id_hoadon = res_hd.id_hoadon,
+                                payment_type_id = 2, // choose who pay package 1=seller 2=buyer
+                                note = "",
+                                required_note = "KHONGCHOXEMHANG",
+                                //return_phone = ,
+                                //return_address = session_acc.street + " " + session_acc.ward + " " + session_acc.dictrict + " " + session_acc.province,
+                                //return_district_id = 1450,
+                                //return_ward_code = ,
+                               // return_name_ward ,
+                               // return_name_district nvarchar(150),
+                                client_order_code = "",
+                                to_name = session_acc.hoten,
+                                to_phone = "0" + session_acc.phone.ToString(),
+                                to_address = d.name_address + " " + d.name_ward+ " " + d.name_dictrict + " " + d.name_province,
+                                to_ward_code = d.id_ward,
+                                to_district_id = d.id_dictrict,
+                                to_name_ward = d.name_ward,
+                                to_name_district = d.name_dictrict,
+                                to_name_province = d.name_province,
+                                cod_amount =res_hd.tonggia,
+                                weight = Math.Round(d.weight, 2),
+                                length = Math.Round(d.length, 2),
+                                width = d.width,
+                                height = d.height,
+                                pick_station_id =  0,
+                                insurance_value = 1000000,
+                                service_id = d.id_service,
+                               // content nvarchar(500) default ''
+                                feeship=d.feeship
+                            };
+                        }
+
+                        //create hgn
+                        var dao_ghn = new GHN_DAO();
+                        var res_ghn = dao_ghn.create_ghn(model);
+
+                        //update hd
+                        res_hd.hinhthuctt = "GHN";
+                        res_hd.freeship = data[0].feeship;
+                        res_hd.trangthaigh = "Đang xác nhận";
+                        res_hd.duyet = false;
+                        res_hd.trangthai = "Đã Thanh Toán";
+                        var ok_hd = dao_hd.update_hoadon(res_hd);
+                        if (ok_hd == 1)
+                        {
+                            return Json(1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    return Json(-1, JsonRequestBehavior.AllowGet);
+                };  
             }
         }
 
+        [HttpGet]
+        public JsonResult GetProduct_modal(int id)
+        {
+            var dao_dg = new DauGia_DAO();
+            var dao_sp = new SanPham_DAO();
+
+            var res_sp = dao_sp.get_product_(id);
+            return Json(res_sp, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public ActionResult Search(FormCollection f)
+        {
+            return RedirectToAction("resultSearch", new { sTuKhoa = f["sTuKhoa"], searchselect = f["searchselect"] });
+        }
+        [HttpGet]
+        public ActionResult resultSearch(string sTuKhoa, string searchselect, int? page)
+        {
+            if (Request.HttpMethod != "GET")
+            {
+                page = 1;
+            }
+            int Pagesize = 8;
+            int PageNumber = (page ?? 1);
+            var dao = new SanPham_DAO();
+            IQueryable<SanPham> lstSP;
+            if (searchselect == "All")
+            {
+                lstSP = dao.get_search_product(sTuKhoa);
+            }
+            else
+            {
+                lstSP = dao.get_search_category(sTuKhoa, searchselect);
+            }
+            ViewBag.TuKhoa = sTuKhoa;
+            ViewBag.searchselect = searchselect;
+            var session_acc = SessionHelper.GetSession();
+            if (session_acc == null)
+            {
+                ViewBag.Name = "My Account";
+                ViewBag.Messager = "Đăng Nhập";
+                ViewBag.Login = "../Accounts/Login";
+            }
+            else
+            {
+                ViewBag.Name = session_acc.hoten;
+                ViewBag.Messager = "Đăng Xuất";
+                ViewBag.Login = "../Accounts/Logout";
+            }
+            return View(lstSP.ToPagedList(PageNumber, Pagesize));
+        }
     }
 }

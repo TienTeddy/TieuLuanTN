@@ -62,7 +62,7 @@
                         grid.Column("result", header: "Người chiến thắng"),
                         grid.Column("status_use", header: "Tình trạng"),
                         grid.Column("status_", format: p => p.status_ == "Mới Thêm" ? Html.ActionLink("Bắt Đầu", "StartDG", new { id = p.id_daugia }, new { @class = "btn btn-green" }) :Html.ActionLink("Xem lịch sử đấu giá", "XemLichSuDG", new {id=p.id_daugia }) ),
-                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteDauGia", new { id = p.id_daugia }, new { @class = "btn btn-danger" }))
+                        grid.Column(format: p => Html.ActionLink("Xoá", "DeleteDauGia", new { id = p.id_daugia }, new { @class = "btn btn-danger", onclick = "return confirm('Bạn Có Muốn Xoá Đấu Giá Không?')" }))
                     ))
 
                 </div>
